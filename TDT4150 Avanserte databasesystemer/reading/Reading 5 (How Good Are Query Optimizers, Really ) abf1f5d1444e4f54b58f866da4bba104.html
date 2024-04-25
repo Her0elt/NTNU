@@ -1,0 +1,670 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 5 (How Good Are Query Optimizers, Really?)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="abf1f5d1-444e-4f54-b58f-866da4bba104" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 5 (How Good Are Query Optimizers, Really?)</h1></header><div class="page-body"><p id="8dfd4912-1624-41b4-947e-93c0d7527eed" class="">This paper investigates the problem of finding a good join order in database systems. The traditional approach, based on cardinality estimates and cost models, can lead to sub-optimal plans due to inaccurate estimates. The paper presents a novel methodology for evaluating the individual components of the optimizer and provides guidelines for designing an effective query optimizer. The experiments are conducted using a challenging workload called Join Order Benchmark (JOB), based on the IMDB dataset, and realistic queries. The paper also shows that exhaustive join order enumeration improves performance and using heuristics is not as effective. The main contributions are the challenging workload, the first end-to-end study of the join ordering problem using a real-world dataset, and guidelines for designing an effective query optimizer. The paper concludes with future work and related work.</p><p id="fe2a534e-cc5a-4e16-b10d-7096be17fcff" class="">This paper aims to study the importance of all query optimizer components in realistic settings, using a workload based on a real-world data set and PostgreSQL. While some papers only focus on either cardinality estimation or search space exploration, this paper considers all relevant factors and uses a widely-used system with a traditional architecture, PostgreSQL. The authors introduce the Join Order Benchmark, explain PostgreSQL&#x27;s relevant aspects, and present their methodology.</p><p id="f0e3d1d7-56f3-4294-96c5-8cea9405945a" class="">Standard benchmarks like TPC-H, TPC-DS, or SSB are not good benchmarks for cardinality estimation in query optimizers, as they use the same simplifying assumptions as the optimizers. Real-world datasets are more challenging due to correlations and non-uniform data distributions. To address this, the Internet Movie Database was used instead, which is freely available and contains a plethora of information about movies and related facts. The dataset is more challenging than synthetic datasets due to its non-uniform data distributions and correlations. The dataset used in this paper is a snapshot from May 2013 and occupies 3.6 GB when exported to CSV.</p><p id="43eacb5a-0512-4526-a079-1b5306d7ed53" class="">We used the IMDB database to construct 33 SQL queries with an average of 8 joins per query, ranging from 3 to 16. Each query consists of one select-project-join block. The queries are realistic and ad hoc and designed to answer questions that a movie enthusiast may ask. We intentionally did not include more complex join predicates like inequalities or non-surrogate-key predicates. We propose the Join Order Benchmark (JOB) for future research in cardinality estimation and query optimization.</p><p id="6acbf2cc-457f-4349-b6d4-567d72c89327" class="">PostgreSQL uses dynamic programming to enumerate join orders, excluding trees with cross products. The cost model is described in more detail in Section 5.1. Base table cardinalities are estimated using histograms, most common values with their frequencies, and domain cardinalities. The estimator assumes uniformity, independence, and the principle of inclusion. The query engine executes plans using Volcano-style interpretation with full table scans and B+Tree index lookups. Joins can be executed using nested loops, in-memory hash joins, or sort-merge joins. The join algorithm is selected by the optimizer and cannot be changed at runtime.</p><p id="84a25f27-9065-44d6-9237-f5ba19ed2cf0" class="">The q-error measures the factor by which an estimate differs from
+the true cardinality, and Table 1 shows percentiles of q-errors for base table selections in the workload. While the median q-error is close to the optimal value of 1 for all systems, some produce misestimates for some queries and differ in quality of cardinality estimates. DBMS A and HyPer perform better, with HyPer using a random sample of 1000 rows per table to estimate selectivities for complex predicates. Other systems&#x27; estimates are worse, based on per-attribute histograms that cannot detect (anti-)correlations between attributes. Default settings were used to obtain all estimates, and some commercial systems support more advanced features but not enabled by default or not fully automatic.</p><p id="44c5383c-8bbb-4e13-b216-6ee4b426c734" class="">In this section, the authors discuss the challenges of estimating intermediate results for joins and how sampling or histograms do not work well for this purpose. The authors present the results of their study on over 100,000 cardinality estimates for intermediate results of a query set. They compute the factor by which the estimate differs from the true cardinality, distinguishing between over- and underestimation. They observe that all tested systems tend to systematically underestimate the result sizes of queries with multiple joins, with the underestimation being most pronounced with one of the systems.</p><p id="0cb74afb-9e03-42d2-9297-9e1bd8b65905" class="">The authors also note that no system tested was able to detect join-crossing correlations, and cardinality estimation is highly brittle, as illustrated by the significant number of extremely large errors observed. Additionally, the authors mention that the current join size estimators are based on the independence assumption, and the state-of-the-art in cardinality estimation is far from perfect. The authors clarify that their results do not imply that the resulting query performance of any system is necessarily worse than that of others, as the query runtime heavily depends on how the system&#x27;s optimizer uses the estimates and how much trust it puts into these numbers.</p><p id="79690e2a-632e-435f-a7df-0c08b0d974ca" class="">PostgreSQL uses the number of distinct values as the most important statistic for join estimation. However, the distinct counts are estimated from a fixed-sized sample, and large tables often result in severe underestimates. To determine if these misestimates are the cause of cardinality estimation problems, the true distinct counts were computed and replaced the estimated values. Surprisingly, the trend to underestimate cardinalities became even more pronounced with the use of true distinct counts. This is because the original, underestimated distinct counts resulted in higher estimates, which were closer to the truth. This creates a frustrating situation for analyzing and fixing query optimizer problems, as fixing one query may break another.</p><p id="c9fb8a39-b06e-4456-ba45-39c0da9b10d6" class="">Large estimation errors don&#x27;t necessarily lead to slow query plans. For example, the misestimated expression may be cheap compared to other parts of the query, or a misestimated relevant plan alternative may &quot;cancel out&quot; the original error. To investigate the conditions under which bad cardinalities are likely to cause slow queries, it&#x27;s important to note that query optimization is closely related to the physical database design. The type and number of indexes heavily influence the plan search space and affect the system&#x27;s sensitivity to cardinality misestimates. Experiments using a relatively robust physical design with only primary key indexes show that the impact of cardinality misestimates can be largely mitigated. However, for more complex configurations with many indexes, cardinality misestimation makes it more likely to miss the optimal plan by a large margin.</p><p id="70a6691e-5a61-43ae-a545-2948eaf8bfe0" class="">To test the impact of cardinality misestimation on query performance, estimates from various systems were injected into PostgreSQL and the resulting plans were executed. The slowdowns of each query were grouped by their relative difference from the optimal plan and reported in a table. While some queries became slightly slower with the true cardinalities, the majority were slower when estimates were used. The quality of the estimates varied between DBMSs, with DBMS A having better estimates than DBMS B. Many observed slowdowns were due to PostgreSQL choosing nested-loop joins, which were disabled in subsequent experiments. However, some queries still had performance issues due to underestimated hash join input sizes, which were addressed in version 9.5 of PostgreSQL. To improve query plans, algorithms that offer little benefit over more robust ones should not be chosen and query processing algorithms should determine their parameters at runtime rather than relying on estimates.</p><p id="3eb2e50e-cb7d-4985-a86b-0fec66ee9e39" class="">Plans with different join orders can have vastly different query runtimes. However, in experiments where the database only has primary key indexes and nested loop joins are disabled and rehashing is enabled, query performance is usually close to that obtained using true cardinalities. Despite the poor quality of cardinality estimates, this is a positive result because without foreign key indexes, most large tables require full table scans, which lessens the impact of different join orders. Moreover, picking an index-nested loop join instead of a hash join is not disastrous in main memory, where the performance difference is at most 5× with PostgreSQL and 2× with HyPer. In contrast, when the index must be read from disk, random IO can result in a much larger factor. Thus, the main-memory setting is more forgiving.</p><p id="75633aea-b2ac-4662-bfc8-69c82ade02fb" class="">Adding foreign key indexes to a database with primary key indexes only can make query optimization more challenging, as shown in Figure 7b. 40% of queries were found to be slower by a factor of 2. While overall performance typically increases with more indexes, the job of the query optimizer becomes harder.</p><p id="8d09056f-2bfa-4888-9b3e-6536a35cfb9f" class="">In our community, cardinality estimation of intermediate results for queries with correlated predicates is a research frontier. Our experiments on the JOB workload reveal that systems using table samples achieve almost perfect estimation for single-table subqueries, even for correlated predicates. However, the challenge lies in join-crossing correlations, which involve columns from different tables. These correlations frequently occur in datasets such as IMDB. The optimal query plan for handling join-crossing correlations depends on available access paths. The physical design of the DBLP example in [22], which uses partitioning on a join-crossing column as a key, is just one example of how to handle a specific join-crossing correlation. Join-crossing correlations remain an open research frontier involving physical design, query execution, and query optimization. Our experiments focus on the impact of (join-crossing) correlations on standard PK and FK indexing, rather than attempting to chart this mostly unknown space.</p><p id="118d8d70-b429-49a9-af59-b79f9fe09652" class="">The cost model selects plans from a search space and contemporary systems have sophisticated cost models resulting from years of research. PostgreSQL’s cost model is over 4000 lines of code and considers various factors. We evaluate the contribution of a complex cost model to query performance and compare PostgreSQL’s model with two others. We find that cardinality estimate errors have a greater impact on performance than cost model differences. Our experiments are conducted on a database with foreign key indexes, and we start with a brief description of PostgreSQL’s typical cost model.</p><p id="61cf0135-5703-46e9-8451-074929bc5c7d" class="">PostgreSQL&#x27;s cost model combines CPU and I/O costs with weights, and the cost of an operator is defined as the sum of the number of accessed disk pages and the amount of processed data in memory. The cost of a query plan is the sum of all operator costs. The default weight parameters used in the sum are set by the optimizer designers, and there is no well-defined method for determining ideal values for these parameters. Tuning and calibrating cost models has been the subject of research, but it is important to investigate the impact of the cost model on query engine performance to show the contribution of cost model errors.</p><p id="2ede915e-ce50-4050-90e3-6d91f5ceddb6" class="">A cost function&#x27;s main benefit is its ability to predict the fastest query plan based on cardinality estimates, as shown in Figure 8a. However, poor cardinality estimates result in a significant number of outliers and a large standard error area, which can be overcome by using the true cardinalities. A linear regression model provides the closest fit to the observed data, and the deviation from this line is the cost model&#x27;s prediction error. The median absolute percentage error of the PostgreSQL cost model with true cardinalities is 38%. Tuning cost models using machine learning techniques has been a subject of several papers.</p><p id="601926b3-0d77-46db-9c44-4566e2b14ecf" class="">The default values for parameters in a cost model for PostgreSQL are not always optimal, especially for main-memory workloads where the proportion of CPU and I/O costs is different. To improve the correlation between cost and runtime, the CPU cost parameters can be multiplied by a factor of 50. However, this tuning improvement is still overshadowed by the difference between estimated and true cardinalities. There are outliers in the data where the optimizer has accidentally discovered very good plans without realizing it, caused by cardinality misestimates. The prediction error of the tuned cost model is improved, with the median error decreasing from 38% to 30%.</p><p id="bab785a1-cebf-4c1d-af02-73d3651b23c4" class="">The PostgreSQL cost model is complex and tailored for disk-based systems. To determine if this complexity is necessary for main-memory systems, a simple cost function Cmm was compared to the PostgreSQL model. Cmm only counts the number of tuples passing through each operator and is able to predict query runtime fairly accurately with true cardinalities. The tuned PostgreSQL model is faster than the standard model, but even Cmm makes queries 34% faster than the built-in cost function. However, improving cardinality estimation is much more crucial than the cost model.</p><p id="88892884-baf2-42f9-a6c8-6d970d5da3cf" class="">Different algorithms with varying numbers of candidate solutions have been proposed, and their effectiveness is evaluated in this study. To explore the search space, a standalone query optimizer is used, which implements Dynamic Programming (DP) and heuristic join enumeration algorithms. The true cardinalities are used to recompute the cost of the resulting plan, which is a reasonable assumption since the errors of the cost model are negligible in comparison to the cardinality errors. The plans are not executed due to the large number of joins in the queries.</p><p id="d33c4332-05bc-416c-b6b4-fc8d6a0750ec" class="">In query optimization, the final important component is a plan enumeration algorithm that explores the space of semantically equivalent join orders. Many different algorithms have been proposed, both exhaustive and heuristic, but they all consider a different number of candidate solutions when picking the best plan. To investigate how large the search space needs to be in order to find a good plan, experiments were conducted using a standalone query optimizer with Dynamic Programming (DP) and a number of heuristic join enumeration algorithms. The experiments did not actually execute the query plans produced by the optimizer, but instead recomputed the cost of the resulting plan with the true cardinalities. This approach allowed a large number of plans to be compared without executing all of them. The results show that the search space is important: the slowest or median cost is generally multiple orders of magnitude more expensive than the cheapest plan. The shapes of the distributions are quite diverse and the plots for different index configurations are different as well, with foreign key indexes having the smallest percentage of plans that are more expensive than the optimal plan and the widest distribution.</p><p id="d258b9d8-b5a9-48bd-bd16-526bc96b8ed1" class="">Join ordering algorithms typically do not consider all possible tree shapes, ignoring cross products to reduce optimization time without much effect on query performance. Oracle goes further by not considering bushy join trees. To assess the impact of this on query performance, the DP algorithm was modified to enumerate only left-deep, right-deep, or zig-zag trees. Each of these classes also imposes constraints on join method selection. Using true cardinalities, the cost of the optimal plan for each restricted tree shape was computed and compared to the optimal tree with any shape. Results in Table 2 show that zig-zag trees perform decently, with the worst case being 2.54× more expensive than the best bushy plan. Left-deep trees are worse but still reasonable, while right-deep trees perform much worse due to the large intermediate hash tables that need to be created and only allowing the bottom-most join to be done via index lookup.</p><p id="59d2acb6-ca9a-4476-bf62-c2a9133fc3a8" class="">We compared the dynamic programming algorithm, which computes the optimal join order, with a randomized and a greedy heuristic due to the bad quality of cardinality estimates. The Quickpick-1000 heuristic chooses the cheapest 1000 random plans, while GOO combines the pair of join trees with the lowest cost to a single join tree. Table 3 shows that dynamic programming is worthwhile despite cardinality misestimation, but errors cause larger performance losses than the heuristics. GOO and Quickpick-1000 work better when few indexes are available and more good plans exist. In summary, exhaustive enumeration algorithms can find the optimal solution for queries with dozens of relations very quickly, so there are few cases where resorting to heuristics or disabling bushy trees should be necessary.</p><p id="c60b8b5e-7a8b-4904-8a06-fdfb0f704cef" class="">Cardinality estimation experiments show that using table samples is a more effective technique for predicting single-table result sizes compared to the independence assumption and single-column histograms. However, single-table samples do not capture join-crossing correlations, which can lead to over- and underestimation of result sizes. Previous research has explored techniques such as join samples, sketches, and graphical models to address this issue, and there is potential for query feedback and new physical designs to further improve cardinality estimation. Additionally, taking into account the probabilistic distribution of estimates when choosing query plans can reduce the adverse effects of estimation mistakes. Runtime techniques can also improve performance by making query engines more performance robust, but there are limitations to these approaches. Tuning cost models is less beneficial than improving cardinality estimation, and plan enumeration methods such as Quickpick and Picasso can be used to visualize search spaces and identify good query plans. Query optimization remains a challenging topic in database research, but the Join Order Benchmark and its integration in testing and evaluating query optimizers may lead to further innovation in this field.</p><p id="29eec819-adb4-4cdb-bd3d-f04bb6693558" class="">We confirm that query optimization is crucial for efficient query processing and exhaustive enumeration algorithms outperform heuristics. Large estimation errors in relational database systems cause bad plans, particularly with many joins. However, the cost model only moderately contributes to query performance. Two approaches can enhance plan quality in heavily-indexed settings: advanced estimation algorithms and increased interaction between runtime and query optimizer. We recommend using the Join Order Benchmark for future experiments and exploring disk-resident and distributed databases.</p></div></article></body></html>

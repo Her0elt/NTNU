@@ -1,0 +1,671 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 6 (Cardinality Estimation Done Right:
+Index-Based Join Sampling)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="369273d5-5bee-438d-92a9-a43ce11fe905" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 6 (Cardinality Estimation Done Right:
+Index-Based Join Sampling)</h1></header><div class="page-body"><p id="1ad5018a-31de-4b96-811d-a474cb4ee6ab" class="">Cost-based query optimization relies on cardinality estimation, but traditional methods using fixed-size histograms and assumptions often lead to large errors. Sampling is a more accurate alternative, but has not been widely used due to cost and time constraints. This paper proposes an index-based join sampling technique that uses existing index structures to obtain samples more efficiently, and proceeds bottom-up to estimate accurate results for intermediate joins. The approach is evaluated using real-world data sets and shows significant improvement over traditional estimators and other sampling methods. The sampling overhead is low and can be configured based on the application profile and query type. The paper concludes with a discussion of future research directions.</p><p id="fd493834-4526-408c-acc4-ba0ba505f2d7" class="">Estimation errors increase exponentially with joins, leading to a focus on improving estimation, plan quality, and robustness. Some recent proposals, like our approach, rely on sampling. Sampling-based query re-optimization draws independent samples from each table of the query and joins them, but suffers from high overhead and misses good plans due to a greedy strategy. CS2 uses materialized samples for each relation and overcomes the problem of empty results by using &quot;correlated&quot; samples. ROX relies on existing index structures to cheaply compute accurate samples for multi-join queries, but uses front-biased cutoff sampling and a greedy approach that misses good plans. These approaches have weaknesses that preclude their use in industrial-strength systems, whereas our index-based sampling approach has low overhead, is fully automatic, and integrates with exhaustive join enumeration without resorting to greedy algorithms.</p><p id="12dc1463-aa5b-4998-a08f-3d4072ae50f8" class="">Our approach to improving cardinality estimates has two parts: an index-based sampling operator that quickly computes a sample for a join result, and a join enumeration strategy that systematically explores important intermediate results while limiting sampling time. We will explain these parts before discussing how our approach fits into a database system&#x27;s architecture.</p><figure id="63d6d27e-3c9e-44b5-b8f5-62b21a3c6be8" class="image"><a href="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled.png"><img style="width:625px" src="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled.png"/></a></figure><figure id="b40c8b2a-c8d6-40c3-98ac-09393f4498df" class="image"><a href="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled%201.png"><img style="width:610px" src="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled%201.png"/></a></figure><p id="9ce0be17-c6f6-404a-aa9f-4c4da61f7214" class="">To estimate cardinalities, we sample random tuples from base relations in the query. Join sampling involves using a sample of B to probe the index A.p and applying selection A.x=1. Or, starting with a sample of A and using an index on B.f to join. However, producing large samples increases sampling time. Algorithm 1 counts the number of matching tuples in the index for each tuple in the input sample S without materializing the join of S and A. The algorithm then randomly materializes n tuples without replacement from this set of matching tuples to produce the final sample. The algorithm assumes that indexes allow O(1) or O(logn) counting and selecting of matches for a particular key.</p><p id="407ca28c-fcef-495e-ab7e-479abb688fb9" class="">The index-based sampling operator can sample a fixed-size sample for an intermediate join result, allowing multiple intermediate results to be sampled for a query. However, the number of intermediate results grows exponentially with the number of joins, making it difficult to sample all of them. Therefore, a limit is set on the time spent in the sampling phase and traditional estimation is used after that. To avoid underestimating result sizes, intermediate results are computed in a bottom-up fashion, starting with smaller intermediate results and then moving to larger ones. This approach provides accurate estimates for smaller intermediate results and allows for exhaustive sampling of smaller intermediate results. This is preferable because a cost-based query optimizer will have precise knowledge of the costs for the crucial early joins.</p><figure id="4600b1dd-967f-4807-bfc2-45c06a4cc563" class="image"><a href="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled%202.png"><img style="width:593px" src="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled%202.png"/></a></figure><p id="c9cc9559-8d39-4634-aeb9-70e31417ae54" class="">Algorithm 2 enumerates plans bottom-up, sampling each intermediate result instead of finding the cheapest alternative. It stops once the given budget is exhausted, keeping track of the number of index lookups, which correlates strongly with the sampling time. The budget can be set to a high value for reporting queries or a low value for simple queries that require low latency. The algorithm has two additional optimizations: it revisits expressions if the sample size is below a threshold and directly joins small relations with a sample if no index exists.</p><figure id="696c4aa0-31ce-4ffc-b0a8-250203190390" class="image"><a href="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled%203.png"><img style="width:629px" src="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled%203.png"/></a></figure><p id="82d21f70-8aa6-442b-9d51-6a49c2fe29f2" class="">In previous work, TPC-H benchmarks were shown to have unrealistically easy cardinality estimation. Instead, experiments were performed on the Join Order Benchmark (JOB), which is a complex real-world dataset. A single-threaded in-memory prototype similar to MonetDB was used for the experiments. Indexes were implemented as hash tables, and the prototype was about 5 times faster than PostgreSQL. Cost-based dynamic programming was used to determine join order and algorithm, with Cmm used as the cost function. Cardinalities were estimated using index-based sampling with a sample size of 1,000. PostgreSQL&#x27;s cardinality estimates were injected for comparison, and ROX-style join ordering was experimented with but found to be uncompetitive due to its greedy nature.</p><figure id="bf022e2c-41ee-4b5d-8f7f-6bd251c6ebe4" class="image"><a href="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled%204.png"><img style="width:1260px" src="Reading%206%20(Cardinality%20Estimation%20Done%20Right%20Index%20369273d55bee438d92a9a43ce11fe905/Untitled%204.png"/></a></figure><p id="54cc892c-35e7-4b63-bdd9-0b45c0a8dfe1" class="">The quality of cardinality estimates is crucial. Figure 4 compares index-based sampling with PostgreSQL’s estimates for intermediate results in our query set. Two trends are observed: errors increase exponentially with increasing join sizes and underestimation is more common than overestimation, becoming more pronounced with each additional join. Sampling-based re-optimization has similar estimates to PostgreSQL. Index-based join sampling outperforms PostgreSQL, especially with a higher budget. Underestimation occurs later because smaller intermediate results are estimated accurately. Even with a low budget of 10,000, larger join estimates are better than PostgreSQL&#x27;s because they are computed from smaller, more accurate ones.</p><p id="2b18491b-82b1-4b3d-a6cb-5c333e2d13b6" class="">Let&#x27;s discuss the efficiency of two cardinality estimation techniques: index-based sampling and sampling-based re-optimization. The quality of estimates is the most important quality of any cardinality estimator. The errors in index-based sampling increase exponentially with increasing join sizes, and underestimation is much more common than overestimation. However, index-based join sampling performs much better than sampling-based re-optimization and PostgreSQL, especially with a higher budget. Sampling-based re-optimization uses larger sample sizes and requires running the join ordering algorithm for each re-optimization step, resulting in a much larger sampling overhead than index-based sampling. Moreover, the sampling overhead of sampling-based re-optimization grows linearly with the database size, while index-based sampling&#x27;s sampling overhead mainly depends on the number of joins. The results show that index-based sampling in RAM is cheap enough for interactive applications, even for larger queries.</p><p id="abc41af2-f023-414c-97d4-a447a5141ff3" class="">Query optimization aims to find good query plans. Figure 6 compares plan quality for different cardinality estimation techniques. Using PostgreSQL&#x27;s estimates, only 25% of the plans are close to optimal. Sampling-based re-optimization improves slightly but remains far from optimal. Index-based sampling achieves better results with even a small budget of 10,000 index lookups producing similar results to sampling-based re-optimization. A budget of 100,000 index lookups further improves performance for many queries, with only 17% off by a factor of 2 or more and 3% off by a factor of 10 or more. Figure 7 shows similar results for actual runtimes. Table 1 compares the geometric mean of all runtimes in the workload with the sampling times. The ROX algorithm performs worse than PostgreSQL, possibly because it is a greedy algorithm that explores the space only from the cheapest first execution step. In contrast, the best plan in the DBLP experiments is typically to join the relation with the smallest selection with its anti-correlated counterpart, which is executed efficiently on a partitioned structural index.</p><p id="772b5a1b-cf3d-4417-bde1-c53425f427fc" class="">In realistic scenarios, not all foreign key attributes will have indexes, which can affect the performance of query optimization techniques that rely heavily on index structures. To investigate this, the researchers created various index configurations by enabling foreign key indexes one-by-one in a random order. The results showed that the quality of plans chosen by the optimizer using PostgreSQL&#x27;s estimates was quite good when there were few indexes, but as the number of indexes increased, the plans chosen were much further away from the optimal plan. Index-based sampling improved plan quality across all configurations, especially in cases where multiple indexes were available.</p><p id="cbacf311-ba5b-4e4d-9c73-fd24b15bd517" class="">Various techniques have been proposed to improve plan quality and robustness beyond traditional optimization methods. One approach is to detect cardinality estimation errors at runtime, as in the LEO project, and utilize the true cardinalities determined in an earlier run. Non-consistent estimates are addressed using a maximum entropy technique. In adaptive query processing, the optimization and execution phases are merged or interleaved. The Eddies algorithm continuously reorders operators by dynamically routing incoming tuples to operators. Plan Bouquet and SpillBound assume high selectivities and start executing a plan that would be optimal under that assumption. If the plan takes longer than expected, they switch to plans with lower selectivities. Other techniques, such as detecting optimizer mistakes using limited runtime adaptivity, have also been proposed. Another approach is to design query operators that do not rely on cardinality estimates, such as Smooth Scan, join, window, and aggregation operators. However, some important decisions still need to be made at optimization time, such as the join order.</p><p id="8fef7ebe-202e-4dc5-9b9b-e2037dc3d660" class="">Our index-based sampling technique is a cost-effective way to systematically sample query results and improve query plans compared to traditional estimators. We plan to integrate it with HyPer and explore its adaptation to databases larger than RAM, such as modern SSDs. Although our fixed-size sampling strategy is simple and effective, more sophisticated sampling strategies could be explored. Overall, we believe that index-based sampling is a promising and practical technique for improving query plan quality.</p></div></article></body></html>

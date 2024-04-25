@@ -1,0 +1,673 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 2 (Query processing)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="693177b1-3f85-4320-96d3-37e9d0a09871" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 2 (Query processing)</h1></header><div class="page-body"><h2 id="706cdb4e-b2fc-40da-a59d-8610f4869415" class="">Query processing</h2><p id="f23ed242-7388-4733-8a1e-fe7f554607b4" class="">
+</p><p id="18436589-e656-48b2-b8cf-6334d8722e4d" class="">Normally we process the query to identify SQL key words and other words, attribute names, and relation names. This is then used to create a query three or a query graph which later is used to create an optimal execution plan in the query optimizer.</p><p id="d1210091-6c73-44b2-9d97-9a60114d61f6" class="">When we call a plan optimal it does not necessarily mean that its the most optimal plan its a plan that solves the given problem is an acceptable way given the query. A better name for the optimization layer of a database might then be planning of a good execution strategy. </p><p id="a8a142a9-8ebd-4473-966b-321c0ef10b07" class="">Some databases opt into using a less abstract language for their querying. This leads to less flexibility on the database system side on how to handle the query, but leaves it up to the user to handle this. Something more abstract like SQL lets the database system handle how to execute a given query.</p><p id="92836211-41b0-4608-9d9c-916df5db7211" class="">SQL queries are decomposed into query blocks which contains a single SELECT-FROM-WHERE expression, with its related GROUP BY and HAVING clauses. semi-joins and anti-joins also needs to be handled, which are created by using the EXISTS, IN and ANY subqueries. An anti-join is created by using NOT EXISTS; NOT IN and ALL. </p><p id="492a1bbb-4086-434f-99da-fa27035b437e" class="">There are many algorithms for executing a SELECT operation, which is basically a search operation to locate the records in a disk file that satisfies a certain condition.</p><p id="03efe639-1b63-4185-aae5-bc86294075f9" class="">There are a number of different algorithms possible for selecting records for a file. These are known as file scans. If the algorithms involve the use of an index, the search is called an index scan. Examples of select algorithms:</p><ol type="1" id="1063dcbf-9772-42f4-a0fd-1041845813e6" class="numbered-list" start="1"><li>Linear search (brute force algo) Retrieve every record in the file and test whether its attribute values satisfy the selection condition</li></ol><ol type="1" id="af6f9c98-08bb-4853-8ebb-a5b808603285" class="numbered-list" start="2"><li>Binary search If the selection condition involves an equality comparison on a key attribute on which the file is ordered, binary search van then be used.</li></ol><ol type="1" id="e42e240c-463c-43ca-b9eb-f9373e6071ca" class="numbered-list" start="3"><li>Using a primary index If the selection condition involves an equality comparison on a key attribute with a primary index, the primary index can be used to retrieve the record. <ol type="a" id="1fd99879-e8fc-4e0e-825f-8bb2e59e2eb2" class="numbered-list" start="1"><li>Using a hash key. If the selection condition involves an equality comparison on a key attribute with a hash key. Note that this condition retrieves a single record. </li></ol></li></ol><ol type="1" id="cf774e54-ccc8-42f1-b455-a80d67a36429" class="numbered-list" start="4"><li>Using primary index to retrieve multiple records, if the comparison condition is &gt;, ≥, &lt; or ≤ on a key field with a primary index then all subsequent records in the (ordered) file for the given condition is retrieved. </li></ol><ol type="1" id="5ccfeed4-3207-4a94-8ddd-7b150556769b" class="numbered-list" start="5"><li>Using clustering index to retrieve multiple records. If the selection condition involves an equality comparison on a monkey attribute with a clustering index use the index to retrieve all the records satisfying the condition. </li></ol><ol type="1" id="ecc87288-7755-4130-a2de-32d77098ab82" class="numbered-list" start="6"><li>Using a secondary (B+tree) index on an equality comparison. This search method can be used to retrieve a single record if the index field is a key(has unique values) or to retrieve multiple records if the indexing field is not a key. This would also be used for a range query. In the case of range queries, the B+-tree index lead nodes contain the indexing field value in order sequence of them is used corresponding to the requested range of that field and provide record pointers to the qualifying records. </li></ol><ol type="1" id="4c8d87ca-dc56-4e53-a814-8e5d25c92498" class="numbered-list" start="7"><li>Using a bitmap index if the selection condition involves a set of values for an attribute the corresponding bitmaps for each value can be OR-ed to give the set of records ids that qualify.<ol type="a" id="36bd562c-af38-4066-b0cc-8f8e5fad1099" class="numbered-list" start="1"><li>Using a functional index, if there is a functional index defined then this index can be used to retrieve records that qualify.Note that the exact way in which the function is written while created the index is immaterial.</li></ol></li></ol><ol type="1" id="cd4f8c0a-d654-4286-8875-749abfd315e8" class="numbered-list" start="8"><li>Conjunctive selection using an individual index. If an attribute involved in any single simple condition in the conductive select condition has an access path that permits the use of one of the methods above (2-6) use the condition to retrieve the records and then check whether each retrieved record satisfies the remaining simple conditions in the conjunctive select condition.</li></ol><ol type="1" id="a1f1cc5f-84eb-4365-9465-0d0776a2abb2" class="numbered-list" start="9"><li>Conjunctive selection using a composite index. If two or more attributes are involved in equality conditions in the conductive select condition and a composite index (or hash structure) exists on the combined fields.</li></ol><ol type="1" id="c00dfcdf-f1c1-4a07-af77-e5468fd67e29" class="numbered-list" start="10"><li>Conjunctive selection by the intersection of record pointers if secondary indexes (or other access paths) are available on more than one of the fields involved in simple conditions in the conjunctive select condition, and if the index includes record pointers then each index can be used to retrieve the set of record pointers that satisfy the individual condition. The intersection of these sets of record pointers gives the record pointers that satisfy the conjunctive select condition, which is then used to retrieve those records directly. If only some conditions have secondary indexes, each retrieved record is further tested to determine whether it satisfies the remaining contentions. In general, this method assumes that each of the indexes is on a monkey field of the file because if one of the conditions is an equality condition on a key field, only one record will satisfy the whole condition. The bit map and functional indexes discussed in point 7 are applicable for conjunctive selection on multiple attributes as well, For conductive selection triple attribute, the resulting bitmaps are AND-ed to produce the list of record ids. </li></ol><p id="70ac60ce-f10d-4256-82c6-f069ee9161b1" class="">
+</p><p id="75d79b32-0a6a-4b3b-9705-4ae75667f01a" class="">Compared to a conjunctive selection condition a disjunctive condition where the statements are connected with a logical OR is much harder to process and optimize. With such a condition, the records satisfying the disjunctive condition are the union of the records satisfying the individual conditions. Hence if any one of the conditions does not have an access oath, we are compelled to use the brute-force linear search approach. Only if an access path exists on every simple condition in the disjunction can we optimize the selection by retrieving the records satisfying each condition or their records ids and then applying the union operation to eliminate duplicates.</p><p id="a7365b8e-ed11-4540-90b4-3a43de7dd757" class="">To Minimize the overall cost of query execution in terms of resources used and response time, the query optimizer receives valuable input from the system catalog, which contains crucial statistical information about the database. </p><p id="b9960c76-c6f2-4ee7-a98c-0c2682daaec0" class="">A typical RDBMS catalog contains the following types of information. - - </p><ul id="6ef95d5e-8953-418f-865d-55e566c6e58c" class="bulleted-list"><li style="list-style-type:disc">For each relation r with schema R containing rR tuples:<ul id="fe8367e0-81ee-4400-a67f-4ea1d03be0b7" class="bulleted-list"><li style="list-style-type:circle">The number of rows/records of its carinatlity |r(R). W will refer to the number of rows as rR.</li></ul><ul id="8b0dd6b4-ef95-4f84-a74f-6170472caf0f" class="bulleted-list"><li style="list-style-type:circle">The width of the relation (i.ethe length of each tuple in the relation) this length of tuple is referred to as R.</li></ul><ul id="46c95849-71d9-4c07-b0e6-dd4eeab61d25" class="bulleted-list"><li style="list-style-type:circle">The number of blocks that relation occupies in storage: referred to as bR. </li></ul><ul id="817bd74c-c9f1-4eb2-a6bd-f66476150e00" class="bulleted-list"><li style="list-style-type:circle">The blocking factor bfr which is the number of tuples per block.</li></ul></li></ul><ul id="69daeb3c-8e7e-4dd9-abde-27b4f6a07b0b" class="bulleted-list"><li style="list-style-type:disc">For each attribute A in relation R:<ul id="4b534f66-1738-4c28-be8a-82ee69bf2b81" class="bulleted-list"><li style="list-style-type:circle">The number of distinct values of A in R: NDV(A,R)</li></ul><ul id="440c4c3c-5394-45d7-bcfb-d4e6efb418c5" class="bulleted-list"><li style="list-style-type:circle">The max and min values of attribute A in R: max(A,R) and min(A,R)</li></ul></li></ul><p id="1feb3a7a-42a7-4b20-990c-8a738ae90277" class="">Other statistics can be stores on a need basis.</p><p id="d89a563a-931b-4f94-b390-35dca49eedf3" class="">When the optimizer chooses between multiple simple conditions in a conjunctive select condition, it typically considers the selectivity of each condition. Zero selectivity means none of the records in the file satisfies the selection condition. A selectivity of one means that all records in the file satisfy the condition.</p><p id="f660d07c-0bde-40a0-8c7a-9270db5bbeed" class="">Although exact selectivities of all conditions may not be available, estimates of selectivity are possible from the information kept in the DBMS catalog and are used by the optimizer.</p><p id="ed78092a-724f-4595-a217-8c0ce6ff19ba" class="">The JOIN operation is one of the most time-consuming operation in query processing. Many of the join operations encountered in queries are of the EQUIJOIN and NATURAL JOIN varieties. There are many possible ways to implement a two-way join. Joining on more than two files is called a multiway join. The number of possible ways to execute multiay joins grows rapidly because of the combinatoral explosion of possible join orderings. </p><p id="7c42279d-6bf3-40c4-95e0-2c4e51faebc1" class="">Methods for implementing joins:</p><ol type="1" id="8f0d5360-25b4-47d1-8240-5b0536564ff3" class="numbered-list" start="1"><li>Nested loop join. This is the default or brute force algorithm because it does not require any special access paths on either file in the join. For each record t in R (outer loop), retrieve every record s from S ( inner loop) and test whether the two records satisfy the join condition. </li></ol><ol type="1" id="efe71f64-47f9-4c22-ab0c-62710dc2ecac" class="numbered-list" start="2"><li>Index-based nested-loop join ( using an access structure to retrieve the matching records) If an index (or hash key) exists for one of the two join attributes say attribute B of fileS retrieve each record in R and then use the access structure to retrieve directly all matching records s from S that satisfies s[B] = t[A]</li></ol><ol type="1" id="b08eb540-c629-405c-aa5e-ec88e50f2fc7" class="numbered-list" start="3"><li>Sort-merge join If the records of R and S are physically sorted (ordered) by the value of the join attributes A and B, respectively we can implement the join in the most efficient way possible. Both files are scanned concurrently in order of the join attributes, matching the records that have the same value for A and B if the files are not sorted they may be sorted first by using external sorting. In this method pairs of fil blocks are copied into memory buffers in order and the records of each file are scanned only once each for matching with the other file unless both A and B are monkey attributes, in which case the method needs to be modified slightly. A variation of the sort-merge join can be used when secondary indexes exist on both join attributes. The indexes provide the ability to access the records in order of the join attributes, but the records themselves are physically scattered all over the file blocks, so this method may be inefficient because every record access may involve accessing a different disk block.</li></ol><ol type="1" id="af594d4e-29f7-4dbf-85f8-2c324f7270e4" class="numbered-list" start="4"><li>Partition-hash join ( or just hash-join) The record s of files R and S are partitioned into smaller files. The partitioning of each file is done using the same hashing function h on the join attribute A of R and B of S. First a single pass through the file with fewer forces hashes its records to the various partitions of R this is called the partitioning phase since the records fo R are partitioned into hash buckets. In the simplest case, we assume that the smaller file can fit entirely in the main memory after it is partitioned so that the portioned sub-files of R are all kept in main memory. the collection of records with the same value h(A) is placed in the same portions which is a hash bucket in a hash table in main memory. In the second phase called the probing phase, a single pass through the other files then hashes each of its records using the same has function h(B) to probe the appropriate bucket. This simplified description of partition-hash join assumes that the smaller of the two files fit entirely into memory buckets after the first phase. </li></ol><p id="9d2a7f66-583e-411a-b9d5-7b9932126ca2" class="">The buffer space available has an important effect on some of the join algorithms. First, let us consider the nested-loop approach. Assume that the number of buffers available in main memory for implementing the join is 7. We assume that each memory buffer is the same size as one disk block. It is advantageous to read as many blocks as possible at a time into memory from the file whose records are used for the outer loop. The algorithm can then read one block at a time for the inner loop and use its records to search the other loop blocks that are currently in main memory for matching records. This reduces the total number of block accesses.  </p><p id="962017fc-fb0d-48d5-813c-a951e296c446" class="">Another factor that affects the performance of a join, particularly the single loop method, is the fraction of records in one file that will be joined with records in the other file. We call this the join selection factor of a file with respect to an equijoin condition with another file. Sort merge join is quite efficient if both files are already sorted by their join attribute. Only a single pass is made through each file. Hence the number of blocks accessed is equal to the sum of the number of blocs in both files.</p><p id="1093161a-e026-4d68-b73c-e4f8e5710951" class="">The hash-join method is also efficient. In this case, only a single pass is made through each file, whether or not the files are ordered. If the hash table for the smaller of the two files can be kept entirely in main memory after hashing on its join attributes the implementation is straightforward. If, however, the portions of both files must be stored on disk, the method becomes more complex, and a number of variations to improve the efficiency have been proposed. In the general case of partition-hash join, each file is first partitioned into M partitions using the same partitioning hash function on the join attributes. Then each pair of corresponding portions is joined. In the partitioning phase, R is partitioned into M partitions. The property of each pair of corresponding portions with respect to the join operation is the records in R only need to be joined with records in Si and vice verses. This property is ensured by using the same hash function to portion both files on their join attributes. To handle overflow when a partition is full it is appended to a disk subfile that stores the partition. In the section phase (joining phase) we join the two files together in much the same way as normal but we also have to load the partition files into memory in order to check them with the joined file which gives extra iterations. </p><p id="e58e72ad-b0c0-4978-b772-4f3f71d2603d" class="">The hybrid hash-join algorithm is a variation of partition hash-join, where the joining phase for one of the partitions is included in the partitioning phase. For the first pass, the algo partitions the smaller of the two files and divides the buffer space such that all the blocks of the first partitions can completely reside within main memory. Then when partitioning the larger file we check if the partition is in the smaller files partition if so its written to the result buffer if not it&#x27;s written to disk, we then proceed to the next phase and join the rest of the records.</p><p id="9e71c515-7f47-451f-83dd-6962eb955f45" class="">If we were to write each step of a query process we would create a lot of overhead which leads to slow response time, this is why we can use a technique called pipelining or stream-based processing. this is done by passing the result of one operation to the next operation and in a final step combining results as needed with a project operation. </p><p id="5a14be2b-0cd9-463f-937d-2e8c82937e07" class="">The rest is about parallelism excluded until deemed necessary by looking a the exams.</p><p id="1a9e541c-99e0-4cf9-9433-70fa05ca1225" class="">
+</p><p id="d5dea890-7c20-4883-b9c4-02c44059aa4d" class="">
+</p></div></article></body></html>

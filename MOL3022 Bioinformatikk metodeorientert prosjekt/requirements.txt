@@ -1,0 +1,8 @@
+scikit-learn
+tensorflow
+pydantic
+numpy
+pandas
+uvicorn[standard]
+fastapi
+matplotlib

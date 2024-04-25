@@ -1,0 +1,671 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 13 (NOSQL Databases
+and Big Data Storage Systems)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="14000447-9f11-4b47-9343-89db32f76734" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 13 (NOSQL Databases
+and Big Data Storage Systems)</h1></header><div class="page-body"><p id="470da823-f1b6-4327-b53b-4ddbe796045e" class="">The rise of large-scale applications storing massive amounts of data has led to the development of NoSQL databases as an alternative to traditional SQL systems. NoSQL databases are more flexible in their data modeling and do not require schemas, making them better suited for applications such as free email services and social media platforms with millions of users and diverse data needs. NoSQL databases are often used in combination with other data storage systems to accommodate the various types of data needed for these applications.</p><p id="9ea4f47c-6973-43c5-9c65-393092092cba" class="">The characteristics of NoSQL databases are divided into two categories - those related to distributed databases and systems, and those related to data models and query languages. NoSQL systems are designed to be highly available, scalable, and performant, which is achieved through techniques such as replication, sharding, and high-performance data access. NoSQL systems often use eventual consistency rather than serializable consistency, and employ different replication models such as master-slave and master-master. Additionally, sharding is used to distribute the load of accessing large files or collections of data objects, and to improve load balancing and data availability. Finally, NoSQL systems typically use hashing or range partitioning on object keys to locate individual records or objects.</p><p id="4d737193-26e6-4ae9-90e4-bfb73bc41cdc" class="">NOSQL systems have four main categories: document-based, key-value stores, column-based or wide column, and graph-based systems. It also lists additional categories such as hybrid NOSQL systems, object databases, and XML databases. The article explains that even keyword-based search engines can be considered as NOSQL big data stores.</p><p id="ad6d5229-9bd7-4d0d-864e-acc11162eb5d" class="">The CAP theorem is introduced to explain the competing requirements of consistency, availability, and partition tolerance in a distributed system with data replication, and how it is not possible to guarantee all three properties at the same time. The article also explains that in NOSQL distributed data stores, weaker consistency levels are often acceptable, and guaranteeing availability and partition tolerance is more important than serializability. The article then introduces the four main categories of NOSQL systems: document-based, key-value stores, column-based, and graph-based. Each category is briefly discussed, and a representative system is introduced for each category.</p><p id="1ed8c9c9-5e0d-43fd-a210-ff8c1fa3275b" class="">Document-based NoSQL systems store data as collections of similar documents and are sometimes known as document stores. Unlike object and object-relational systems and XML, there is no need to specify a schema as the documents are self-describing data. Documents can have different data elements, and the system extracts the data element names from the self-describing documents in the collection. Users can request the system to create indexes on some of the data elements. MongoDB and CouchDB are examples of document-based NoSQL systems, and they can use different models, languages, and implementation methods.</p><p id="fd27e50d-d3a6-461a-8ada-a2cff9a64639" class="">MongoDB stores documents in BSON format and collections. Each collection has a unique ObjectId field called _id that is indexed automatically. The structure of the data fields in documents is chosen based on how documents will be accessed and used. There are three design options for interdocument references: denormalized, embedded with separate collection, or normalized. The choice of design depends on how the data will be accessed. Design tradeoffs discussed in other chapters of the book are applicable for choosing the appropriate design for document structures and document collections.</p><p id="c5dbe6b6-830e-48a8-8513-49d0f9688bbc" class="">MongoDB offers CRUD operations, which are Create, Read, Update, and Delete. The insert operation is used to create and insert documents into collections, and the remove operation is used to delete documents based on a Boolean condition. The update operation can be used to modify or replace existing documents, and the find operation is used for read queries. The query condition can be specified as a Boolean condition, and the selected documents are returned as a result. For more detailed information, the MongoDB online documentation can be referenced.</p><p id="37ee7dc3-5215-4b84-8b40-6636c58912b1" class="">MongoDB&#x27;s atomic updates are for a single document, and multidocument transactions use the two-phase commit method to ensure atomicity and consistency. MongoDB uses the replica set concept to create multiple copies of the same data set on different nodes, and replication is done using a variation of the master-slave approach. Sharding, also known as horizontal partitioning, divides the documents into disjoint partitions known as shards to achieve load balancing. Range and hash partitioning are two ways to partition a collection into shards, and MongoDB queries are submitted to a module called the query router, which keeps track of which nodes contain which shards based on the partitioning method used.</p><p id="3befb3c6-6516-481d-8c24-63edb41e66a5" class="">Key-value stores are a type of distributed storage system that prioritize performance, availability, and scalability. The data model is simple, with a unique key used to locate data items quickly, and values that can be structured or unstructured. Retrieving values by supplying the key must be fast. There are many key-value store systems available, each with their own characteristics.</p><p id="4dd84571-3688-4af6-bf78-468253354856" class="">DynamoDB is a key-value store system offered by Amazon as part of its cloud computing services. It uses tables, items, and attributes to store data, where each item is a self-describing record containing attribute-value pairs. The primary key is used to locate items in the table and can be a single attribute or a pair of attributes. The system supports JSON format for items and hash indexes for fast data retrieval. The distributed characteristics of DynamoDB are similar to those of the open source key-value system Voldemort, which is based on similar techniques as DynamoDB.</p><p id="b8de5c15-85a4-41ab-9e6a-608b3d13bb5b" class="">Voldemort is a high-performance open-source system based on Amazon&#x27;s DynamoDB, designed for horizontal scalability, replication, and sharding. Consistent hashing is used to distribute key-value pairs among the nodes of a distributed cluster. The system has simple basic operations and supports high-level formatted data values. The values can be specified in JSON or other data object formats with the help of the Serializer class provided by the user. The consistent hashing method enables horizontal scalability by adding new nodes to the system, and the sharding is built into the method. Replication is achieved by placing specified replicas of an item on successive nodes in a clockwise direction. When a node fails, its data items are distributed to other existing nodes whose labels follow the labels of the failed node. Voldemort has been used by LinkedIn for data storage.</p><p id="f6cb98a8-27df-4e44-9d3b-c1e7566640b9" class="">Oracle NoSQL Database, Redis key-value cache and store, and Apache Cassandra. There are many other systems in this category and provides a brief overview of each system&#x27;s unique features. Cassandra is not easily categorized and offers features from several NOSQL categories.</p><p id="a9ad09af-a467-4258-96f6-daf58d025550" class="">Column-based or wide column are another category of NOSQL systems. BigTable, used in many Google applications, is a well-known example of this category. It uses the Google File System (GFS) for data storage and distribution, and Apache Hbase is an open source system similar to BigTable that typically uses HDFS for data storage. Hbase can also use Amazon’s Simple Storage System (S3) for data storage. In column-based systems, the key is multidimensional and has several components, including a combination of table name, row key, column, and timestamp. Column-based systems are different from key-value stores in terms of the nature of the key.</p><p id="5f43972a-d912-40d8-8c2d-0931fc7f6701" class="">Hbase is a NoSQL system that organizes data using namespaces, tables, column families, column qualifiers, columns, rows, and data cells. Data is stored in self-describing rows with a unique row key, and each table is associated with one or more column families. Hbase stores multiple versions of a data item with a timestamp associated with each version. The concept of column family is similar to vertical partitioning, and each column family of a table is stored in its own files using the HDFS file system. A cell holds a basic data item in Hbase, and a namespace is a collection of tables.</p><p id="d7c01e46-d1b4-43a6-a86e-6e3fb33cd75a" class="">HBase provides low-level CRUD operations (create, read, update, delete) and only supports simple operations, leaving more complex operations like joins between rows in different tables to be implemented by application programs. The create operation creates a new table and specifies one or more column families, while the put operation is used for inserting new data or new versions of existing data items. The get operation retrieves data associated with a single row in a table, and the scan operation retrieves all rows.</p><p id="6087f77f-2dee-469d-ba3b-ebc2a78ffeb1" class="">HBase tables are divided into regions that hold a range of row keys and are assigned to region servers. Each region has stores for each column family. A master server monitors the region servers and splits tables into regions, assigning them to region servers. HBase uses Apache Zookeeper for managing naming, distribution, synchronization, coordination, and replication services, and Apache HDFS for distributed file services. Zookeeper can have several replicas on several nodes for availability and keeps data it needs in main memory. HBase&#x27;s distributed system architecture and components are not discussed in detail but full documentation is available online.</p><p id="7a015212-9f46-42cd-85e6-ab9a16845bee" class="">Graph databases or graph-oriented NOSQL systems represent data as a collection of vertices (nodes) and edges. Both nodes and edges can be labeled to indicate the types of entities and relationships they represent, and it is generally possible to store data associated with both individual nodes and individual edges. Neo4j is a particular open-source Java-based graph database system that will be discussed in detail in later sections, including its data model, querying capabilities, and distributed systems.</p><p id="9db26a4d-4b5a-4e53-a34f-65ea78ba26bc" class="">Neo4js data model uses nodes and relationships to organize data. Nodes and relationships can have properties, and nodes can have labels, which group nodes into collections. Relationships are directed and have a start and end node, as well as a relationship type. In comparison to conventional graph theory, Neo4j uses labels instead of entities, and relationships are directed. The CREATE command is used to create nodes and relationships, and multiple labels can be used for a single node. Paths specify a traversal of part of the graph, and a schema is optional in Neo4j. The system creates a unique identifier for each node, and indexes can be created to retrieve nodes using their properties efficiently.</p><p id="c73fb77b-b92d-4f54-b5d2-2a5bd5b42cdc" class="">Neo4j uses a high-level query language called Cypher which can be used to create, modify, and find nodes and relationships in a graph database. Cypher queries are made up of clauses, and the language can specify complex queries and updates. Some of the main clauses in Cypher include CREATE, DELETE, MATCH, and ORDER BY. Cypher also supports aggregation and conditions through clauses like WITH and WHERE. The language can be used to return both property values and the nodes and relationships themselves, allowing for graph visualization using Neo4j&#x27;s tool. The full Cypher language manual is available online.</p><p id="693228db-cf6a-466b-96be-7e43e0029bbc" class="">Neo4j has two versions: the enterprise edition and the community edition. Both versions support the Neo4j graph data model and storage system, the Cypher graph query language, and other interfaces. The enterprise edition provides additional features, such as caching and clustering of data and locking, to enhance performance. Neo4j also has a graph visualization interface to display a subset of nodes and edges in a database graph. It supports master-slave replication and caching to improve performance, and maintains logical logs to recover from failures.</p></div></article></body></html>

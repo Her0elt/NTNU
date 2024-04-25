@@ -1,0 +1,677 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 4 Tan</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="8536c4c8-15a9-46ee-b167-38ffe4790da0" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📖</span></div><h1 class="page-title">Chapter 4 Tan</h1><table class="properties"><tbody><tr class="property-row property-row-person"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesPerson"><path d="M10.9536 7.90088C12.217 7.90088 13.2559 6.79468 13.2559 5.38525C13.2559 4.01514 12.2114 2.92017 10.9536 2.92017C9.70142 2.92017 8.65137 4.02637 8.65698 5.39087C8.6626 6.79468 9.69019 7.90088 10.9536 7.90088ZM4.4231 8.03003C5.52368 8.03003 6.42212 7.05859 6.42212 5.83447C6.42212 4.63843 5.51245 3.68945 4.4231 3.68945C3.33374 3.68945 2.41846 4.64966 2.41846 5.84009C2.42407 7.05859 3.32251 8.03003 4.4231 8.03003ZM1.37964 13.168H5.49561C4.87231 12.292 5.43384 10.6074 6.78711 9.51807C6.18628 9.14746 5.37769 8.87231 4.4231 8.87231C1.95239 8.87231 0.262207 10.6917 0.262207 12.1628C0.262207 12.7974 0.548584 13.168 1.37964 13.168ZM7.50024 13.168H14.407C15.4009 13.168 15.7322 12.8423 15.7322 12.2864C15.7322 10.8489 13.8679 8.88354 10.9536 8.88354C8.04492 8.88354 6.17505 10.8489 6.17505 12.2864C6.17505 12.8423 6.50635 13.168 7.50024 13.168Z"></path></svg></span>Owner</th><td></td></tr><tr class="property-row property-row-verification"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesVerification"><path d="M3.86426 14.0459H5.32715C5.45475 14.0459 5.56185 14.0892 5.64844 14.1758L6.6875 15.2148C7.13411 15.6615 7.56934 15.8825 7.99316 15.8779C8.42155 15.8779 8.85677 15.6569 9.29883 15.2148L10.3379 14.1758C10.429 14.0892 10.5384 14.0459 10.666 14.0459H12.1221C12.751 14.0459 13.2158 13.8955 13.5166 13.5947C13.8219 13.2939 13.9746 12.8268 13.9746 12.1934V10.7305C13.9746 10.6029 14.0202 10.4958 14.1113 10.4092L15.1436 9.37012C15.5902 8.92806 15.8112 8.49284 15.8066 8.06445C15.8066 7.63607 15.5856 7.19857 15.1436 6.75195L14.1113 5.71289C14.0202 5.6263 13.9746 5.52148 13.9746 5.39844V3.92871C13.9746 3.30436 13.8242 2.83952 13.5234 2.53418C13.2227 2.22884 12.7555 2.07617 12.1221 2.07617H10.666C10.5384 2.07617 10.429 2.03288 10.3379 1.94629L9.29883 0.914062C8.85677 0.462891 8.42155 0.239583 7.99316 0.244141C7.56934 0.244141 7.13411 0.467448 6.6875 0.914062L5.64844 1.94629C5.56185 2.03288 5.45475 2.07617 5.32715 2.07617H3.86426C3.23535 2.07617 2.76823 2.22656 2.46289 2.52734C2.16211 2.82812 2.01172 3.29525 2.01172 3.92871V5.39844C2.01172 5.52148 1.96842 5.6263 1.88184 5.71289L0.849609 6.75195C0.402995 7.19857 0.179688 7.63607 0.179688 8.06445C0.179688 8.49284 0.402995 8.92806 0.849609 9.37012L1.88184 10.4092C1.96842 10.4958 2.01172 10.6029 2.01172 10.7305V12.1934C2.01172 12.8223 2.16211 13.2871 2.46289 13.5879C2.76823 13.8932 3.23535 14.0459 3.86426 14.0459ZM7.23438 11.4277C7.10221 11.4277 6.98372 11.4004 6.87891 11.3457C6.77409 11.291 6.67155 11.2021 6.57129 11.0791L4.89648 9.04199C4.83724 8.96452 4.79167 8.88477 4.75977 8.80273C4.72786 8.7207 4.71191 8.63639 4.71191 8.5498C4.71191 8.37663 4.77116 8.22852 4.88965 8.10547C5.0127 7.97786 5.16081 7.91406 5.33398 7.91406C5.44336 7.91406 5.54134 7.93685 5.62793 7.98242C5.71452 8.02799 5.80339 8.10775 5.89453 8.22168L7.20703 9.88965L10.0371 5.36426C10.1829 5.12728 10.3675 5.00879 10.5908 5.00879C10.7594 5.00879 10.9098 5.06348 11.042 5.17285C11.1787 5.28223 11.2471 5.42578 11.2471 5.60352C11.2471 5.68099 11.2288 5.76302 11.1924 5.84961C11.1559 5.93164 11.1149 6.00911 11.0693 6.08203L7.87012 11.0723C7.78809 11.1908 7.69238 11.2796 7.58301 11.3389C7.47819 11.3981 7.36198 11.4277 7.23438 11.4277Z"></path></svg></span>Verification</th><td></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td></td></tr><tr class="property-row property-row-last_edited_time"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesCreatedAt"><path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM4.54102 8.91211H7.99316C8.30078 8.91211 8.54004 8.67285 8.54004 8.37207V3.8877C8.54004 3.58691 8.30078 3.34766 7.99316 3.34766C7.69238 3.34766 7.45312 3.58691 7.45312 3.8877V7.83203H4.54102C4.2334 7.83203 4.00098 8.06445 4.00098 8.37207C4.00098 8.67285 4.2334 8.91211 4.54102 8.91211Z"></path></svg></span>Last edited time</th><td><time>@April 13, 2023 2:31 PM</time></td></tr></tbody></table></header><div class="page-body"><p id="9cace8b9-16f6-4290-94f8-7f3aa5689666" class="">Businesses collect vast amounts of data, such as customer purchase information, which can be analyzed to gain valuable insights into consumer behavior. Association analysis is a useful method for discovering relationships in large data sets, such as frequent itemsets or association rules. These relationships can be used for marketing, inventory management, and customer relationship management. While association analysis is applicable to various domains, this chapter focuses on market basket data. However, two key issues must be addressed when applying this analysis to market basket data: the computational cost of pattern discovery and the presence of spurious results. The chapter explains the basic concepts of association analysis and algorithms used to efficiently mine patterns, as well as techniques to evaluate and rank patterns based on interestingness.</p><p id="69859b12-4705-4e40-836b-bad28b5d070d" class="">
+</p><h2 id="31611646-3f2f-4b09-9bcb-c0ece50db9b4" class="">4.1 Preliminaries</h2><p id="65bf8921-8d0b-4aa9-a6f3-9e4790a9aa09" class="">This section explains association analysis and its basic terminology. Market basket data can be represented in a binary format where each row is a transaction and each column is an item. Each item is treated as a binary variable that takes a value of 1 if it is present in the transaction and 0 otherwise. An itemset is a collection of zero or more items, and its support count is the number of transactions that contain the itemset. A transaction contains an itemset X if X is a subset of the transaction. An association rule is an implication expression of the form X→Y, where X and Y are disjoint itemsets. Support determines how often a rule is applicable, while confidence determines how frequently items in Y appear in transactions that contain X. Support and confidence are important measures because a rule with very low support might occur by chance, and a low support rule is unlikely to be interesting from a business perspective.</p><h2 id="5bce22c4-7f75-4130-b294-616407842cff" class="">4.2 Frequent Itemset Generation</h2><p id="ff07c809-be0c-4ea2-82eb-bbe7c0ee7180" class="">A lattice structure can enumerate all possible itemsets, with up to 2^k - 1 frequent itemsets generated for a data set with k items. However, exploring such a large search space can be expensive, requiring O(NMw) comparisons. To reduce the computational complexity, there are three main approaches: 1) reduce the number of candidate itemsets (M) using the Apriori principle; 2) reduce the number of comparisons by using advanced data structures; 3) reduce the number of transactions (N) by removing unsupported transactions.</p><p id="e2e5dd1d-9435-459a-9e94-87a2ef3d7883" class="">
+</p><h3 id="5b6f63de-49d9-4297-8b54-83c77d1d88d2" class="">4.2.1 The Apriori Principle</h3><p id="d88fff65-8de8-4e84-a6b4-10173c53f676" class="">This section discusses how the support measure can be used to prune candidate itemsets during frequent itemset generation. The Apriori principle states that if an itemset is frequent, then all of its subsets must also be frequent. For example, if {c, d, e} is a frequent itemset, then all its subsets, such as {c, d} and {d, e}, must also be frequent. Therefore, we can use this principle to reduce the number of candidate itemsets that need to be explored.</p><p id="ab90718d-83d3-4f3d-85ad-409742ddd3d9" class="">The idea behind support-based pruning is to trim the search space of candidate itemsets based on their support values. If an itemset has a low support value, then all its supersets (i.e., itemsets that contain this itemset) must also have a low support value. Conversely, if an itemset is frequent, then all its subsets must also be frequent. This anti-monotone property of the support measure allows us to prune the search space effectively.</p><p id="5d7559fc-f47d-4550-b622-bf507cd018e5" class="">To illustrate this idea, consider an example where we have a set of transactions containing items such as Bread, Milk, Diapers, Beer, and Coke. We can generate candidate itemsets by combining items that appear together in the transactions. For example, the itemset {Bread, Milk} appears in transactions 1, 2, 4, and 5, so it is a candidate itemset. We can count the support of each candidate itemset by scanning the transactions and counting the number of transactions that contain the itemset. Figure 4.2 shows an example of how to count the support of candidate itemsets.</p><p id="956047e3-e607-4d23-98c7-949d1943b860" class="">Once we have counted the support of each candidate itemset, we can use the support measure to prune the search space. If an itemset has low support, then we can eliminate all its supersets from further consideration. For example, if {Bread, Milk} has low support, then we can eliminate {Bread, Milk, Diapers}, {Bread, Milk, Beer}, and {Bread, Milk, Coke} from further consideration because they are all supersets of {Bread, Milk}.</p><p id="c83d1dbe-8926-4976-9b06-8dd893041943" class="">In summary, the support measure can be used to reduce the number of candidate itemsets explored during frequent itemset generation. The anti-monotone property of the support measure allows us to prune the search space effectively by eliminating itemsets with low support and all their supersets.</p><p id="b078dc53-1751-4594-b4c2-509fbbf62a4d" class="">
+</p><h3 id="28bb46c6-4874-4f37-91e1-66de1b79fbed" class="">4.2.2 Frequent Itemset Generation in the Apriori Algorithm</h3><p id="316250a2-c973-481f-b875-b400ea089153" class="">Apriori is the first algorithm to pioneer the use of support-based pruning in association rule mining. It systematically controls the exponential growth of candidate itemsets. Frequent itemsets are generated using the Apriori principle, which ensures that all supersets of infrequent itemsets must be infrequent. The algorithm initially makes a pass over the data set to determine the support of each item. Upon completion of this step, the set of all frequent 1-itemsets will be known. Next, the algorithm iteratively generates new candidate k-itemsets and prunes unnecessary candidates that are guaranteed to be infrequent given the frequent (k-1)-itemsets found in the previous iteration. To count the support of the candidates, the algorithm needs to make an additional pass over the data set. The effectiveness of the Apriori pruning strategy is significant, reducing the number of candidate itemsets even in simple examples.</p><p id="6954458f-7130-449e-b497-7b7aa38b8500" class="">
+</p><h3 id="3d87c288-19b8-4701-b79e-d491366e5479" class="">4.2.3 Candidate Generation and Pruning</h3><p id="ecb468b4-548d-435f-8d1c-9a0fd43553e1" class="">The Apriori algorithm is a popular algorithm for generating frequent itemsets in a given dataset. It works by iteratively generating candidate itemsets of increasing size based on the frequent (k-1)-itemsets found in the previous iteration, and then pruning unnecessary candidates using support-based pruning.</p><p id="84669203-b78c-440d-b976-a7cf714778c8" class="">There are different methods for generating candidate itemsets, including the brute-force method and the Fk-1 x F1 method. The brute-force method considers every k-itemset as a potential candidate and then applies candidate pruning to remove any unnecessary candidates whose subsets are infrequent. The Fk-1 x F1 method extends each frequent (k-1)-itemset with frequent items that are not part of the (k-1)-itemset, ensuring that all frequent k-itemsets are part of the candidate k-itemsets generated by this procedure.</p><p id="bef45e00-3c6c-4e9e-a1b1-ba64495dc2da" class="">An effective candidate generation procedure must be complete and non-redundant. A complete candidate generation procedure must not omit any frequent itemsets, and a non-redundant one must not generate the same candidate itemset more than once. A candidate itemset is unnecessary if at least one of its subsets is infrequent and thus eliminated in the candidate pruning step.</p><p id="09282ee0-337c-4738-afb0-e11f475d670f" class="">In summary, the Apriori algorithm is an iterative process that generates candidate itemsets and prunes unnecessary ones to efficiently find frequent itemsets in a given dataset.</p><h3 id="bb786cec-a25c-4f03-afc3-9ef61e6a0d2d" class="">4.2.4 Support Counting</h3><p id="9d5e533c-389e-43a9-ad55-4224be77d284" class="">Support counting is a crucial step in frequent itemset generation algorithms like Apriori. It involves determining the frequency of occurrence for every candidate itemset that survives the candidate pruning step. Support counting is usually done in steps 6 through 11 of Algorithm 4.1.</p><p id="c993f268-a6be-4107-bf50-abe0003ffb05" class="">One way to perform support counting is to compare each transaction against every candidate itemset and update the support counts of candidates contained in a transaction. However, this approach is computationally expensive, especially when the numbers of transactions and candidate itemsets are large.</p><p id="5a5ea16b-2e9c-417d-bb91-086e6a09c0cf" class="">An alternative approach is to enumerate the itemsets contained in each transaction and use them to update the support counts of their respective candidate itemsets. This can be done by systematically enumerating itemsets by specifying their items one by one, from the leftmost item to the rightmost item. This way, itemsets contained in a transaction can be systematically enumerated by specifying their items one by one, from the leftmost item to the rightmost item.</p><p id="596b8cde-bd74-45d2-894a-284ecea79eb4" class="">To match enumerated itemsets to existing candidate itemsets, a hash tree structure can be used. In this structure, candidate itemsets are partitioned into different buckets and stored in a hash tree. Itemsets contained in each transaction are also hashed into their appropriate buckets. This way, itemsets in a transaction are matched only against candidate itemsets that belong to the same bucket, which is more efficient than comparing each itemset in the transaction with every candidate itemset.</p><p id="e4f00f61-5420-423d-8e6f-9b37b6d36ad8" class="">In summary, support counting is an important step in frequent itemset generation algorithms, and there are different approaches to perform it. One can compare each transaction against every candidate itemset or enumerate itemsets in a transaction and match them to existing candidates using a hash tree structure.</p><h3 id="1e268d09-205a-4a7e-adb5-75bc985dfb2d" class="">4.2.5 Computational Complexity</h3><p id="0002fa83-f905-4b66-a4eb-3eaced432290" class="">The computational complexity of the Apriori algorithm depends on several factors. Lowering the support threshold leads to more frequent itemsets, which increases the number of candidate itemsets that must be generated and counted at every level, and increases the size of frequent itemsets. As the number of items and transactions increases, the runtime and storage requirements of the algorithm also increase. In dense data sets with large transaction widths, more candidate itemsets must be examined, and more hash tree traversals are performed during support counting.</p><p id="7143cff4-828c-4800-aa56-f9a228fa258f" class="">To generate frequent 1-itemsets, the algorithm requires O(Nw) time, where N is the total number of transactions and w is the average transaction width. Candidate generation requires merging pairs of frequent (k-1)-itemsets, which can produce at most one viable candidate k-itemset per merging step. The cost of merging frequent itemsets is between (k-2)|Ck| and (k-2)|Fk-1|2, where Ck is the set of candidate k-itemsets and Fk-1 is the set of frequent (k-1)-itemsets. During candidate pruning, each candidate k-itemset requires verifying that its k-2 subsets are frequent, which requires O(k(k-2)|Ck|) time. The cost of support counting is O(Nkkαk), where k is the size of the frequent itemset and αk is the average number of items per transaction in the frequent itemset.</p><h2 id="e44283c1-ceac-47a1-acac-2d656fe9ae47" class="">4.3 Rule Generation</h2><p id="fe55544a-a681-41cb-9d9c-fdc85081bc53" class="">This section explains how to efficiently extract association rules from a frequent itemset. Each frequent k-itemset, Y, can produce up to 2k-2 association rules, but empty antecedents or consequents are ignored. An association rule is generated by dividing the itemset Y into two non-empty subsets, X and Y - X, where X -→ Y - X meets the confidence threshold. These rules have already met the support threshold as they are generated from a frequent itemset. For example, if X = {a, b, c}, six candidate association rules can be generated from it, all of which satisfy the support threshold. The confidence of an association rule can be computed without additional scans of the transaction data set. For instance, the confidence for {1, 2} -→ {3} generated from X = {1, 2, 3} is σ({1, 2, 3})/σ({1, 2}). Since both itemsets&#x27; support counts were found during frequent itemset generation, there is no need to read the entire data set again.</p><h3 id="cdf954d7-41b2-4b49-b07c-659dd1d8c912" class="">4.3.1 Conﬁdence-Based Pruning</h3><p id="cdb232a1-110a-4ed5-bf6a-ebce25b9ae5f" class="">Conﬁdence measure does not follow the anti-monotone property like support measure. Comparing two rules, X−→Y and X̃−→Ỹ generated from the same frequent itemset Y, conﬁdence for X−→Y can be larger, smaller or equal to X̃−→Ỹ. However, for any given itemset Y, if a rule X−→Y−X does not meet the confidence threshold, then any rule X̃−→Y−X̃, where X̃ is a subset of X, must also fail to meet the threshold. This is formalized in Theorem 4.2, where the conﬁdence of two rules, X̃−→Y−X̃ and X−→Y−X with X̃⊂X, are compared and it is shown that the latter rule cannot have a lower confidence than the former one because σ(X̃)≥σ(X).</p><h3 id="2f2f6845-9819-4a9c-ad00-27aad165c94a" class="">4.3.2 Rule Generation in Apriori Algorithm</h3><p id="3ba7bcc4-dd55-4169-8884-9dc5df1020a4" class="">The Apriori algorithm generates association rules using a level-wise approach, with each level representing the number of items in the rule consequent. The first step is to extract all high confidence rules with a single item in the rule consequent. These rules are then used to generate new candidate rules by merging the consequents of existing high confidence rules. The resulting association rules are organized into a lattice structure, and any node with low confidence can be pruned along with its subgraph. A pseudocode for the rule generation step is provided, which is similar to the frequent itemset generation procedure except that the conﬁdence of the candidate rules is determined using support counts computed during frequent itemset generation.</p><h3 id="5b236e6c-7678-46ad-a0c0-0ce7e96226ee" class="">4.3.3 An Example: Congressional Voting Records</h3><p id="49c8b09f-a589-4868-86ff-0706c3a2c617" class="">This section uses association analysis on the voting records of members of the US House of Representatives, obtained from the 1984 Congressional Voting Records Database with 435 transactions and 34 items. The set of items are listed in Table 4.3, which includes binary attributes such as party affiliation and voting records on 16 key issues. The Apriori algorithm is applied to the data set with minsup = 30% and minconf = 90%, and high confidence rules are extracted, which are shown in Table 4.4. These rules reveal the key issues that divide members from both political parties, such as aid to El Salvador, budget resolution, and MX missile.</p><h2 id="3d639ef9-6e5a-471c-a17b-81f9b2d4c885" class="">4.4 Compact Representation of Frequent Itemsets</h2><h3 id="271ab79b-086a-4be6-a560-9f65595d5048" class="">4.4.1
+Maximal Frequent Itemsets</h3><p id="06e5c7e7-a078-49ad-b419-299fda9eeeee" class="">A frequent itemset is maximal if none of its immediate supersets are frequent. The itemset lattice in Figure 4.16 illustrates this concept, with frequent itemsets above the border and infrequent itemsets below it. Maximal frequent itemsets provide a compact representation of frequent itemsets and form the smallest set from which all frequent itemsets can be derived. For example, {a, d}, {a, c, e}, and {b, c, d, e} are maximal frequent itemsets in Figure 4.16. Enumerating all the subsets of maximal frequent itemsets generates the complete list of frequent itemsets. However, maximal frequent itemsets do not contain the support information of their subsets. An additional pass over the data set is required to determine the support counts of non-maximal frequent itemsets. A minimal representation of itemsets that preserves the support information is described in the next section.</p><h3 id="fdec47cc-e80d-44b3-8416-948ce7164bf2" class="">4.4.2 Closed Itemsets</h3><p id="0bb6823a-7549-42ba-b7e0-20fb1d7e8009" class="">Closed itemsets are a minimal representation of all itemsets, while still preserving their support information. A closed itemset is an itemset X where none of its immediate supersets has exactly the same support count as X. Closed itemsets have an interesting property in that if we know their support counts, we can derive the support count of every other itemset in the itemset lattice without making additional passes over the data set. Closed frequent itemsets are closed itemsets where their support is greater than or equal to the minimum support threshold. Although closed itemsets provide a compact representation of the support counts of all itemsets, they can still be exponentially large in number. Nonetheless, algorithms are available to extract closed frequent itemsets from a given dataset, which can then be used to determine the support counts for all non-closed frequent itemsets.</p><h2 id="0677d5f9-0478-4c0d-9a7f-b4ab53fb966b" class="">4.5
+Alternative Methods for Generating Frequent
+Itemsets</h2><p id="2a4b890e-d398-40dd-be06-140ccf4413f4" class="">Apriori algorithm addresses the problem of frequent itemset generation by applying the Apriori principle to prune the search space. However, it still has significant I/O overhead, especially for dense datasets. To overcome these limitations, alternative methods have been developed. One such method is the traversal of the itemset lattice using different search strategies, including general-to-specific, specific-to-general, or bidirectional approaches. Equivalence classes can also be used to partition the lattice into disjoint groups of nodes, where the algorithm searches for frequent itemsets within a particular class before moving to another. Additionally, the itemset lattice can be traversed in a breadth-first or depth-first manner.</p><h2 id="b8838419-d543-41cc-8f40-bff70626c7e8" class="">4.6 FP-Growth Algorithm*</h2><p id="5d2df328-f13d-45ed-a6d6-cb616baf3ea3" class="">This section introduces the FP-growth algorithm, which differs significantly from Apriori in its approach to finding frequent itemsets. FP-growth uses an FP-tree to encode the dataset and extract frequent itemsets without generating and testing like Apriori. The next section delves into the specifics of this approach.</p><h3 id="91c58ffb-3dbf-4a5f-b17a-23a45917b72f" class="">4.6.1 FP-Tree Representation</h3><p id="95d95f9c-32ec-4fe8-ac22-5d0707b2af91" class="">An FP-tree is a compressed representation of input data that maps each transaction onto a path in the tree. The tree is constructed by scanning the data set twice, where infrequent items are discarded and frequent items are sorted. The algorithm then constructs the FP-tree by creating nodes for each item in a transaction and forming a path to encode the transaction. The size of the FP-tree is typically smaller than the size of the uncompressed data because many transactions often share common items. The worst-case scenario happens when every transaction has a unique set of items. The size of the FP-tree also depends on how the items are ordered.</p><h3 id="222fc5dd-04ed-4f5f-818d-3f7dd91407f9" class="">4.6.2 Frequent Itemset Generation in FP-Growth Algorithm</h3><p id="c0eb71cb-73c7-4911-a54b-b211b71acce7" class="">FP-growth is an algorithm for generating frequent itemsets by exploring an FP-tree in a bottom-up manner. It starts by searching for frequent itemsets ending in a specific item and uses a divide-and-conquer strategy to split the problem into subproblems. To find all frequent itemsets ending with a particular suffix, such as &quot;e,&quot; the algorithm checks whether the itemset {e} itself is frequent. If it is frequent, it considers the subproblems of finding frequent itemsets ending in de, ce, be, and ae. These subproblems are further decomposed into smaller subproblems. The solutions obtained from the subproblems are merged to find all the frequent itemsets ending in e. The algorithm uses conditional FP-trees to find frequent itemsets ending with a particular suffix. The conditional FP-tree is structurally similar to an FP-tree, except it is used to find frequent itemsets ending with a specific suffix. The algorithm first gathers all the paths containing the specific item and obtains the support count for that item. If the minimum support count is met, the algorithm solves the subproblems of finding frequent itemsets ending in the suffix. The preﬁx paths are converted into a conditional FP-tree, and the support counts along the prefix paths are updated to reflect the counts of transactions that contain the specific item. Finally, the solutions obtained from the subproblems are merged to find all the frequent itemsets ending in the suffix.</p><h2 id="8944c232-ba6b-4f74-afeb-c4807f7499f9" class="">4.7 Evaluation of Association Patterns</h2><p id="f4f99d36-a8a2-4013-a992-b1c67c1bb48d" class="">The Apriori principle reduces the search space of itemsets, but association analysis can still generate many patterns. Evaluating which patterns are interesting is difficult since criteria vary. Objective measures like support, confidence, and correlation can be used to rank patterns. Subjective measures, which require domain expertise, consider whether a pattern reveals unexpected information or provides useful knowledge. For example, the rule {Butter} −→ {Bread} may not be interesting despite high support and confidence, while {Diapers} −→ {Beer} may suggest a new cross-selling opportunity for retailers. Resources for subjective interestingness measures are listed in the chapter bibliography.</p><h3 id="07efb00e-dc7e-4100-a57a-a7f7ee92286c" class="">4.7.1 Objective Measures of Interestingness</h3><p id="c4d70e45-1e4c-414a-a186-0d8ecd36cc67" class="">Objective measure evaluates quality of association patterns in a domain-independent approach with a threshold for filtering low-quality patterns. It is computed based on frequency counts tabulated in a contingency table. Contingency tables can also be used for symmetric binary, nominal, and ordinal variables. The classical association rule mining formulation relies on support and confidence measures to eliminate uninteresting patterns. However, the support threshold eliminates many potentially interesting patterns with low support items. The confidence measure can be misleading, and high confidence values do not always imply an interesting association pattern. It is important to consider the support of the other variable(s) to avoid misleading results. In evaluating association patterns, what is important is to measure the change in the fraction of item(s) given the information of the other variable(s).</p><p id="e4ca71b9-fa76-4d01-a73a-fbaa72cff7e9" class="">The measures defined in the previous section use different techniques to capture the deviance between s(A, B) and sindep (A, B) = s(A)×s(B). Some measures use the ratio between s(A, B) and sindep (A, B), such as the interest factor and IS, while others consider the difference between the two, such as the PS and the φ-coefficient. Some measures are bounded in a particular range, such as the IS and the φ-coefficient, while others are unbounded and do not have a defined maximum or minimum value, such as the interest factor. Because of these differences, these measures behave differently when applied to different types of patterns.</p><p id="f88c0952-4fd3-4444-9438-6b1984f79d25" class="">It is important to note that the measures defined above are not exhaustive, and there exist many alternative measures for capturing different properties of relationships between pairs of binary variables. Given the wide variety of measures available, it is reasonable to question whether the measures can produce similar ordering results when applied to a set of association patterns. If the measures are consistent, then we can choose any one of them as our evaluation metric. Otherwise, it is important to understand what their differences are in order to determine which measure is more suitable for analyzing certain types of patterns.</p><p id="3b0a294f-375f-40ed-a814-0d735ef3413b" class="">The measures used in association analysis greatly differ from each other and can provide conflicting information about the quality of a pattern. No measure is universally best for all applications. Inversion Property is an important property of the measures that can be tested by exchanging the frequency counts f11 with f00 and f10 with f01. Measures that are invariant to the inversion property include the correlation, odds ratio, κ, and collective strength. Measures that do not remain invariant under the inversion operation include the interest factor and the IS measure. For asymmetric binary variables, it is more meaningful to capture relationships based on the presence of a variable rather than its absence. On the other hand, if we are dealing with symmetric binary variables where the relationships between 0’s and 1’s are equally meaningful, care should be taken to ensure that the chosen measure is invariant to inversion. The scaling property is also important, where the actual number of males or females can depend upon the samples available for study, but the relationship between gender and performance in a course should remain the same.</p><p id="2062f0ac-cb82-4a69-8a86-072891e112d6" class="">
+</p><h3 id="bc8ee650-0bb7-4a83-b05f-fd4c353390a1" class="">4.7.2 Measures beyond Pairs of Binary Variables</h3><p id="ea47bbb6-f98d-4f43-8152-c02223b60c99" class="">Many measures in association rule mining are defined for pairs of binary variables, such as 2-itemsets or association rules. However, some of these measures, such as support and all-confidence, can be extended to larger-sized itemsets using multidimensional contingency tables. Other measures, including interest factor, IS, PS, and Jaccard coefficient, can also be extended to more than two variables using these tables. For example, a three-dimensional contingency table for items a, b, and c can represent the number of transactions that contain a particular combination of these items. Objective measures such as interest factor and PS can be extended to more than two variables by applying the condition for statistical independence. Another approach is to define the objective measure as the maximum, minimum, or average value for the associations between pairs of items in a pattern, such as the φ-coefficient for a k-itemset X. However, such alternate measures may not always show the anti-monotone property in the same way as the support measure, making them unsuitable for mining patterns using the Apriori principle. Analysis of multidimensional contingency tables is more complicated because of the presence of partial associations in the data, which can lead to Simpson&#x27;s paradox. More sophisticated statistical techniques, such as loglinear models, can be used to analyze such relationships, but these techniques are beyond the scope of this book.</p><h3 id="5f2e4ad9-ace7-4946-988b-fafbae9041f7" class="">4.7.3 Simpson’s Paradox</h3><p id="e67822f3-5775-4b44-9a19-4b1e4064c547" class="">When interpreting associations between variables, caution must be taken, as confounding factors, or hidden variables not analyzed, may influence the observed relationship. Simpson&#x27;s paradox is a phenomenon where hidden variables may cause the observed relationship between a pair of variables to disappear or reverse its direction. An example is the relationship between the sale of high-definition televisions (HDTV) and exercise machines. While data analysis may suggest that customers who buy HDTVs are more likely to buy exercise machines than those who do not, further analysis shows that the sales of these items depend on whether the customer is a college student or a working adult. In this case, customer group acts as a hidden variable that affects both the fraction of customers who buy HDTVs and those who buy exercise machines. Stratifying the data can factor out the effect of the hidden variable and reveal that the relationship between buying HDTVs and buying exercise machines is not direct but indirect. Simpson&#x27;s paradox can be illustrated mathematically as a/b &lt; c/d and p/q &lt; r/s, but (a + p)/(b + q) and (c + r)/(d + s) &gt; b+q/d+s, which results in the paradoxical reversal of the relationship between the two variables.</p><h2 id="5c36abb0-03a3-4a97-9874-62517fb87dc0" class="">4.8 Eﬀect of Skewed Support Distribution</h2><p id="1ae85c0a-d93f-4756-ae8e-a1f847b98361" class="">This section examines how the properties of input data can influence the performance and quality of extracted patterns by many association analysis algorithms. For instance, the computational complexity of the Apriori algorithm depends on factors such as the number of items in the data, the average transaction width, and the support threshold used. Another critical property that can significantly affect the performance of association analysis algorithms is the support distribution of the input data. Specifically, data sets with skewed support distributions, where most of the items have relatively low to moderate frequencies, but a small number of them have very high frequencies, can be challenging for pattern mining algorithms.</p><p id="be62f6a6-e3be-4baa-a6f0-7c9389e3fac0" class="">For instance, suppose we have a data set with a skewed support distribution like the illustrative example shown in Figure 4.29, where p is a high support item, and q and r are low support items. Even though q and r are low support items, they always occur together in the limited number of transactions that they appear and hence are strongly related. A pattern mining algorithm should, therefore, report {q, r} as interesting. However, choosing the right support threshold for mining itemsets such as {q, r} can be quite tricky. If we set the threshold too high, we may miss many interesting patterns involving low-support items such as {q, r}. Conversely, setting the support threshold too low can be detrimental to the pattern mining process for several reasons.</p><p id="7462c762-70b3-4029-9ada-59a8824aba84" class="">First, existing association analysis algorithms&#x27; computational and memory requirements increase considerably with low support thresholds. Second, the number of extracted patterns also increases substantially with low support thresholds, making their analysis and interpretation difficult. In particular, we may extract many spurious patterns that relate a high-frequency item such as p to a low-frequency item such as q. Such patterns, called cross-support patterns, are likely to be spurious because the association between p and q is largely influenced by the frequent occurrence of p instead of the joint occurrence of p and q together.</p><p id="340b01d8-ff3c-4c73-b0cb-c868e11e4a13" class="">An example of a real data set that exhibits a skewed support distribution is the census data set, as shown in Table 4.19. The data contains 49,046 records and 2113 asymmetric binary variables. While more than 80% of the items have support less than 1%, a handful of them have support greater than 90%. In market basket analysis, such low support items may correspond to expensive products (such as jewelry) that are seldom bought by customers, but whose patterns are still interesting to retailers. Patterns involving such low-support items, though meaningful, can easily be rejected by a frequent pattern mining algorithm with a high support threshold. On the other hand, setting a low support threshold may result in the extraction of spurious patterns that relate a high-frequency item to a low-frequency item.</p></div></article></body></html>

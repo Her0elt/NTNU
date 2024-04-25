@@ -1,0 +1,15 @@
+name: conda-env
+channels:
+  - conda-forge
+  - anaconda
+  - defaults
+dependencies:
+  - python=3.8.16
+  - tensorflow
+  - scikit-learn
+  - pydantic
+  - numpy
+  - pandas
+  - uvicorn-standard
+  - fastapi
+  - matplotlib

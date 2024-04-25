@@ -1,0 +1,690 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 8 (Supporting Top-k Join Queries in Relational Databases)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="fd594b5d-087a-4671-b586-ed1cc8aa9f31" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 8 (Supporting Top-k Join Queries in Relational Databases)</h1></header><div class="page-body"><p id="7047ab61-eecb-4705-8d2c-536f33ebe384" class="">Rank-aware query processing is crucial for many applications, including building meta-search engines and similarity matching in multimedia and digital libraries. In these applications, multiple features are used to evaluate the similarity between query and stored media, and combining rankings is necessary. Top-k join queries are frequently used, where users want the top-k results based on a score function. Our goal is to support top-k join queries in relational query processors. A top-k join query joins multiple relations and produces the results ranked on a total score computed using a provided function, f. The score can be the value of one attribute or a computed value using a predicate. The SQL-like notation for a top-k join query is:
+SELECT * FROM R1, R2, ..., Rm WHERE join condition(R1, R2, ..., Rm) ORDER BY f(R1.score, R2.score, ..., Rm.score) STOP AFTER k.</p><p id="93ea3a18-64c6-44b5-850c-d80b44bde2c7" class="">Join operation combines Cartesian product of input relations to get valid join combinations. The join condition needs to be evaluated for all points in the Cartesian space, but only part of this space needs to be computed for top-k join queries. Current join operators cannot generally benefit from orderings on their inputs to produce ordered join results. A sort operator is needed on top of the join to produce ranked results on expressions like 0.3<em>A.1+0.7</em>
+B.2. However, having a rank-join operator can use individual orders and produce join results ordered on expressions like 0.3<em>A.1+0.7</em>
+B.3, making sorting unnecessary. Two major problems of sorting are its expense and its blocking nature, which can stall the process if one of the inputs is blocked.</p><p id="74e45aca-1832-4b74-aca5-07877fd83b84" class="">To address problems resulting from decoupling sorting from the join operation, we propose a ranking-aware join operator that preserves the interesting orders of its inputs, performs the basic join operation under general join conditions, conforms with the current query operator interface, avoids unnecessary sorting of join results, produces the first ranked join results quickly, and adapts to input fluctuations. Our contribution includes a new rank-join algorithm and correctness proof, implemented in practical pipelined rank-join operators based on ripple join. We also propose a score-guided join strategy and an adaptive join strategy for joining ranked inputs from external sources. Experimental evaluation validates our approach and shows superior performance over other approaches. The remainder of the paper describes relevant previous attempts and their limitations, necessary background on ripple join, the query model, physical rank-join operators, generalization of the rank-join algorithm, experimental evaluation, and concluding remarks.</p><p id="86e39dbc-1bba-4bba-9404-06a1641dffc0" class="">The problem of supporting top-k selection queries involves applying a scoring function to multiple attributes of the same relation to select tuples ranked by their combined score. Various algorithms have been proposed to tackle this problem in different contexts. Fagin and Fagin et al. introduce efficient algorithms for ranking queries, assuming sorted or random access to object scores. Similarly, Chang and Hwang address expensive probing of object scores in top-k selection queries, assuming sorted access to one attribute. J∗ is introduced to join multiple ranked inputs to produce a global rank using A* search. However, this approach is less flexible than our proposed join operators, which are more general in terms of access capabilities and easier to adopt in practical query processors. In particular, our operators outperform NRA-RJ, which is efficient but limited to key-equality conditions.</p><p id="96e1d11f-5a35-4dd6-8c8a-1f02ccbef219" class="">Ripple join is a join algorithm family introduced in [11] for online processing of aggregation queries in relational databases. Unlike traditional join algorithms that aim to minimize completion time, ripple joins aim to minimize the time it takes to get an acceptably precise query result estimate. Ripple join is a generalization of nested-loops join and hash join. In the simplest two-table version, one new tuple is retrieved from each table at each sampling step and joined with previously seen tuples and with each other to sweep out the Cartesian product R × S. The rectangular version samples one relation at a higher rate to provide the shortest possible confidence intervals. Variants of ripple join include Block Ripple Join, where sample units are blocks of tuples, and Hash Ripple Join, where sampled tuples are kept in hash tables in memory for faster join condition calculation. When hash tables exceed memory size, Hash Ripple Join falls back to Block Ripple Join.</p><p id="02f8ba21-e460-4bff-bfe6-2bc463e92843" class="">In traditional relational systems the answer to a join
+query is a set of m − tuple records, where m is the
+number of joined relations and each join result is a
+new tuple that consists of the concatenation of the
+tuples from the joined relations. There is no order
+requirement imposed on the join results although the
+join technique may be able to preserve partial orders
+of the inputs. In contrast, the answer to a top-k join
+query is an ordered set of join results according to some
+provided function that combines the orders on each
+input.</p><p id="03e6b7eb-622d-4d4e-9942-4437a5f2c45a" class="">Join operator is implemented to perform better in evaluating the top-k join queries by taking into consideration the fact that the inputs may already be ordered based on their individual scores. By doing this, the need to sort the join results on the combined score can be eliminated. The join operation spans the space of Cartesian product of the input relations to get valid join combinations. Only part of this space needs to be computed to evaluate top-k join queries if the inputs are ordered individually. The rank-join algorithm is introduced in this section, which takes m ranked inputs, a join condition, a monotone combining ranking function f, and the number of desired ranked join results k. The algorithm reports the top k ranked join results in descending order of their combined score. The value T is an upper-bound of the scores of any join combination not seen so far. Using a monotone combining function, the described rank-join algorithm correctly reports the top k join results ordered on their combined score.</p><p id="7d0530ff-6f9b-4586-a38b-8368f25aa70d" class="">The order of checking points in Cartesian space affects the rank-join algorithm&#x27;s stopping criteria. Two relations, with join condition L.A = R.A and ordered by L.B + R.B, are shown in Figure 3. The rank-join algorithm computes a threshold value based on the last accessed tuples from each relation. Figure 4 shows two join strategies: nested-loops evaluation (a) and symmetric join evaluation (b). The algorithm computes different threshold values for each strategy, and a lower threshold value enables reporting top-ranked join results earlier. Different implementations of the rank-join algorithm can be chosen based on the join strategy used.</p><p id="62ab3bc3-e6ca-4ea8-8554-aae70003d3db" class="">Encapsulating the rank-join algorithm in a physical query operator enables practical query engines to adopt it. Two alternatives to implement the new rank-join algorithm as a physical join operator are presented, differing in the join strategy used. Reusing existing join strategies (nested-loops, merge, hash) results in poor performance. The new operators are described in terms of the Open, GetNext, and Close methods. The ripple join strategy is used to sweep the Cartesian space and retrieve tuples in order to preserve ranking. Two variants of the rank-join algorithm are presented based on the hash and block ripple join variants.</p><p id="9bdde026-8544-47ae-ab61-42f2702c3f08" class="">HRJN is a variant of hash join or hash ripple join algorithm. The operator takes four parameters during initialization: the two inputs, the join condition, and the combining function. One or both of the inputs can be another HRJN operator. The Open method sets up the operator&#x27;s internal state, including two hash tables for each input and a priority queue for valid join combinations ordered by their combined score. The GetNext method uses the rank-join algorithm and maintains a threshold value as an upper-bound of the score of all join combinations not yet seen. The algorithm starts by checking if the priority queue has any join results and reports it if its combined score is greater than or equal to the computed threshold value. Otherwise, it reads tuples from the left and right inputs and performs a symmetric hash join to generate new join results, which are inserted into the priority queue. The algorithm switches between the left and right inputs at each step for faster results depending on the joined data.</p><p id="f9c703a1-27c8-495f-833a-7a9fafc4ee7d" class="">Issues with implementing rank-join as a binary pipelined query operator:</p><ul id="2219e6b0-e733-4046-9760-b14386ef55a2" class="bulleted-list"><li style="list-style-type:disc">HRJN requires more space than the logical rank-join algorithm due to two hash tables and a priority queue. However, in the proposed rank-join algorithm, the queue buffer is bounded by k, the maximum number of ranked join results the user wants.</li></ul><ul id="877b8ed9-d0ec-4841-bab8-6c6aa6f2b9cb" class="bulleted-list"><li style="list-style-type:disc">Implementing the algorithm in a pipeline increases computational overhead. When the top HRJN operator is called for the next top-ranked join result, excessive calls to the ranking algorithm in the lower-level operators result in larger queue sizes and more database accesses, which we call the Local Ranking problem.</li></ul><ul id="422efcdb-f7d2-43b2-91f5-ad41c4dd782e" class="bulleted-list"><li style="list-style-type:disc">To solve the Local Ranking problem, we utilize the idea of the blocked ripple join algorithm and issue less expensive GetNext calls to the input with more HRJN operators in its subtree of the query plan. This significantly enhances the performance of the HRJN operator.</li></ul><ul id="6208b7ea-45df-4880-86d7-b4d2397e11a9" class="bulleted-list"><li style="list-style-type:disc">Choosing the right value for p, the balancing factor, is a design decision and depends on the generated query plan. A good choice of p boosts the performance of HRJN.</li></ul><p id="0b0d052e-af92-46c2-a480-4bd82454aa56" class="">
+</p><p id="91180136-8baa-4b28-b43d-bb22241ccc10" class="">Algorithm input polling strategy significantly affects operator response time. Balancing input retrieval may not be optimal for rank-joining relations L and R with scores 100, 50, 25, 10 ... and 10, 9, 8, 5, ... respectively. Favoring R (4 R tuples and 2 L tuples) rather than a balanced approach (3 tuples from each) narrows the gap between T1 and T2 in the threshold computation. Adaptive switching between hash join and nested-loops join occurs using this heuristic. The join strategy behaves as a nested-loops join when L scores are higher, a symmetric hash join when scores are close, and gracefully switches between the two strategies to minimize the threshold. HRJN∗ is the enhanced operator implementing this heuristic and outperforms other rank-join operators including HRJN.</p><p id="744ad724-8ee0-465f-b6b4-a04ce3ed7048" class="">An adaptive join algorithm can handle stalled inputs by using tuples from the other input to produce join results. This is useful in applications dealing with ranking and variable environments, such as mediators over web-accessible sources and distributed multimedia repositories. The rank-join operator can use input availability to guide its join strategy, and HRJN can easily be adapted to use the practical adaptive version of the symmetric hash join operator, XJoin. The adaptive HRJN inherits the adaptability advantage of XJoin and supports top-k join queries over external sources.</p><p id="3f29b5b0-f3ee-432e-b517-da13687310b9" class="">This section generalizes the rank-join algorithm to allow for random access to input relations when indexes exist. This can lead to better performance depending on the type of index and the selectivity of the join operation. The new algorithm eliminates on-the-fly duplicate join results by checking the combined score of the join result against the upper-bound of scores of join results not yet produced. If both inputs have indexes on the join columns, there is no need to build hash tables. The top value of the relation being probed should be decreased to the score of the next tuple. If no indexes exist, the algorithm behaves like the original HRJN algorithm.</p><p id="2328afed-c6a4-4fe6-a7d8-c1afef06595b" class="">In this section, we compare the HRJN and HRJN∗ rank-join operators with another rank-join operator based on the J∗ algorithm. The experiments are conducted on a research platform for a complete video database management system (VDBMS), which runs on a Sun Enterprise 450 with 4 UltraSparc-II processors running SunOS 5.6 operating system. The research platform is based on PREDATOR [17], the object-relational database system from Cornell University. The database tables have the schema (Id, JC, Score, Other Attributes), where JC is the join column (not a key) having D distinct values. Each table is accessed through a sorted access plan, and tuples are retrieved in descending order of the Score attribute.</p><p id="bd754ea7-5b1c-4973-ba69-11783948ead1" class="">The study uses a simple ranking query that joins four tables on the non-key attribute JC and retrieves the join results ordered on a simple function. The function combines individual scores, which in this case, is a weighted sum of the scores, where wi is the weight associated with input i. The top k results are retrieved by the query. The query is expressed in a SQL-like form, as follows:</p><p id="a4ce999c-8382-46f2-b8b0-fcd55844fa97" class="">Q: SELECT T1.id, T2.id, T3.id, T4.id
+FROM T1, T2, T3, T4
+WHERE T1.JC=T2.JC and
+T2.JC=T3.JC and
+T3.JC=T4.JC
+ORDER BY w1<em>T1.Score + w2</em>T2.Score +
+w3<em>T3.Score + w4</em>T4.Score
+STOP AFTER k;</p><p id="f9770e3f-3829-4e39-b459-28f94558e065" class="">One pipelined execution plan for the query Q is the left-deep plan, Plan A. To limit the number of reported answers to k, the StopAfter query operator [3, 4] is applied, which is implemented in the prototype as a physical query operator Scan-Stop, a straightforward implementation of StopAfter, and appears on top of the query plan. Scan-Stop does not perform any ordering on its input.</p><p id="b64bad79-c20e-4967-8e10-8082a4d5867c" class="">In this section, we compare three rank-join operators: HRJN, HRJN∗, and J∗. HRJN uses a symmetric hash join strategy and applies the local ranking minimization heuristic, while HRJN∗ uses a score-guided strategy to retrieve tuples from both inputs. J∗ is an implementation of the J∗ algorithm. We use four performance metrics: total time to retrieve k results, total number of accessed disk pages, maximum queue size, and total occupied space. We vary the number of required answers and the join selectivity in our experiments. HRJN and HRJN∗ show faster execution for large values of k, while J∗ has better performance for high selectivity values. HRJN∗ shows the best performance overall, combining the advantages of J∗ and HRJN. HRJN and HRJN∗ show better scalability than J∗ in terms of total query time, while J∗ and HRJN∗ show better performance in terms of the number of accessed pages. HRJN∗ is the most scalable in terms of space overhead.</p><p id="499e7b99-4be6-482d-9b7b-fe3ab2c5e337" class="">This paper proposes a new rank-join algorithm for supporting top-k join queries in practical relational query processors. The algorithm uses ranking on input relations to produce ranked join results on a combined score, without requiring a blocking sort operation after join. A physical query operator called hash rank join (HRJN) is presented to implement rank-join based on ripple join. The paper also proposes a new join strategy guided by input score values, and a general rank-join algorithm that utilizes available indexes on join columns for faster termination of the ranking process. Experimental evaluation shows significant performance enhancement, especially for low values of join selectivity.</p><p id="c3a822ca-9a04-480e-908c-3df2f60731e2" class=""><strong>Summery of the two methods </strong></p><p id="8ab6c82d-3a91-4297-ad65-6f7572a8f8d8" class="">Encapsulating the rank-join algorithm in a physical query operator enables practical query engines to adopt it. Two alternatives to implement the new rank-join algorithm as a physical join operator are presented, differing in the join strategy used. Reusing existing join strategies (nested-loops, merge, hash) results in poor performance. The new operators are described in terms of the Open, GetNext, and Close methods. The ripple join strategy is used to sweep the Cartesian space and retrieve tuples in order to preserve ranking. Two variants of the rank-join algorithm are presented based on the hash and block ripple join variants.</p></div></article></body></html>

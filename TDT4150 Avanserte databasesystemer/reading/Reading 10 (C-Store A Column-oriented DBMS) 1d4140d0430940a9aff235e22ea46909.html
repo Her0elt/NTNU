@@ -1,0 +1,697 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 10 (C-Store: A Column-oriented DBMS)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1d4140d0-4309-40a9-aff2-35e22ea46909" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 10 (C-Store: A Column-oriented DBMS)</h1></header><div class="page-body"><p id="eb715eae-2cc7-4e83-9272-282b89610b60" class="">Most DBMS vendors use record-oriented storage systems, where the attributes of a record are stored contiguously, making them write-optimized for high-performance writes, especially for OLTP-style applications. However, ad-hoc querying of large amounts of data requires read-optimized systems like data warehouses, CRM systems, electronic library card catalogs, and other ad-hoc inquiry systems, which benefit from the efficiency of column store architecture. Unlike row stores, column stores read only the required values of columns for processing a query, which improves performance in warehouse environments. The use of CPU cycles to save disk bandwidth is profitable in read-mostly environments. C-Store is a column store architecture that stores a collection of columns, each sorted on some attribute(s), and multiple projections. We expect aggressive compression techniques to support multiple column sort-orders without space explosion, opening optimization opportunities. The proposed shared-nothing architecture is horizontally partitioned across disks, and automatic allocation of data structures to grid nodes is essential to optimize the grid environment.</p><p id="9b43f661-1865-46c9-88a7-058a70ebfc12" class="">C-Store is a relational database system that supports the standard relational data model. It consists of named tables with named collections of columns (attributes), where attributes in tables can form a unique primary key or be a foreign key referencing a primary key in another table. The C-Store query language is SQL. Unlike most row stores, C-Store implements only projections, which are anchored on a logical table and contain one or more attributes from that table, as well as any number of other attributes from other tables as long as there is a foreign key relationship from the anchor table to the table containing the attribute. Each projection is sorted on a sort key and horizontally partitioned into one or more segments associated with a key range of the sort key. C-Store uses storage keys and join indexes to reconstruct complete rows of tables from stored segments. A covering set of projections is necessary for answering any SQL query in C-Store.</p><p id="74e76b9a-733c-4974-b429-a6439950d4e3" class="">RS is a read-optimized column store. Hence any
+segment of any projection is broken into its constituent
+columns, and each column is stored in order of the sort
+key for the projection. The storage key for each tuple in
+RS is the ordinal number of the record in the segment.
+This storage key is not stored but calculated as needed.</p><p id="3f60f8b0-13c9-41a5-a46d-48c2302b2250" class="">RS columns are compressed using 4 encodings based on their ordering and the proportion of distinct values they contain. Type 1 encoding is used for self-ordered columns with few distinct values, represented by a sequence of triples. Type 2 encoding is used for foreign-ordered columns with few distinct values, represented by a sequence of tuples with bitmaps indicating the positions of the values. Type 3 encoding is used for self-ordered columns with many distinct values, representing every value as a delta from the previous value. Type 4 encoding is used for foreign-ordered columns with many distinct values, leaving values unencoded. A densepack B-tree index is used for indexing in all cases.</p><p id="a294e561-a2b9-4b76-aa68-0418de63ae2f" class="">Join indexes must be used to connect the various
+projections anchored at the same table. As noted earlier, a
+join index is a collection of (sid, storage_key) pairs. Each
+of these two fields can be stored as normal columns.
+There are physical database design implications
+concerning where to store join indexes, and we address
+these in the next section. In addition, join indexes must
+integrate RS and WS; hence, we revisit their design in the
+next section as well.</p><p id="f4f6648c-1974-4460-b519-79177700644e" class="">To avoid using two optimizers, WS is a column store with the same DBMS design as RS, including projections and join indexes. However, WS&#x27;s storage representation differs to allow for efficient transactional updates. Each record in WS has a storage key (SK) explicitly stored, which is an integer larger than the number of records in the largest segment of the database. WS is horizontally partitioned in the same way as RS, with a 1:1 mapping between their segments. WS projections use B-tree indexing to maintain sort-key order. Every column in a WS projection is represented as pairs (v, sk), with v being a value and sk being its corresponding storage key. Each projection&#x27;s sort keys are represented by pairs (s, sk), with s being a sort key value and sk describing where s first appears. Join indexes are represented as pairs of segments in WS and RS, with each (sid, storage key) pair being a pointer to a record in either RS or WS.</p><p id="2d36060b-b224-418c-917c-d2d9a48e8039" class="">The storage allocator automatically allocates segments to nodes in a grid system, with co-located columns in a single segment. Join indexes are also co-located with their sender segments, and WS segments with the RS segments with the same key range. An allocator is being developed to perform initial allocation and reallocation. Storage is a collection of columns stored in individual files in the underlying operating system, as a raw device offers little benefit.</p><p id="99317e02-fc77-49fe-a615-f8b3dc4f4e65" class="">C-Store uses a storage allocator to automatically allocate segments to nodes in a grid system, co-locating columns in a single segment of a projection. A unique storage key is allocated at the site where the update is received, avoiding synchronization between nodes. To handle large numbers of ad-hoc queries with large read sets, C-Store uses snapshot isolation instead of conventional locking to avoid lock contention, introducing a high water mark to keep track of the most recent time in the past as well as a low water mark to restrict the earliest effective time of a read-only transaction. Update transactions continue to set read and write locks and obey strict two-phase locking. C-Store builds WS on top of BerkeleyDB, utilizing a large main memory buffer pool to avoid poor performance.</p><p id="deade423-2596-43de-a3d3-89af1901da40" class="">The problem in snapshot isolation is determining which records should be visible to a read-only transaction at a given time. To provide snapshot isolation, updates are turned into inserts and deletes, and a record is visible if it was inserted before the given time and deleted after. To make this determination without requiring too much space, epochs are used as timestamps, and an insertion vector and a deleted record vector are maintained. The High Water Mark (HWM) is maintained by designating a timestamp authority (TA) to allocate timestamps, dividing time into epochs, and periodically moving the system to the next epoch. After the TA broadcasts the new HWM, read-only transactions can read data from that epoch or earlier. To avoid epoch numbers growing without bound, timestamps are wrapped.</p><p id="ee1dfcbe-4118-4b98-888d-49fd74374ff0" class="">C-Store uses strict two-phase locking for read-write transactions with a distributed lock table and write-ahead logging for recovery, but with a different logging and locking implementation that only logs UNDO records and performs REDO. Deadlock is resolved by aborting one of the deadlocked transactions through timeouts. The distributed COMMIT protocol differs from two-phase commit in that no PREPARE messages are sent and the master waits until all workers have completed outstanding actions before issuing commit or abort messages to each site. If a site fails before writing any updates or log records related to a transaction to stable storage, it can recover its state from other projections on other sites during recovery. When a transaction is aborted, it is undone by scanning backwards in the UNDO log, which contains one entry for each logical update to a segment. Logical logging is used instead of physical logging to avoid generating too many log records.</p><p id="6304baf4-df87-40bf-a859-a0749f5f7cdb" class="">A crashed site recovers by running a query from other projections. C-Store maintains K-safety to ensure transactional consistency in case K sites fail within the time to recover (t). There are three cases to consider:</p><ol type="1" id="88c1cccb-6823-4b97-9d4b-f2b614c99092" class="numbered-list" start="1"><li>If the failed site suffers no data loss, updates can be executed to bring it up to date, which is straightforward.</li></ol><ol type="1" id="31110bfb-74c2-4e64-b136-79d14dfbe491" class="numbered-list" start="2"><li>If both the RS and WS are catastrophically failed, both segments must be reconstructed from other projections and join indexes in the system.</li></ol><ol type="1" id="2436d553-fa5b-48c8-bdff-22dc0bca7909" class="numbered-list" start="3"><li>If the WS is damaged but RS is intact, the recovering site inspects every projection in a collection (C) for a collection of columns that covers the key range (K) and executes a collection of queries to restore the WS to the current HWM. If there is no cover with the desired property, the recovering site can use a remote WS segment and the tuple mover log to solve the query. The WS portion of any join indexes stored locally is also reconstructed by querying remote &quot;receivers.&quot;</li></ol><p id="70a67727-97a7-4bac-a900-c4df62c59821" class="">The tuple mover moves WS segment blocks to corresponding RS segments, updating join indexes. It searches for segment pairs and uses MOP to merge them. MOP divides records in the WS segment into two groups: those deleted before LWM and those not. The former is discarded, while the latter is moved to RS. MOP creates a new RS segment called RS&#x27; and merges in column values from WS, deleting RS items with a DRV value less than or equal to LWM. RS&#x27; is then updated with join indexes and the system cuts over from RS to RS&#x27;. The timestamp authority sends out new LWM epoch numbers periodically to mediate between historical access needs and WS space constraints.</p><p id="34629684-5224-4431-a1ce-bcab2b70b9fa" class="">The query optimizer will accept a SQL query and
+construct a query plan of execution nodes. In this section,
+we describe the nodes that can appear in a plan and then
+the architecture of the optimizer itself.</p><p id="3b796aa6-5863-4d73-b9e8-226ccb17105b" class="">C-Store has 10 node types that work with three types of data: projections, columns, and bitstrings. A projection is a set of columns with the same cardinality and ordering. A bitstring is a list of zeros and ones indicating whether associated values are present in the record subset being described. C-Store query operators accept arguments such as predicates, join indexes, attribute names, and expressions. Join indexes and bitstrings are special types of columns. C-Store query plans are made up of operators that form a tree, with access methods at the leaves and iterators connecting nodes. Iterators return 64K blocks from a single column to reduce communication overhead between plan nodes. The 10 operators are: Decompress, Select, Mask, Project, Sort, Aggregation Operators, Concat, Permute, Join, and Bitstring Operators.</p><p id="a454a824-70df-4daf-811e-bbc19d807118" class="">C-Store uses a Selinger-style optimizer that considers compressed representations of data and when to use a bitstring to mask a projection. The optimizer uses a cost-based estimation for plan construction and a two-phase optimizer to limit the complexity of the plan search space. Operators can work on both compressed and uncompressed data, and the cost model must account for the representation of input and output columns. The optimizer&#x27;s main decision is which set of projections to use for a query, and it must also decide where to mask a projection according to a bitstring. The goal is to prune the search space to find the best plan efficiently.</p><p id="d2f9b42c-adc0-44ec-95da-f40b6cb071a8" class="">Currently, our RS storage engine and executor are running, but our WS and tuple mover are still being developed, so we cannot conduct experiments on them yet. Thus, our performance analysis is limited to readonly queries, and we cannot report on updates. We also do not yet support segments or multiple grid nodes, so we are only reporting single-site numbers. Our benchmarking system is a 3.0 Ghz Pentium with 2 Gbytes of memory and 750 Gbytes of disk running RedHat Linux. We use a simplified version of TPC-H, the gold standard in the decision support market, which consists of the lineitem, order, and customer tables with columns of type INTEGER and CHAR(1). The standard data for this schema totals 60,000,000 line items (1.8GB), and we tested CStore, a row store, and a column store with a storage budget of 2.7 GB for all data plus indices. The row-store was unable to operate within the space constraint, so we gave it 4.5 GB. CStore used 1.987 GB, which is only 40% of the space used by the row store, while the column store used 30% more space than CStore. We conducted seven queries on each system, and we constructed schemas for each of the three systems that best matched our seven-query workload.</p><p id="10319100-7049-4833-af52-1a0cec20dc8a" class="">Warehouse market focuses on maintaining &quot;data cubes&quot; that efficiently build and maintain specific aggregates on stored data sets. Storing data via columns has been implemented in several systems, but C-Store&#x27;s hybrid architecture and model of overlapping materialized projections differentiate it. Similarly, C-Store uses inverted organization, but extends the architecture with RS and a tuple mover. C-Store&#x27;s coding schemes are similar to some techniques derived from a long history of work in computer science. Lastly, C-Store combines materialized views, snapshot isolation, transaction management, and high availability to provide improved performance, K-safety, efficient retrieval, and high-performance transactions.</p><p id="eb861e21-7735-462f-b098-f944436c3993" class="">This paper has presented the design of C-Store, a
+radical departure from the architecture of current DBMSs.
+Unlike current commercial systems, it is aimed at the
+“read-mostly” DBMS market. The innovative
+contributions embodied in C-Store include:</p><ul id="731664aa-de8f-4cec-a80d-98f4ce3deb1a" class="bulleted-list"><li style="list-style-type:disc">A column store representation, with an associated
+query execution engine.</li></ul><ul id="209082f1-3352-4a21-b183-33860a7ac470" class="bulleted-list"><li style="list-style-type:disc">A hybrid architecture that allows transactions on a
+column store.</li></ul><ul id="5b2ac0ba-4742-4641-8f9f-a96e39bdddce" class="bulleted-list"><li style="list-style-type:disc">A focus on economizing the storage representation on
+disk, by coding data values and dense-packing the data.</li></ul><ul id="33c27d92-39a4-4a47-b7bd-127009aa4cc5" class="bulleted-list"><li style="list-style-type:disc">A data model consisting of overlapping projections of
+tables, unlike the standard fare of tables, secondary
+indexes, and projections.</li></ul><ul id="28355481-d464-4727-8377-46e37593d6a5" class="bulleted-list"><li style="list-style-type:disc">A design optimized for a shared nothing machine
+environment.</li></ul><ul id="4cbf57ff-a8f8-4da3-ae09-05d19783bc38" class="bulleted-list"><li style="list-style-type:disc">Distributed transactions without a redo log or two
+phase commit.</li></ul><ul id="34f375b7-f650-44ef-9559-a54b596fb0ce" class="bulleted-list"><li style="list-style-type:disc">Efficient snapshot isolation.</li></ul><p id="5ed6b010-4c4a-4bea-b629-ab8f3c143f1b" class="">
+</p></div></article></body></html>

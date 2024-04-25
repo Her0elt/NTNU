@@ -1,0 +1,669 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 12 (Database Replication: A Tutorial)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="d07010b1-4115-4745-a187-0617840342fb" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 12 (Database Replication: A Tutorial)</h1></header><div class="page-body"><p id="e85d875a-84bc-4348-bba5-982fba9d0c3b" class="">Database replication involves managing data copies on different nodes controlled by independent database engines. A major challenge is maintaining consistency through a protocol running across nodes, allowing local decisions that maintain global consistency. Database replication differs from replication in other distributed computing domains in that it&#x27;s primarily used to improve performance and scalability. This creates a tradeoff between consistency and performance. Databases are data-centric, with operations grouped in transactions, making replication more complex than in other domains. Transactions have properties like atomicity, isolation, and durability, adding additional challenges compared to object or process replication.</p><figure id="f1fc545d-7178-43ce-9b3b-21560fa62714" class="image"><a href="Reading%2012%20(Database%20Replication%20A%20Tutorial)%20d07010b141154745a1870617840342fb/Untitled.png"><img style="width:509px" src="Reading%2012%20(Database%20Replication%20A%20Tutorial)%20d07010b141154745a1870617840342fb/Untitled.png"/></a></figure><p id="acd822a8-1522-46de-9416-eefd54feaffd" class="">Gray et. al [20] categorize replica control solutions into four categories based on two parameters: transaction location (where transactions can be executed) and synchronization point (when replicas coordinate to achieve consistency).</p><p id="0524faa6-f182-41ce-8240-c18154bf93d1" class="">For read-only transactions, any replica can execute them, which is called a local transaction. For update transactions, there are two possibilities: primary copy approach and update anywhere approach. In the primary copy approach, updates are executed at a specific replica (the primary), which then propagates the write operations to other replicas. In the update anywhere approach, update transactions can be executed at any replica.</p><p id="241c198b-a1b1-4a43-8e56-528c9af79b03" class="">The synchronization strategy also determines the degree of consistency that can be achieved. Eager replication coordinates updates before a transaction commits, while lazy replication propagates updates asynchronously after a transaction commits.</p><p id="3ab38224-b32e-4ff7-a346-2bb632749fbe" class="">Each category has its own implications for performance, flexibility, and consistency. The four categories are shown in Figure 12.1. Gray et. al provide example algorithms for each category, illustrating the main building blocks needed for replica control and reflecting other design choices that are discussed in detail later. The algorithms consider read and write operations, and assume that transactions can either commit or abort. The protocols do not consider failures, but the discussions mention how they could be addressed.</p><p id="cbd27d2f-74e2-484a-a151-6d05853046b6" class="">This is an excerpt from a technical paper describing an example protocol that uses strict 2-phase-locking (2PL) for concurrency control at each replica in eager primary copy protocols, which are one of the simplest protocol types to understand.</p><p id="941303a9-3cd4-4900-9e75-d44a4967dce9" class="">The example protocol operates as follows: when a client submits a transaction Ti, it sends all operations of the transaction to one replica R. Ti is then a local transaction at R, which is responsible for returning the corresponding responses for the requests associated with Ti. Read operations acquire a shared lock before accessing the local copy of the data item, while write operations first acquire an exclusive lock locally, perform the update, and then multicast the request to the other replicas in FIFO order. If an update transaction aborts, the primary informs the secondary replicas if they had already received some write requests for this transaction. When a client submits the commit request after completing the transaction, an update transaction needs to run a 2-phase-commit protocol (2PC) to guarantee the atomicity of the transaction. After successful commit, the transaction releases its lock, and the local replica returns the confirmation to the client. A secondary replica that receives a write request for a transaction from the primary acquires an exclusive lock and executes the operation. When a secondary receives an abort request for an update transaction, it aborts it locally. The excerpt also includes an example execution of this protocol, showing the shared and exclusive locks acquired by transactions and the order in which they are executed.</p><p id="2139a13e-ec39-404b-bb29-9753f8e78cf9" class="">Advantages:</p><ul id="ee6da538-ecbf-474d-b4fd-e4aa6ee4e432" class="bulleted-list"><li style="list-style-type:disc">Concurrency control in primary copy approaches is similar to non-replicated systems.</li></ul><ul id="65607cc2-dc1e-4bd3-8d70-86a1fb3970a4" class="bulleted-list"><li style="list-style-type:disc">Secondaries have request locks for updates in the order they receive them from the primary, and execute conflicting updates in the same order as the primary.</li></ul><ul id="314c03da-6d51-47b9-9b23-4254c5344649" class="bulleted-list"><li style="list-style-type:disc">Execution is globally serializable and concurrent transactions are equivalent to a serial execution over a single logical copy of the database.</li></ul><ul id="dbff410a-dcd2-411e-8edf-9ef029e89196" class="bulleted-list"><li style="list-style-type:disc">All copies are virtually consistent and read operations at secondaries never read stale data.</li></ul><ul id="9f409f3e-3bf8-4668-a8d2-34534d68c69a" class="bulleted-list"><li style="list-style-type:disc">Provides strong guarantees in case of failures, and committed transactions are guaranteed to have updates at the secondaries.</li></ul><ul id="80af1e30-a14f-4062-bc5e-65727effe2f9" class="bulleted-list"><li style="list-style-type:disc">If the primary fails, active transactions are aborted, but no updates are lost if one of the secondaries takes over and becomes the new primary.</li></ul><p id="50cc0daa-8717-4e51-9b82-a5916b1a41b2" class="">Disadvantages:</p><ul id="0c5df62b-880b-41c9-8515-ad965e8459b7" class="bulleted-list"><li style="list-style-type:disc">Requiring update transactions to execute at the primary leads to a loss of replication transparency and flexibility.</li></ul><ul id="ffbd120b-d710-4f66-851d-ecdd9aba60e6" class="bulleted-list"><li style="list-style-type:disc">Clients need to know that only the primary replica can execute update transactions.</li></ul><ul id="1e522e3e-b8b5-478d-ad17-9d685846b8a8" class="bulleted-list"><li style="list-style-type:disc">Long execution times for update transactions as they only commit at the primary once they have completely executed at all secondaries.</li></ul><p id="8d614256-b2a0-4f58-a427-234e0a8a34fe" class="">The eager update anywhere replica control algorithms were the first proposed, with an emphasis on globally serializable execution and correctly handling failures and recoveries. The algorithm allows for both read-only and update transactions to execute locally at any replica. Write operations must execute at all replicas, and acknowledgements are needed to prevent conflicting requests and distributed deadlocks. Local transaction aborts and commits are handled similarly to the primary copy protocol. However, distributed deadlocks can occur, which requires a distributed deadlock mechanism or timeout. An example execution is provided, where conflicting lock requests at different replicas result in a deadlock, and T2 is chosen to abort.</p><p id="6880ee51-0355-4aad-a3be-90a5a3547cff" class="">Advantages of the update anywhere approach include its flexibility, transparency, and virtual consistency through the use of 2PC. Failures can be tolerated without loss of correctness, and the protocol provides global serializability due to its extension of strict 2PL.</p><p id="d7cfa669-4e9a-4231-9468-d19d22416895" class="">However, the protocol&#x27;s complexity is higher than that of the eager primary copy approach due to the possibility of distributed deadlocks. Many systems use timeouts to address this issue, but setting them sensibly can be difficult.</p><p id="40a7a9d8-152f-471b-bc6c-a9bfe41fa8b8" class="">In terms of response times, the update anywhere protocol may have longer ones than the primary copy protocol because each write operation must be executed at all replicas before the next operation can start. However, this is not intrinsic to either approach and could be addressed through changes to the protocols. There are many design alternatives to consider when implementing database replication.</p><p id="83625755-00a9-494f-a641-8cbf9a91e9f0" class="">Lazy replication approaches don&#x27;t involve communication among replicas during transaction execution. The protocol combines lazy with primary copy to make replication simple. The protocol executes read-only transactions as in the eager approach and executes both read and write operations locally for update transactions. After commit, write operations are multicast to all replicas. The secondaries receive the writeset in the order they were sent and acquire locks to serialize conflicting transactions in the same way as the primary. In case of deadlock, the local transaction aborts to apply the updates of the primary.</p><p id="73e13508-9010-4370-aaec-1bed5f0f361c" class="">Advantages:</p><ul id="ebf4c14a-1388-45a5-8210-031e14ea3100" class="bulleted-list"><li style="list-style-type:disc">Simple concurrency control</li></ul><ul id="ff7a5f1c-26b6-445e-bab7-8f0ac88b9315" class="bulleted-list"><li style="list-style-type:disc">Provides serializability</li></ul><ul id="37682ea1-2cb5-4803-8c2a-82f0b0e87c64" class="bulleted-list"><li style="list-style-type:disc">Shorter response times for update transactions compared to eager approaches</li></ul><p id="a3a0d13a-9b75-4cab-a726-16b22de7c471" class="">Disadvantages:</p><ul id="ae130c6f-bf85-4661-b026-c9c80ead1758" class="bulleted-list"><li style="list-style-type:disc">Provides weaker consistency than eager replication</li></ul><ul id="6b083230-f71b-42a1-8a5f-7b455b727147" class="bulleted-list"><li style="list-style-type:disc">Read operations may access outdated data at secondary replicas</li></ul><ul id="5405531f-2a48-4dc9-b601-4efbcfec37f2" class="bulleted-list"><li style="list-style-type:disc">Risk of lost durability guarantee if the site executing and committing an update transaction fails before propagating the writeset</li></ul><ul id="6124c8cc-fe5f-4cd4-85ab-109c8c2a563d" class="bulleted-list"><li style="list-style-type:disc">Transactions may not necessarily be faster than in an eager approach, especially in geographically distributed applications</li></ul><ul id="e8da2358-d60e-4509-9e18-350760ff215d" class="bulleted-list"><li style="list-style-type:disc">Challenge of finding appropriate partitions and writing code to access data for a single partition</li></ul><p id="d01cc9f5-3be5-4274-8d3b-a8e566f55a36" class="">This algorithm allows write operations to be processed at all replicas, with each replica responsible for multicasting the writesets of its local transactions to the other replicas. When a replica receives a remote writeset, it applies the changes. However, as the lazy update anywhere approach allows conflicting transactions to execute and commit concurrently at different replicas without detecting conflicts during the lifetime of transactions, conflict resolution may be necessary. The system must detect whether there was a concurrent conflicting operation on the same data item, and if so, conflict resolution must ensure that the different replicas agree on the same final value for their data copies. There are many ways to resolve conflicts, such as the Thomas Write Rule which discards any update with an earlier timestamp than a previously applied update. An example execution of this protocol is shown in the text, where both T1 and T2 update the same data item x. Both replicas apply the updates they receive from the other replica, resulting in a conflict that must be detected and resolved for eventual consistency.</p><p id="81e6d83b-682a-4c55-8cef-185f9ce0743c" class="">Lazy update anywhere provides fast execution and flexibility for all transactions, making it a strong approach in some situations such as frequent WAN connection loss where forbidding updates could result in revenue loss, and conflicts are rare or easy to resolve. However, it violates fundamental transaction properties such as durability, atomicity, and serializability. Conflict resolution can also be complex and require different mechanisms for different parts of the database. As such, it may be suitable only in highly controlled environments with exact knowledge of the application and not as a general replication solution.</p><p id="d580e962-00c5-47aa-950c-53a80c5d8711" class="">Eager protocols typically use a two-phase commit (2PC) to ensure consistency across replicas, while recent protocols that also define themselves as eager do not use a 2PC. Instead, they allow a transaction to be committed at the local replica once the local replica knows that all remote replicas will &quot;eventually&quot; commit it. Many of these approaches use group communication systems to simplify the agreement protocol. Lazy protocols do not send write operations at all before commit time or the sending multicast occurs earlier but is not reliable.</p><p id="c9b076bb-79db-4b12-b297-cef3b398ae94" class="">TLiterature does not have a single, agreed-upon definition of &quot;correctness&quot; and data consistency. The terms used, such as strong consistency, weak consistency, 1-copy-equivalence, serializability, and snapshot isolation, vary in definition and failure assumptions.Correctness is composed of different orthogonal issues, and a replica control protocol may provide a high level of consistency in one dimension and a low level for another dimension. The article explores several correctness dimensions individually and discusses how replication protocols can fulfill the criteria depending on their category (eager or lazy).</p><p id="d1816bef-8c32-437f-9eca-233dcc81b6b2" class="">Atomicity refers to the property that if an update transaction commits at one replica, it must commit at all other replicas, and all replicas must take the same decision on commit/abort for each transaction. Atomicity can only be achieved by eager protocols and is difficult to achieve in the presence of failures. Consistency refers to the property that all data copies have the same value at transaction commit time. Weak consistency means that data copies can be stale or temporarily inconsistent, while eventual consistency means that all copies of a data item eventually converge to the same value. These concepts are important for designing replicated database systems that provide the desired level of data consistency and availability.</p><p id="40a9afe1-c70f-4207-bdf3-c7d779844b50" class="">In non-replicated databases, the level of isolation determines how transactions can interact with each other. Serializability is a well-known correctness criteria where transactions are executed in a serial manner. Concurrency control mechanisms such as strict 2-phase-locking and optimistic concurrency control provide serializability. Weaker levels of isolation allow for anomalies during execution. Snapshot isolation is a weaker level of isolation that allows for certain anomalies but provides better concurrency for applications with a large read proportion. Transactions read from a snapshot of the database and conflicts only exist between write operations.</p><p id="6bcc98f4-414c-4c1f-86b4-b0c9d9a92834" class="">Replicated database systems needs to provide the same level of isolation as non-replicated systems. It suggests that definitions for isolation in a replicated system should reduce the execution over data copies onto an execution over a single logical copy. The passage mentions that serializability and snapshot isolation have been well studied in replicated systems, and that snapshot isolation is attractive in a replicated environment due to its handling of read operations.</p><p id="bfd50891-1241-4750-9b87-19808a419f36" class="">Isolation and atomicity are independent concepts, and both eager and lazy protocols can provide serializability or snapshot isolation in a non-failure scenario. However, in the presence of failures, lazy protocols can result in lost transactions, making it challenging to maintain the serializability and snapshot isolation properties. It is unclear how to incorporate these lost transactions into the execution history while ensuring the properties are satisfied.</p><p id="a014cd08-dc10-433e-814a-718083044254" class="">1-copy-equivalence means that multiple physical copies should appear as a single logical copy, even when some copies are temporarily unavailable. Lazy protocols do not provide 1-copy-equivalence in this context. 1-copy-equivalence can be combined with an isolation level to consider isolation in a failure-prone environment. 1-copy-serializability requires the execution over a set of physical copies, some of them possibly unavailable, to be equivalent to a serial execution over a single logical copy.</p><p id="f362ae2f-1c34-4897-bd32-b49c3efd9dc7" class="">Linearizability and sequential consistency are correctness criteria for concurrent execution on replicated objects. Both aim to make the execution on replicated data equivalent to the execution on a single image of the object. However, neither considers transactions that operate on different objects. Unlike serializability and snapshot isolation, linearizability requires consistency with real-time order.</p><p id="fc3e02c9-85bf-433a-8599-599cba193e90" class="">Session consistency is a correctness criterion that ensures a client observes its own writes. In a replicated system, it is important to provide session consistency in addition to other correctness criteria like serializability or snapshot isolation. Without special mechanisms, replica control may not ensure session consistency. Lazy primary copy approach may result in a violation of session consistency, while eager protocols like 2PL and 2PC provide session consistency automatically. To ensure session consistency in a lazy protocol, transactions can receive global transaction identifiers which are monotonically increasing within a session.</p><p id="f55c3156-6497-49a2-bb39-ca713dd6131b" class="">The number of message rounds within a transaction is an important parameter for a replica control protocol. Eager update anywhere protocols have a message round per write operation of a transaction plus the 2PC, making the number of messages within a transaction linear with the number of write operations of the transaction. On the other hand, lazy protocols send only one message per transaction, regardless of the number of operations. However, the number of messages per transaction depends on protocol details rather than simply on the category. For example, eager protocols can have a constant number of messages and lazy protocols can send a message per write operation.</p><p id="1aca8bf9-3f0f-4125-8766-9fb83d57ba4e" class="">Transaction response time is often assumed to increase with the number of message rounds which occur during the transaction. In WANs, where messages take a long time, it is usually unacceptable to include more than one message round. In LANs, however, message latency might not play such a big role, and message throughput is often high. In such an environment, response time may be influenced more by other aspects rather than rounds of message exchange.</p><p id="561d6d3b-6337-474f-b7e7-12b27618d430" class="">The eager update anywhere protocol can have different alternatives, such as executing all operations first only on the local database copy and then sending the writeset with all write operations to all other replicas at commit time. The other replicas acquire the locks, execute the operations, and return when they have completed. Finally, the 2PC is performed. This model has one message round for the writeset and acknowledgements plus the overhead for the 2PC. The second alternative also executes the transaction first locally and sends the writeset at commit time. The remote replicas acquire the locks and send the acknowledgement once they have all locks. The local replica commits the transaction once it has received all acknowledgements. No 2PC takes place, and the remote replicas execute the write operations in the writeset and commit the transaction in the meantime. That is, transaction execution contains only a single message round.</p><p id="92b1365e-1562-4466-866f-8e6ecbb1d60c" class="">Overall, the number of message rounds within a transaction depends on the specific protocol used, and response time can be affected by other factors besides message rounds, such as message latency and throughput.</p><p id="d092594e-5471-41e7-aec0-a0d5dc58b7f1" class="">In statement replication, all replicas execute the entire SQL statement, whereas in object replication, only the local replica executes the operation and sends the changed tuples to remote replicas. Applying changes is usually less resource-intensive than executing the entire statement. However, statement replication can be challenging due to the need for determinism, particularly when statements involve generating random numbers or setting the current time. In some cases, executing the entire update transaction at all replicas may be appropriate in WANs to minimize message overhead.</p><p id="60a1f1df-fa5e-4b13-b28a-5b32c04511eb" class="">There are two mechanisms for concurrency control in non-replicated systems: optimistic concurrency control and multi-version concurrency control with snapshot isolation. Optimistic concurrency control uses a private workspace for transaction writes, and validates for conflicts at the end of the transaction before writing to the shared database. Multi-version concurrency control generates new versions of data items for each write operation, and read operations are provided with a snapshot of the last committed version of the data item. Snapshot isolation detects conflicts between concurrent transactions at commit time, either by using write locks or mechanisms similar to optimistic concurrency control.</p><p id="d88c3556-359f-4bb5-93d3-d160f53a730e" class="">Ensuring a consistent serialization order across replicas is a challenge. Primary copy approaches rely on the non-replicated concurrency control mechanism at the primary replica and forward write operations in FIFO order. For optimistic and snapshot isolation concurrency control, validation can be performed either centrally or by each replica, but the process needs to be deterministic to ensure all replicas validate transactions in the same order and decide on the same outcome. Total order multicast is often used to send relevant validation information to all replicas in the same total order.</p><p id="a4d7ee1c-fb2b-4703-a14d-13c6ea166fd3" class="">Optimistic Concurrency Control is a replica control protocol based on optimistic concurrency control and a central scheduler that performs validation for all transactions. The protocol involves a transaction being submitted to any replica and executed locally using optimistic techniques. The protocol keeps track of all data versions read in the read set RS, and a write creates a local copy that is added to the transaction’s writeset WS. Upon a commit request, the read and writesets are sent to the scheduler, which performs validation to check if the readset of the current transaction overlaps with the writesets of any concurrent transaction. If not, the writeset is forwarded to all replicas using a FIFO multicast, and the replicas apply them. The protocol involves technical challenges such as determining whether two transactions are concurrent and comparing transactions that are local at different replicas.</p><p id="a6f27253-37ef-49d5-8e18-6945879cec83" class="">There are two main protocols used in replica control: optimistic concurrency control (OCC) and snapshot isolation (SI). In OCC, a central scheduler performs validation for all transactions. A transaction is submitted to any replica and executed locally. A read operation accesses the last committed version of the data item, while a write creates a local copy that is added to the transaction&#x27;s writeset. Upon a commit request, the read and writesets are sent to the scheduler, which checks whether the readset of the currently validated transaction overlaps with the writesets of any concurrent transaction that validated before. If yes, it tells the local replica to abort the transaction. Otherwise, it forwards the writeset to all replicas using a FIFO multicast, and the replicas apply them. In SI, each replica maintains its own snapshot of the database state, and a transaction reads from the last committed snapshot at the start time. Upon write operations, new versions are created. At the end of a transaction, only the writeset is multicast in total order. Validation checks whether this writeset overlaps with the writesets of any concurrent transaction that validated before. If validation succeeds, remote transactions have to create the new versions. Transactions are committed serially to guarantee that all replicas go through the same sequence of snapshots. SI has the advantage over OCC that read operations remain completely local.</p><p id="b8a7bdd9-1f20-41f0-85c1-6c98bc2b850e" class="">Both optimistic and pessimistic replication protocols use multicast primitives, which can be either eager or lazy depending on whether they provide uniform reliable delivery. Eager protocols guarantee that a transaction only commits locally when it is certain that the writeset will be delivered to all replicas and the global serialization order of the transaction is determined. In this case, a transaction will commit in the same order at all available replicas. On the other hand, lazy protocols, which use multicasts without uniform reliable delivery, allow a transaction to be committed at a replica that fails, causing the other replicas to not receive the writeset.</p><p id="535de07e-693d-419b-956f-b66147f7ca24" class="">Kernel-based replication involves a tightly-coupled replica control module that is part of the database kernel and replication-aware, while middleware-based replication involves a middleware layer outside the database that appears as a database system. The middleware controls execution and directs read and write operations to individual database replicas. The middleware-based approach has its own concurrency control mechanism and can be used with 3rd-party database systems. However, kernel-based approaches have full access to the internals of the database and can tightly couple replica control with concurrency control. The article notes that middleware-based systems present a nicer separation of concerns, but kernel-based approaches allow for more efficient writeset extraction and application.</p><p id="a46fe419-8475-42e0-a02b-33c4ae409b12" class="">Replication can be done for scalability, fast local access, or fault-tolerance, and the choice of replication depends on the setting. In a LAN, where message latency is low and bandwidth is high, adding more replicas to the system can handle an increasing load. Lazy update is not needed in LAN replication, and asymmetric replication is better than symmetric replication. In a WAN, where message latency plays an important role, lazy update anywhere might be preferable, and primary copies of partitions can be put close to the clients for short response times without inconsistencies. Symmetric vs. asymmetric replication has a minor role in a WAN setting. Replication for fault-tolerance can deploy replicas both in a LAN and a WAN, and eager protocols are used in LANs to keep replicas consistent, while lazy propagation is used in a WAN. During normal processing, weaker consistency is acceptable for better performance, but catastrophic failures can be handled by replicas in different locations.</p><p id="a4b9fa45-a388-4dc3-bda1-6abe7c643e2a" class="">Partial replication involves having physical copies of data items on only a subset of sites, and can be used to improve scalability and reduce communication costs. In a cluster environment, read operations are executed at a single replica while write operations only need to be executed at replicas that have a copy of the data item being accessed. The replication degree should be fixed to a constant to avoid a scalability limit from contention for writing. However, finding an appropriate replication degree and optimal location for replicas can be difficult, and partial replication may lead to distributed queries.</p><p id="47593f31-c403-4089-ac17-302904449567" class="">Recovering failed and new replicas in a replicated database system is important. Joining replicas need to obtain the current state of the database, which can be done by transferring a complete copy of the database or only changes made during downtime. This transfer can occur offline, interrupting transaction processing, or online, which requires ensuring the recovering replica does not miss any transactions.</p><p id="adcb69f6-6d14-4bc2-b177-a70758c1b12a" class="">The field of database replication started in the 1980s, and the book &quot;Concurrency Control and Recovery in Database Systems&quot; provided a formalism for reasoning about correctness in replicated systems. Early work on replication focused on extending concurrency control mechanisms of non-replicated systems and combining them with replica control, and failure handling was also a major research issue. However, these approaches provided poor performance and did not scale well. In 1996, Gray et al. pointed out that traditional approaches commit transactions only after executing all operations on all physical data copies, leading to serial execution and long response times.</p><p id="4cb1243f-42e1-43d8-b4e8-8ff6ca156308" class="">Commercial systems often provide a choice of replication solutions, with high-availability solutions implementing a simplified version of primary-copy. Lazy replication solutions, which allow looser consistency when reading at a replica, are often provided for WAN replication. Sophisticated reconciliation techniques are offered for update anywhere. Both distributed and centralized reconciliation mechanisms exist, and eager update anywhere protocols are rarely found in commercial systems.</p><p id="2bc83e39-cebc-4a3b-90a5-d7a8823cf19d" class="">The challenges in maintaining global serializability in lazy primary copy protocols, where different data items have their primary copies on different sites. Such scenarios can violate global serializability even if each site implements strict 2PL. Researchers have proposed restricting the placement of primary and secondary copies using graphs to ensure serializability. The allowed configurations are defined using graphs where nodes are the sites, and edges are created between sites that have primary and secondary copies of the same data item. Certain graph properties (such as acyclic graphs) can ensure serializability, while other solutions require updates to be propagated along specific paths in the graph.</p><p id="7111ac47-82b9-4040-baca-c0c8f5031ebd" class="">One approach to database replication is based on group communication and kernel-replication, and different tasks can be distributed. Middleware-based systems are also explored, with some solutions using one middleware replica per database replica, while others have a single middleware. Both eager and lazy approaches have been proposed, and load distribution and query routing are also important issues. Finally, the article notes that there is a gap between replica control protocols proposed by the research community and the technical challenges of implementing them in an industrial setting.</p><p id="e65003ac-a6c1-4ee0-a0af-6a4fd4354fc2" class="">Materialized views, parallel databases, database logging, fault-tolerance mechanisms, and database caching all involve some form of replication to improve performance or ensure fault-tolerance. Materialized views can be seen as a type of lazy primary copy replication while parallel databases use partitioning and redundant data allocation across disks and memory. The log of a database is a form of replication used for fault-tolerance, and database caching is used for performance improvements through caching frequently used data items.</p></div></article></body></html>

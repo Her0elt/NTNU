@@ -1,0 +1,670 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 16 (Spanner: Becoming a SQL System)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="8dddfaf1-0379-4eed-91e3-309ec177db90" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 16 (Spanner: Becoming a SQL System)</h1></header><div class="page-body"><p id="527980e2-3a8f-49c6-9576-22868e5b2eb0" class="">Google&#x27;s Spanner started as a key-value store and evolved into a relational database system with a strongly-typed schema system and an SQL query processor. Query execution has driven the evolution of Spanner, turning it into a full-featured SQL system with a robust query language and other traditional database features. Today, Spanner is widely used as an OLTP database management system for structured data at Google and is publicly available as Cloud Spanner on the Google Cloud Platform.</p><p id="f0b69e6c-d14d-4e90-8974-d2e98a909481" class="">Spanner is a geo-replicated relational database system with horizontal row-range sharding. Each shard of the database is assigned to exactly one Paxos group, and transactions use a replicated write-ahead redo log. Spanner&#x27;s concurrency control uses pessimistic locking and timestamps, and the coprocessor framework is used to hide the complexity of locating data. Spanner stores data in an append-only distributed filesystem called Colossus, and the query compiler extensively uses correlated join operators. Execution plans are cached at different places within Spanner to avoid recompilation of common query templates.</p><p id="1410da5c-471d-4182-8985-23101e521252" class="">One important aspect of Spanner is its use of TrueTime, a system for providing a globally consistent and accurate clock. TrueTime is based on GPS and atomic clocks, and is used to provide a monotonic clock reading that is consistent across all replicas of a given shard. This is important for ensuring that transactions are serialized correctly and that snapshot reads are accurate.</p><p id="ab894e64-6131-4da4-8023-3a5d7150601b" class="">Another interesting feature of Spanner is its support for schema changes without downtime. Schema changes in traditional databases often require taking the system offline or at least disrupting service. In Spanner, schema changes are performed using a rolling update strategy, where each replica of a shard is updated one at a time without affecting the availability of the database.</p><p id="ff125560-64d1-4b02-b00c-914888f774a5" class="">Spanner also supports backup and restore operations, which are critical for disaster recovery and compliance with data retention policies. Backups can be performed either on demand or on a regular schedule, and can be restored to a specific point in time.</p><p id="5e91852a-e267-4b8b-9794-0690dbd05abf" class="">Finally, it&#x27;s worth noting that Spanner is designed to be used as part of a larger cloud-based architecture, and integrates well with other Google Cloud services such as BigQuery, Cloud Storage, and Compute Engine. This makes it a powerful tool for building complex, scalable, and reliable cloud-based applications.</p><p id="97b2735d-98b5-4e45-8be6-ea4efeec2591" class="">The Spanner SQL query compiler optimizes queries using equivalent rewrites and represents query distribution with explicit operators, including the Distributed Union operator. This operator is used to ship a subquery to each shard of the underlying data and concatenate the results. The operator is fundamental in Spanner because the sharding of a table may change during query execution. Spanner pushes down basic operations such as projection and filtering below Distributed Union and more complex operations such as grouping and sorting close to the data when the sharding columns are a proper subset of grouping or sorting columns. The system also pushes down joins between tables that share a prefix of primary keys, and operations that potentially take input from multiple shards. The partitionability criterion ensures that operator tree rewrites are equivalent. The system uses well-known multi-stage processing to push partial local Top or local aggregation to table shards below Distributed Union while merging or grouping results on the machine executing the Distributed Union. The query plan is represented as a single operator tree, but in execution, Distributed Union becomes a 1:N cross-machine call that executes the subtree on servers hosting each of N shards.</p><p id="6df49b5e-e002-4015-932e-f9f508563bca" class="">Distributed Union is a system that minimizes latency in distributed queries by using Spanner coprocessor framework to route subqueries to the nearest replicas. It leverages shard pruning to avoid querying irrelevant shards and maps sharding key ranges to a minimal set of relevant shards. When the sharding key range covers the entire table, Distributed Union may change its subquery evaluation strategy and send a single call to every server hosting a group of shards belonging to the target table. The system reduces latency by dispatching subqueries to each shard or group in parallel and detects shard affinity to avoid making remote calls by executing subqueries locally.</p><p id="efae7619-17cb-4c1d-b586-530ccc9a5cab" class="">Joins between independently distributed tables and highlights the design of one type of join called the batched apply join. This join is used for joining a secondary index and its independently distributed base table as well as for executing Inner/Left/Semi-joins with predicates involving the keys of the remote table. A naive implementation of such operators in a distributed environment involves a cross-machine call made per each row coming from the left input of the join operator, which is prohibitively expensive due to query latency and computing resource consumption. Using a Distributed Apply operator allows Spanner to minimize the number of cross-machine calls for key-based joins and parallelize the execution. It also allows turning full table scans into a series of minimal range scans. The Distributed Apply operator performs shard pruning using batching and merge techniques, and can execute its subquery in parallel on multiple shards, minimizing the amount of data scanned locally on each shard.</p><p id="f149d2df-39fd-4c3c-a284-6fc3da239564" class="">Google Spanner provides two APIs for querying and consuming results - single-consumer API and parallel-consumer API. The former is used when a single client consumes the results of a query, while the latter is used when consuming query results in parallel from multiple processes. The single-consumer API uses location hints to minimize cross-machine calls and speed up performance, while the parallel-consumer API allows distributed data processing systems to push some processing close to the data in the database. The parallel-consumer API requires root partitionable queries and guarantees the same unordered set of rows as the single-consumer API.</p><p id="16a055d1-e38b-470b-b120-d67144bb18c5" class="">Range extraction is the process of analyzing a query to determine what portions of tables are referenced by the query. The referenced row ranges are expressed as intervals of primary key values. Spanner employs several flavors of range extraction for different purposes, including distribution range extraction, seek range extraction, and lock range extraction. In general, range extraction needs to be done at runtime to be fully integrated with the query processor. The main differences between distribution range, seek range, and lock range extraction are in the choice of the key prefix length used for specifying the key intervals.</p><p id="1b1390b7-52b0-4eb2-b40e-a4d33b8389ec" class="">The implementation of range extraction in Spanner uses two techniques: compiling a filtered scan expression into a tree of correlated self-joins at compile time, and using a filter tree data structure for efficient evaluation at runtime. Compile-time rewriting involves expression normalization, isolating key references, discretizing small integer intervals, and eliminating complex conditions. The rewritten plan contains scans with associated filters that fix values, correlated scans that depend on other scans, and a post-filter that ensures the rewritten query matches the original expression. The goal is to efficiently compute ranges for successive key columns and evaluate post-filtering conditions without redundant predicate evaluation.</p><p id="e3d4fed4-370e-4d7c-99a3-69a971d73ea5" class="">The filter tree is a runtime data structure used for extracting key ranges and post-filtering rows in Spanner. It is shared across all correlated scans and memoizes results for efficiency. Range extraction is done one key column at a time and involves intersecting and unioning intervals. Unsatisfiable conditions and tautologies are pruned away. While range extraction often produces minimal key ranges for complex expressions, it is an approximation and may not be perfect, especially for distribution range extraction. Finally, optimization decisions regarding seeks vs. scans and locking granularity are tricky and beyond the scope of this paper.</p><p id="a6c81139-0e6c-45d7-944b-c798f66c78ad" class="">The client library can resume execution of snapshot queries even after transient errors or system events occur, and even if partial results have already been consumed. The section primarily focuses on snapshot queries and read-modify-write transactions and how they handle failures. </p><p id="f284f17e-d7b1-49c2-bc35-041fbaa08d94" class="">Spanner is a distributed query processor that hides transient failures during query execution, including network disconnects, machine reboots, and process crashes. Spanner&#x27;s failure handling implementation is optimized to minimize wasted work when recovering from transient failures. This results in a simpler programming model and eliminates the need for retry loops. Spanner also enables efficient use of long-running queries and improves tail latency for online requests. Additionally, Spanner supports recurrent rolling upgrades, which allows the team to deploy new server versions regularly without significantly affecting request latency and system load. Finally, Spanner uses restartable RPCs, simplifying its architecture in regards to failure handling.</p><p id="bfb59f7e-fc45-4b7d-9e7f-00103aa40fe9" class="">Spanner added a restart token to its RPC mechanism to support restarts, which allows query results to be sent in batches with an opaque restart token blob accompanying each batch. The restart token prevents the rows already returned to the client from being returned again. Spanner uses fully streaming request processing to ensure forward progress on transient failures, and to implement SQL query restarts inside the query processor by capturing the distributed state of the query plan being executed. There are several challenges that Spanner had to overcome, including dynamic resharding, non-determinism, and restarts across server versions. Despite the considerable engineering cost, support for restarts improved user-perceived system stability and provided important flexibility in other aspects of Spanner&#x27;s design.</p><p id="38441e9b-c5f3-41ee-889a-45964a4bdd37" class="">Google designed its own SQL dialect for Spanner. The common data model, type system, syntax, semantics, and function library are defined and shared across these systems to lower the barrier of working across them. Google also made efforts to standardize the implementation and covers the gaps in the SQL standard, which required significant investment in tooling and processes. Several shared components, including a compiler front-end, a library of scalar functions, and a shared testing framework and tests, were built to ensure consistency between systems. The testing framework includes compliance tests and coverage tests that use a random query generation tool and a reference engine implementation to check query results. The article also highlights the challenges in finding blind spots while testing.</p><p id="250c8914-a8d3-48c1-a181-f9ca296a0578" class="">The Spanner database originally used the SSTable data format inherited from Bigtable, which is optimized for NoSQL data, but not well-suited for Spanner&#x27;s SQL queries. Therefore, Spanner is introducing a new low-level storage format called Ressi, which is designed to handle SQL queries over large-scale, distributed databases with both OLTP and OLAP workloads. Ressi organizes data in an LSM tree, stores rows of child tables in the same (or nearby) blocks as their parent rows, and supports fast binary search for random key access. Ressi&#x27;s fundamental data structure is the vector, and it operates directly on vectors in compressed form. Migrating from SSTables to Ressi requires extraordinary care to ensure data integrity and minimal user-visible latency spikes or outages. Spanner&#x27;s data movement mechanism allows for a gradual, reversible rollout to minimize impact to live traffic.</p><p id="713b2a6f-3a73-4c9e-b02f-b9853aac8071" class="">The evolution of Spanner, a database system developed by Google, from its initial focus on scalability and fault-tolerance to becoming a fully-fledged database system. The system initially provided NoSQL methods for point lookups and range scans of individual and interleaved tables, but SQL has provided additional value in expressing more complex data access patterns. The system supports very strong transactional guarantees and external consistency. The article also touches on physical data layout options, schema reviews, and query optimization. Google&#x27;s goal is to make Spanner perform well and be cost-effective across a broad spectrum of use cases over time.</p><p id="483d37f7-934c-4bfa-b973-507f322e7bb8" class="">The architecture of Google&#x27;s Spanner database management system had to be rethought to accommodate its scale, including a service-based design, dynamic table partitioning, remote call communication, and various replication configurations. Spanner&#x27;s relationship to the NoSQL movement is discussed, with scalable, manageable, transactional key-value stores being important for building enterprise-strength global storage systems. The development of a mature control plane and a transactional NoSQL core took years of effort and innovation to address failures that occur at scale. Spanner&#x27;s evolution towards a SQL system involved addressing scalability, manageability, ACID transactions, the relational model, schema DDL with indexing of nested data, and query optimization. Starting with the relational model early on is recommended for other development organizations on a similar path.</p><p id="2095a473-e654-4d57-838b-803ac7683e06" class="">
+</p></div></article></body></html>

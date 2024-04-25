@@ -1,0 +1,24 @@
+version: '3'
+services:
+  e2_db:
+    image: mysql:5.7
+    container_name: e2_db
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=e2_db
+  phpmyadmin:
+    container_name: phpmyadmin
+    depends_on:
+      - e2_db
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '7070:70'
+    environment:
+      PMA_HOST: e2_db
+      MYSQL_ROOT_PASSWORD: password

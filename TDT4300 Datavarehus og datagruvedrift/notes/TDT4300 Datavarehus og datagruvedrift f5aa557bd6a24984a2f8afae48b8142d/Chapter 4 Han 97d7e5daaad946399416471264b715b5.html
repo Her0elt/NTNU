@@ -1,0 +1,945 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 4: Han</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="97d7e5da-aad9-4639-9416-471264b715b5" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📖</span></div><h1 class="page-title">Chapter 4: Han</h1><table class="properties"><tbody><tr class="property-row property-row-person"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesPerson"><path d="M10.9536 7.90088C12.217 7.90088 13.2559 6.79468 13.2559 5.38525C13.2559 4.01514 12.2114 2.92017 10.9536 2.92017C9.70142 2.92017 8.65137 4.02637 8.65698 5.39087C8.6626 6.79468 9.69019 7.90088 10.9536 7.90088ZM4.4231 8.03003C5.52368 8.03003 6.42212 7.05859 6.42212 5.83447C6.42212 4.63843 5.51245 3.68945 4.4231 3.68945C3.33374 3.68945 2.41846 4.64966 2.41846 5.84009C2.42407 7.05859 3.32251 8.03003 4.4231 8.03003ZM1.37964 13.168H5.49561C4.87231 12.292 5.43384 10.6074 6.78711 9.51807C6.18628 9.14746 5.37769 8.87231 4.4231 8.87231C1.95239 8.87231 0.262207 10.6917 0.262207 12.1628C0.262207 12.7974 0.548584 13.168 1.37964 13.168ZM7.50024 13.168H14.407C15.4009 13.168 15.7322 12.8423 15.7322 12.2864C15.7322 10.8489 13.8679 8.88354 10.9536 8.88354C8.04492 8.88354 6.17505 10.8489 6.17505 12.2864C6.17505 12.8423 6.50635 13.168 7.50024 13.168Z"></path></svg></span>Owner</th><td></td></tr><tr class="property-row property-row-verification"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesVerification"><path d="M3.86426 14.0459H5.32715C5.45475 14.0459 5.56185 14.0892 5.64844 14.1758L6.6875 15.2148C7.13411 15.6615 7.56934 15.8825 7.99316 15.8779C8.42155 15.8779 8.85677 15.6569 9.29883 15.2148L10.3379 14.1758C10.429 14.0892 10.5384 14.0459 10.666 14.0459H12.1221C12.751 14.0459 13.2158 13.8955 13.5166 13.5947C13.8219 13.2939 13.9746 12.8268 13.9746 12.1934V10.7305C13.9746 10.6029 14.0202 10.4958 14.1113 10.4092L15.1436 9.37012C15.5902 8.92806 15.8112 8.49284 15.8066 8.06445C15.8066 7.63607 15.5856 7.19857 15.1436 6.75195L14.1113 5.71289C14.0202 5.6263 13.9746 5.52148 13.9746 5.39844V3.92871C13.9746 3.30436 13.8242 2.83952 13.5234 2.53418C13.2227 2.22884 12.7555 2.07617 12.1221 2.07617H10.666C10.5384 2.07617 10.429 2.03288 10.3379 1.94629L9.29883 0.914062C8.85677 0.462891 8.42155 0.239583 7.99316 0.244141C7.56934 0.244141 7.13411 0.467448 6.6875 0.914062L5.64844 1.94629C5.56185 2.03288 5.45475 2.07617 5.32715 2.07617H3.86426C3.23535 2.07617 2.76823 2.22656 2.46289 2.52734C2.16211 2.82812 2.01172 3.29525 2.01172 3.92871V5.39844C2.01172 5.52148 1.96842 5.6263 1.88184 5.71289L0.849609 6.75195C0.402995 7.19857 0.179688 7.63607 0.179688 8.06445C0.179688 8.49284 0.402995 8.92806 0.849609 9.37012L1.88184 10.4092C1.96842 10.4958 2.01172 10.6029 2.01172 10.7305V12.1934C2.01172 12.8223 2.16211 13.2871 2.46289 13.5879C2.76823 13.8932 3.23535 14.0459 3.86426 14.0459ZM7.23438 11.4277C7.10221 11.4277 6.98372 11.4004 6.87891 11.3457C6.77409 11.291 6.67155 11.2021 6.57129 11.0791L4.89648 9.04199C4.83724 8.96452 4.79167 8.88477 4.75977 8.80273C4.72786 8.7207 4.71191 8.63639 4.71191 8.5498C4.71191 8.37663 4.77116 8.22852 4.88965 8.10547C5.0127 7.97786 5.16081 7.91406 5.33398 7.91406C5.44336 7.91406 5.54134 7.93685 5.62793 7.98242C5.71452 8.02799 5.80339 8.10775 5.89453 8.22168L7.20703 9.88965L10.0371 5.36426C10.1829 5.12728 10.3675 5.00879 10.5908 5.00879C10.7594 5.00879 10.9098 5.06348 11.042 5.17285C11.1787 5.28223 11.2471 5.42578 11.2471 5.60352C11.2471 5.68099 11.2288 5.76302 11.1924 5.84961C11.1559 5.93164 11.1149 6.00911 11.0693 6.08203L7.87012 11.0723C7.78809 11.1908 7.69238 11.2796 7.58301 11.3389C7.47819 11.3981 7.36198 11.4277 7.23438 11.4277Z"></path></svg></span>Verification</th><td></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td></td></tr><tr class="property-row property-row-last_edited_time"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesCreatedAt"><path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM4.54102 8.91211H7.99316C8.30078 8.91211 8.54004 8.67285 8.54004 8.37207V3.8877C8.54004 3.58691 8.30078 3.34766 7.99316 3.34766C7.69238 3.34766 7.45312 3.58691 7.45312 3.8877V7.83203H4.54102C4.2334 7.83203 4.00098 8.06445 4.00098 8.37207C4.00098 8.67285 4.2334 8.91211 4.54102 8.91211Z"></path></svg></span>Last edited time</th><td><time>@April 13, 2023 11:16 AM</time></td></tr></tbody></table></header><div class="page-body"><p id="bb3a91a6-af7b-4370-b7e7-d5a572e4b550" class="">In sum, a data warehouse is a semantically consistent data store that serves as a
+physical implementation of a decision support data model. It stores the information
+an enterprise needs to make strategic decisions. A data warehouse is also often viewed
+as an architecture, constructed by integrating data from multiple heterogeneous sources
+to support structured and/or ad hoc queries, analytical reporting, and decision making.</p><p id="cfcddd9a-24de-4012-aeec-08257a261bf6" class="">Data warehouses generalize and consolidate data in multidimensional space. The construction of data warehouses involves data cleaning, data integration, and data transformation, and can be viewed as an important preprocessing step for data mining. Datawarehoused provide online analytical processing (OLAP) tools for the interactive analysis of multidimensional data of varied granularity, which facilitates effective data generalization and data mining. </p><p id="d9e15d41-cd70-4934-a012-3c19e177002f" class="">
+</p><h2 id="cbb25ddc-a9c2-47e8-bd94-d977b8b50b9b" class="">4.1 Data warehouses: Basic Concepts</h2><h3 id="7165a169-a7ab-4f2e-b842-46ee2d352559" class="">4.1.1 What is a Data warehouse?</h3><p id="47b4d022-1746-415d-a131-78805e2be5f1" class="">A data warehouse refers to a data repository that is maintained separately from an organizations operational databases. Data warehouse systems allow for integration of a variety of application systems. </p><p id="16e269d3-6c36-4765-a474-e219f838b6c1" class="">William H. Inmon: “A data warehouse is a subject-oriented, integrated, time-variant, and nonvolatile collection of data in support of management’s decision making process”.</p><p id="73141620-9ad4-40e2-b90b-a0712c597ab8" class="">
+</p><p id="7777485d-f807-46e0-a51b-75a17ff752cb" class="">Four key features:</p><ul id="eeb6c991-aa34-4388-8b8e-be77861a555a" class="bulleted-list"><li style="list-style-type:disc">Subject-oriented: A data warehouse is organized around major subjects such as customer, supplier, product, and sales. Rather than concentrating on the day-to-day operations and transactions processing of an organization, a data warehouse focuses on th modeling and analysis of data for decision makers. Hence, data warehouses typically provide a simple concise view of particularity subject issues by excluding data that are not useful in the decision support process.</li></ul><ul id="263d60fa-b53a-4fb1-9022-702e8e0ac6b9" class="bulleted-list"><li style="list-style-type:disc">Integrated: A data warehouse is usually constructed by integrating multiple heterogeneous, sources, such as relational databases, flat files, and online transaction records. Data cleaning and data integration techniques are applied to ensure consistency in naming conventions, encoding structures, attribute measures, and so on. </li></ul><ul id="5ddf1888-7957-46e4-8d6a-74337253096c" class="bulleted-list"><li style="list-style-type:disc">Time-variant: Data are stored to provide information from an historic perspective. Every key structure in the data warehouse contains, either implicitly or explicitly, a time element. </li></ul><ul id="9fce6928-be0d-4d1a-8a58-5487044fdd80" class="bulleted-list"><li style="list-style-type:disc">Nonvolatile: A data warehouse is always a physically separate store of data transformed from the application data found in the operational environment. Due to this separation, a data warehouse does not require transaction processing, recovery, and concurrency control mechanisms. It usually requires only two operations in data accessing initial loading of data and access of data.</li></ul><p id="078c042d-f810-427f-ab48-c0fd48849666" class="">
+</p><p id="158d9564-a589-4790-9d8f-7aea45c9b18b" class="">In sum, a data warehouse is a semantically consistent data store that serves as a physical implementation of a decision support data model. It stores the information an enterprise needs to make strategic decisions. A data warehouse is also often viewed as an architecture, constructed by integrating data from multiple heterogeneous sources to support structured and/or ad hoc queries, analytical reporting, and decision making.</p><p id="4d344a32-96e6-48eb-a7f6-4a4fc4b2c920" class="">The construction of a data warehouse requires data cleaning, data integration, and data consolidation. The utilization of a data warehouse
+often necessitates a collection of decision support technologies. This allows “knowledge workers” (e.g., managers, analysts, and executives) to use the warehouse to quickly and conveniently obtain an overview of the data, and to make sound decisions based on information in the warehouse.</p><h3 id="cf47b2ae-2b77-4461-b0df-447cdb5aba4b" class="">4.1.2 Differences between Operational Database Systems and Data Warehouses</h3><p id="32dd75e1-3073-40f6-a127-b816b3d03f55" class="">
+</p><p id="86bf94c9-eb89-4be3-bb23-e630ff4486e4" class="">To compare the difference between and operational database and a Data warehouse, you could compare a Online transaction processing (OLTP) system  with a online analytical processing (OLAP) system. </p><p id="40b2ef3c-da78-4593-837b-39c17b04982c" class="">
+</p><ul id="812651d5-380b-4b00-acc8-3a7db0434e80" class="bulleted-list"><li style="list-style-type:disc">Users and system orientation: An OLTP system is costumer-oriented and is used for transaction and query processing by clerks, clients and information technology professionals. An OLAP system is market-oriented and is sued for data analysis by knowledge workers, including managers, executives and analysts.</li></ul><ul id="366911ab-5a7e-4a1b-a2ca-14f7c7f930a1" class="bulleted-list"><li style="list-style-type:disc">Data contents: An OLTP system manages current data that, typically, are too detailed to be easily used for decision making. An OLAP system manages large amounts of historic data, provides facilities for summarize and aggregation, and stores and manages information. at different levels of granularity. These features make the data easier to use for informed decision making.</li></ul><ul id="0da0e8bd-b06c-4126-92b6-04a5ef89c99d" class="bulleted-list"><li style="list-style-type:disc">Database design: An OLTP system usually adopts and entity-relationship (ER) data model and an application-oriented database design. An OLAP system typically adopts either a star or a snowflake model and a subject oriented database design. </li></ul><ul id="465b8764-3880-4fa6-b3fd-31da6464f70b" class="bulleted-list"><li style="list-style-type:disc">View: An OLTP system focuses mainly on the current data within an enterprise or department, without referring to historic data or data in different organizations. In contrast, an OLAP system often spans multiple versions of a database schema, due to the evolutionary process of an organization. OLAP systems also deal with information that originates from different organizations, integrating information from any data stores. Because of their huge volume, OLAP data are stored on multiple storage media. </li></ul><ul id="baae98b5-6136-4812-845b-cb5198636ee5" class="bulleted-list"><li style="list-style-type:disc">Access patterns: The acess patterns of an OLTP system consist mainly of short, atomic transactions. Such a system requires concurrency control and recovery mechanisms. However, accesses to OLAP systems are mostly read-only operations, although many could be complex queries. </li></ul><p id="cfa7d118-b469-4a48-a22f-c29cd98e1a80" class="">
+</p><h3 id="f00af6e1-fe0d-4b66-b830-04f0950861d2" class="">4.1.3 But, Why have a separate Data Warehouse?</h3><p id="fec4be0c-eec0-4b31-8659-e4248cbd8d02" class="">A major reason to separate a operational database and a data warehouse if to allow both systems to preform optimally, and achieve high performance for both systems. An OLAP systems needs mostly read-only access and there for might hinder the concurrency of a OLTP system. They also support different operations and features. </p><p id="43defb9b-a85a-4e18-abba-3da1227e79c9" class="">
+</p><h3 id="fdee2b69-a2ce-4810-85f0-d90323f3a01d" class="">4.14 Data warehousing: A Multitiered Architecture</h3><p id="8b498bcc-1149-4d1c-8db2-d2a7001ccc25" class="">A data warehouse often adopts a three-tier architecture. The first level is a warehouse database server, this is almost always a relational database system. Backend tools and utilites are used to feed data into the database. These tools preform different operations to keep the warehouse up to date, and ready for use. The second tier is an OLAP server which handles accessing the data of the warehouse. The third and top tier, is the frontend client layer which alows access to the data warehouse through queries and other tools.</p><p id="8f2fdf95-f3b1-4bfc-8812-9b399ab0e627" class="">
+</p><h3 id="fab8ed63-2696-4a7a-90ce-3081ad2c7ab6" class="">4.1.5 Data warehouse Models: Enterprise Warehouse, Data Mart, and Virtual Warehouse</h3><ul id="b604c851-9520-4acd-97e0-58a7f85c7848" class="bulleted-list"><li style="list-style-type:disc">Enterprise warehouse: An enterprise warehouse collects all of the information about subjects spanning the entire organization. It provides corporate-wide data integration, usually from one or more operational systems or external information providers, and is cross-functional in scope. It typically contains detailed data as
+well as summarized data, and can range in size from a few gigabytes to hundreds of gigabytes, terabytes, or beyond. An enterprise data warehouse may be implemented on traditional mainframes, computer super servers, or parallel architecture
+platforms. It requires extensive business modeling and may take years to design and build.</li></ul><ul id="5e8c4332-e485-42af-8354-d3655e7804e9" class="bulleted-list"><li style="list-style-type:disc">Data mart: A data mart contains a subset of corporate-wide data that is of value to a
+specific group of users. The scope is confined to specific selected subjects. For example, a marketing data mart may confine its subjects to customer, item, and sales. The
+data contained in data marts tend to be summarized.
+Data marts are usually implemented on low-cost departmental servers that are
+Unix/Linux or Windows based. The implementation cycle of a data mart is more
+likely to be measured in weeks rather than months or years. However, it may
+involve complex integration in the long run if its design and planning were not
+enterprise-wide. Depending on the source of data, data marts can be categorized as independent or dependent. Independent data marts are sourced from data captured from one or more operational systems or external information providers, or from data generated
+locally within a particular department or geographic area. Dependent data marts are
+sourced directly from enterprise data warehouses.</li></ul><ul id="bb417bc6-f609-443e-8301-4865544275e9" class="bulleted-list"><li style="list-style-type:disc">Virtual warehouse: A virtual warehouse is a set of views over operational databases.
+For efficient query processing, only some of the possible summary views may be
+materialized. A virtual warehouse is easy to build but requires excess capacity on
+operational database servers.</li></ul><p id="dc52c9d8-50fc-4034-82d3-0373f4d857fb" class="">
+</p><p id="ce7a032a-b8c3-4c0b-a4e9-6458c2941652" class="">“What are the pros and cons of the top-down and bottom-up approaches to data ware-
+house development?” The top-down development of an enterprise warehouse serves as a
+systematic solution and minimizes integration problems. However, it is expensive, takes
+a long time to develop, and lacks flexibility due to the difficulty in achieving consistency
+and consensus for a common data model for the entire organization. The bottom-
+up approach to the design, development, and deployment of independent data marts
+provides flexibility, low cost, and rapid return of investment. It, however, can lead to
+problems when integrating various disparate data marts into a consistent enterprise data
+warehouse.</p><p id="cf19b659-49eb-47b2-a5fc-ddbb4c25ca49" class="">
+</p><p id="63e4127b-6ca8-4155-b5f7-27c10f5fe9dd" class="">A recommended method for the development of data warehouse systems is to implement the warehouse in an incremental and evolutionary manner, as shown in Figure 4.2.
+First, a high-level corporate data model is defined within a reasonably short period
+(such as one or two months) that provides a corporate-wide, consistent, integrated
+view of data among different subjects and potential usages. This high-level model,
+although it will need to be refined in the further development of enterprise data ware-
+houses and departmental data marts, will greatly reduce future integration problems.
+Second, independent data marts can be implemented in parallel with the enterprise</p><figure id="91ce1afe-c293-46a4-b59d-553ac8480b78" class="image"><a href="Chapter%204%20Han%2097d7e5daaad946399416471264b715b5/Untitled.png"><img style="width:584px" src="Chapter%204%20Han%2097d7e5daaad946399416471264b715b5/Untitled.png"/></a></figure><p id="87cf2f56-5605-4e44-b701-4d6783966dab" class="">
+</p><h3 id="5c2073b4-bcaa-42b8-a126-6d96ba76992e" class="">4.1.6 Extraction, Transformation, and Loading</h3><p id="e0d9da39-0f6b-4173-8fe8-20e3bc75b034" class="">
+</p><p id="667ad26a-968c-461e-a772-87bde6676b38" class="">Data warehouses use backend tools and utilities to handle its data:</p><ul id="b136362e-6e61-4d61-a090-b8fb5e5afbe4" class="bulleted-list"><li style="list-style-type:disc">Data extraction, which typically gathers data from multiple, heterogeneous, and
+external sources.</li></ul><ul id="4e7148b3-f7d5-4656-beb0-f7da33076bb9" class="bulleted-list"><li style="list-style-type:disc">Data cleaning, which detects errors in the data and rectifies them when possible.</li></ul><ul id="f182add5-4510-48fe-a5a5-cdfe78d8daee" class="bulleted-list"><li style="list-style-type:disc">Data transformation, which converts data from legacy or host format to warehouse
+format.</li></ul><ul id="6943ac46-439d-4d05-9a82-fa803ba2d1dc" class="bulleted-list"><li style="list-style-type:disc">Load, which sorts, summarizes, consolidates, computes views, checks integrity, and
+builds indices and partitions.</li></ul><ul id="7cced4f2-725b-4191-9df7-6080cb4b9c4c" class="bulleted-list"><li style="list-style-type:disc">Refresh, which propagates the updates from the data sources to the warehouse.</li></ul><p id="5e55cf9c-18df-4464-b106-56ed62f486d4" class="">
+</p><h3 id="2494183c-eb49-4bad-8f22-12a9383c16a7" class="">4.1.7 Metadata Repository</h3><p id="f18f7b3a-536a-421a-b14a-07f9aa2e8613" class="">Metadata are data about data. A metadata repository should contain the following:</p><ul id="529a6258-5775-4396-94a9-a07902c47226" class="bulleted-list"><li style="list-style-type:disc">A description of the data warehouse structure, which includes the warehouse schema,
+view, dimensions, hierarchies, and derived data definitions, as well as data mart
+locations and contents.</li></ul><ul id="bdceb2a0-43d7-4fc6-b3f0-6fa0fb0238c9" class="bulleted-list"><li style="list-style-type:disc">Operational metadata, which include data lineage (history of migrated data and the
+sequence of transformations applied to it), currency of data (active, archived, or
+purged), and monitoring information (warehouse usage statistics, error reports, and
+audit trails).</li></ul><ul id="fe9e299c-c8cd-4fb9-9901-57a5d230bdd6" class="bulleted-list"><li style="list-style-type:disc">The algorithms used for summarization, which include measure and dimension
+definition algorithms, data on granularity, partitions, subject areas, aggregation,
+summarization, and predefined queries and reports.</li></ul><ul id="29f570e9-972a-4a9a-94f5-f3b9ab4dc38b" class="bulleted-list"><li style="list-style-type:disc">Mapping from the operational environment to the data warehouse, which includes
+source databases and their contents, gateway descriptions, data partitions, data
+extraction, cleaning, transformation rules and defaults, data refresh and purging
+rules, and security (user authorization and access control).</li></ul><ul id="d41dd025-ab85-4d96-85e5-306386994257" class="bulleted-list"><li style="list-style-type:disc">Data related to system performance, which include indices and profiles that improve
+data access and retrieval performance, in addition to rules for the timing and
+scheduling of refresh, update, and replication cycles.</li></ul><ul id="0b7c6aa4-4626-406e-befe-4e7fd845143b" class="bulleted-list"><li style="list-style-type:disc">Business metadata, which include business terms and definitions, data ownership
+information, and charging policies.</li></ul><p id="69c4eb7d-e19a-4937-9101-f48f5d68ce2f" class="">
+</p><h2 id="3d669d9a-ada2-4654-a79d-10837b616a23" class="">4.2 Data Warehouse Modeling: Data Cube
+and OLAP</h2><p id="19b9156d-a9db-4aa3-83a6-352f0ba77223" class="">
+</p><h3 id="5c136007-f052-4cdf-874a-9c2c1d013b52" class="">4.2.1 Data Cube: A Multidimensional Data Model</h3><p id="69d658a4-8d49-47d5-8f42-c1739261cdf8" class="">A data cube allows data to be modeled and viewed in multiple dimensions. A multidimensional data model is typically organized around a central theme, such as sales. This theme is represented by a fact table. Facts are numeric measures. Think of them as the quantities by which we want to analyze relationships between dimensions. Data data warehouse cube is N dimensional. We can add on dimensions by adding relationships or related data that we want to compare an attribute to.  </p><p id="57a88d74-35e1-4cdc-88a2-393e6e4b06b2" class="">
+</p><h3 id="69fa4386-fb7e-4b1b-b0da-9167765d8317" class="">4.2.2 Stars, Snowflakes, and Fact Constellations: Schemas for
+Multidimensional Data Models</h3><p id="c28b103c-8515-4dd3-8c8e-10106cf0f97a" class="">
+</p><p id="e5afa355-003a-4ecb-af64-f538545503da" class="">Star schema: The most common modeling paradigm is the star schema, in which the
+data warehouse contains (1) a large central table (fact table) containing the bulk of
+the data, with no redundancy, and (2) a set of smaller attendant tables (dimension
+tables), one for each dimension. The schema graph resembles a starburst, with the
+dimension tables displayed in a radial pattern around the central fact table.</p><p id="57b8e179-deb0-4983-8fe9-1cc15b33b1a3" class="">Snowflake schema: The snowflake schema is a variant of the star schema model,
+where some dimension tables are normalized, thereby further splitting the data into
+additional tables. The resulting schema graph forms a shape similar to a snowflake.</p><p id="eb32ad65-353e-4a86-997d-3e9661af53d6" class="">The major difference between the snowflake and star schema models is that the
+dimension tables of the snowflake model may be kept in normalized form to reduce
+redundancies. Such a table is easy to maintain and saves storage space. However, this
+space savings is negligible in comparison to the typical magnitude of the fact table. Furthermore, the snowflake structure can reduce the effectiveness of browsing, since more
+joins will be needed to execute a query. Consequently, the system performance may be
+adversely impacted. Hence, although the snowflake schema reduces redundancy, it is not
+as popular as the star schema in data warehouse design.</p><p id="29e01879-07e7-420f-ade8-1b2d8c9a1d19" class="">Fact constellation: Sophisticated applications may require multiple fact tables to share
+dimension tables. This kind of schema can be viewed as a collection of stars, and
+hence is called a galaxy schema or a fact constellation.</p><p id="976e9e81-328e-4bfe-832e-32beaabec375" class="">
+</p><h3 id="67e9cc17-6271-4790-a17e-e83c49075ee5" class="">4.2.3 Dimensions: The Role of Concept Hierarchies</h3><p id="ba714001-980d-4b36-962f-ab0d36186cc3" class="">A concept hierarchy defines a sequence of mappings from a set of low-level concepts
+to higher-level, more general concepts. Data mining systems should provide users with the flexibility to tailor predefined hierarchies according to their particular needs. Concept hierarchies may also be defined by discretizing or grouping values for agiven dimension or attribute, resulting in a set-grouping hierarchy.</p><h3 id="e55a3286-2276-475d-83dc-347e43c1dd3b" class="">4.2.4 Measures: Their Categorization and Computation</h3><p id="655cbb91-7c53-4e85-9635-5ae22464c601" class="">“How are measures computed?” To answer this question, we first study how measures can
+be categorized. Note that a multidimensional point in the data cube space can be defined</p><p id="40b70f02-c7af-4015-a0b6-b389cca9c3a2" class="">
+</p><ul id="11c8d2bd-ca8c-4538-a1d9-3f2f67e1c4ef" class="bulleted-list"><li style="list-style-type:disc">Distributive: An aggregate function is distributive if it can be computed in a distributed
+manner as follows. Suppose the data are partitioned into n sets. We apply the func-
+tion to each partition, resulting in n aggregate values. If the result derived by applying
+the function to the n aggregate values is the same as that derived by applying the func-
+tion to the entire data set (without partitioning), the function can be computed in a
+distributed manner. For example, sum() can be computed for a data cube by first par-
+titioning the cube into a set of subcubes, computing sum() for each subcube, and then
+summing up the counts obtained for each subcube. Hence, sum() is a distributive
+aggregate function. For the same reason, count() , min() , and max() are distributive aggregate functions. By treating the count value of each nonempty base cell as 1 by default, count() of any cell in a cube can be viewed as the sum of the count values of all of its corresponding
+child cells in its subcube. Thus, count() is distributive. A measure is distributive if it is
+obtained by applying a distributive aggregate function. Distributive measures can be
+computed efficiently because of the way the computation can be partitioned.</li></ul><ul id="fb3631c7-79ec-43b9-8910-cf59ca1d5346" class="bulleted-list"><li style="list-style-type:disc">Algebraic: An aggregate function is algebraic if it can be computed by an algebraic func-
+tion with M arguments (where M is a bounded positive integer), each of which
+is obtained by applying a distributive aggregate function. For example, avg() (aver-
+age) can be computed by sum()/count() , where both sum() and count() are distributive
+aggregate functions. Similarly, it can be shown that min N() and max N() (which
+find the N minimum and N maximum values, respectively, in a given set) and
+standard deviation() are algebraic aggregate functions. A measure is algebraic if it is
+obtained by applying an algebraic aggregate function.</li></ul><ul id="03395e20-d59c-4d3a-bce7-b9c7a8edb88b" class="bulleted-list"><li style="list-style-type:disc">Holistic: An aggregate function is holistic if there is no constant bound on the stor-
+age size needed to describe a subaggregate. That is, there does not exist an algebraic
+function with M arguments (where M is a constant) that characterizes the compu-
+tation. Common examples of holistic functions include median() , mode() , and rank() .
+A measure is holistic if it is obtained by applying a holistic aggregate function.</li></ul><p id="c3758cb4-4fc7-418d-8ff3-4602abb5f2ea" class="">
+</p><h3 id="e919124e-26ec-43ae-9e00-308ad42f4334" class="">4.2.5 Typical OLAP Operations</h3><p id="604016ce-b59c-477d-b431-40fbe2358fe1" class="">Roll-up: The roll-up operation (also called the drill-up operation by some vendors)
+performs aggregation on a data cube, either by climbing up a concept hierarchy for
+a dimension or by dimension reduction. Figure 4.12 shows the result of a roll-up
+operation performed on the central cube by climbing up the concept hierarchy for
+location given in Figure 4.9. This hierarchy was defined as the total order “street &lt;
+city &lt; province or state &lt; country.” The roll-up operation shown aggregates the data
+by ascending the location hierarchy from the level of city to the level of country. In
+other words, rather than grouping the data by city, the resulting cube groups the data
+by country. When roll-up is performed by dimension reduction, one or more dimensions are
+removed from the given cube. For example, consider a sales data cube containing
+only the location and time dimensions. Roll-up may be performed by removing, say,
+the time dimension, resulting</p><p id="07331e3e-e30e-44e7-ae17-cd2261f9a8d6" class="">Drill-down: Drill-down is the reverse of roll-up. It navigates from less detailed data
+to more detailed data. Drill-down can be realized by either stepping down a concept
+hierarchy for a dimension or introducing additional dimensions. Figure 4.12 shows the
+result of a drill-down operation performed on the central cube by stepping down a concept hierarchy for time defined as “day &lt; month &lt; quarter &lt; year.” Drill-down
+occurs by descending the time hierarchy from the level of quarter to the more detailed
+level of month. The resulting data cube details the total sales per month rather than
+summarizing them by quarter.
+Because a drill-down adds more detail to the given data, it can also be per-
+formed by adding new dimensions to a cube. For example, a drill-down on the
+central cube of Figure 4.12 can occur by introducing an additional dimension, such
+as customer group.</p><p id="56769cec-a82e-4c7a-82da-34fec7f34fbb" class="">
+</p><figure id="dc65e235-3bef-4269-a71a-377b81044567" class="image"><a href="Chapter%204%20Han%2097d7e5daaad946399416471264b715b5/Untitled%201.png"><img style="width:775px" src="Chapter%204%20Han%2097d7e5daaad946399416471264b715b5/Untitled%201.png"/></a></figure><p id="6dca1cba-3201-401b-89ce-4999a7e7fddf" class="">Slice and dice: The slice operation performs a selection on one dimension of the given
+cube, resulting in a subcube. Figure 4.12 shows a slice operation where the sales
+data are selected from the central cube for the dimension time using the criterion
+time = “Q1.” The dice operation defines a subcube by performing a selection on two
+or more dimensions. Figure 4.12 shows a dice operation on the central cube based on
+the following selection criteria that involve three dimensions: (location = “Toronto”
+or “Vancouver”) and (time = “Q1” or “Q2”) and (item = “home entertainment” or
+“computer”).</p><p id="6d1dc178-6570-4c88-bdea-37ee2e46007b" class="">Pivot (rotate): Pivot (also called rotate) is a visualization operation that rotates the data
+axes in view to provide an alternative data presentation. Figure 4.12 shows a pivot
+operation where the item and location axes in a 2-D slice are rotated. Other examples
+include rotating the axes in a 3-D cube, or transforming a 3-D cube into a series of
+2-D planes.</p><p id="f7b4473f-d1f8-49b9-a46c-740cc413d6f4" class="">Other OLAP operations: Some OLAP systems offer additional drilling operations. For
+example, drill-across executes queries involving (i.e., across) more than one fact
+table. The drill-through operation uses relational SQL facilities to drill through the
+bottom level of a data cube down to its back-end relational tables.
+Other OLAP operations may include ranking the top N or bottom N items in
+lists, as well as computing moving averages, growth rates, interests, internal return
+rates, depreciation, currency conversions, and statistical functions.</p><p id="bbc28519-4977-4c63-865b-2f5891588c0c" class="">
+</p><h3 id="ced8d167-4d4f-4c65-bf3f-9d09c94c1c9c" class="">4.2.6 A Starnet Query Model for Querying
+Multidimensional Databases</h3><p id="76ddc77d-adfe-45eb-9797-e6023e034f27" class="">The querying of multidimensional databases can be based on a starnet model, which
+consists of radial lines emanating from a central point, where each line represents a
+concept hierarchy for a dimension. Each abstraction level in the hierarchy is called a
+footprint. These represent the granularity available for use by OLAP operations such
+as drill-down and roll-up.</p><p id="0074da71-279d-4f61-88b8-6d8eaafe996b" class="">
+</p><h2 id="d702ce00-e304-4c5c-8aa4-0ece08f02b19" class="">4.3 Data Warehouse Design and Usage</h2><p id="572b42e5-1afa-4df1-94ba-a02ebf804cc8" class="">
+</p><h3 id="4d0eb4e7-fc61-48ae-bdd9-977ea81525a3" class="">4.3.1 A Business Analysis Framework for Data
+Warehouse Design</h3><p id="e03841cf-177c-4b7b-af73-11aa7f7bdbfa" class="">To design an effective data warehouse we need to understand and analyze busi-
+ness needs and construct a business analysis framework. The construction of a large
+and complex information system can be viewed as the construction of a large and
+complex building, for which the owner, architect, and builder have different views.
+These views are combined to form a complex framework that represents the top-down,
+business-driven, or owner’s perspective, as well as the bottom-up, builder-driven, or
+implementor’s view of the information system.
+Four different views regarding a data warehouse design must be considered: the top-
+down view, the data source view, the data warehouse view, and the business query view.</p><p id="ef5fdebb-a5ea-4fb2-8d06-1f91ca81886a" class="">
+</p><ul id="6df94079-431c-4970-a7f2-77d26fde19c2" class="bulleted-list"><li style="list-style-type:disc">The top-down view allows the selection of the relevant information necessary for the
+data warehouse. This information matches current and future business needs.</li></ul><ul id="e4778693-6d49-4608-a9d1-dc4e0131dacc" class="bulleted-list"><li style="list-style-type:disc">The data source view exposes the information being captured, stored, and man-
+aged by operational systems. This information may be documented at various levels
+of detail and accuracy, from individual data source tables to integrated data source
+tables. Data sources are often modeled by traditional data modeling techniques, such
+as the entity-relationship model or CASE (computer-aided software engineering)
+tools.</li></ul><ul id="63de4786-7765-4604-9188-fa607b6467c0" class="bulleted-list"><li style="list-style-type:disc">The data warehouse view includes fact tables and dimension tables. It represents the
+information that is stored inside the data warehouse, including precalculated totals
+and counts, as well as information regarding the source, date, and time of origin,
+added to provide historical context.</li></ul><ul id="41266d79-801e-49f5-9cc0-e3fddfdb59d3" class="bulleted-list"><li style="list-style-type:disc">Finally, the business query view is the data perspective in the data warehouse from
+the end-user’s viewpoint.</li></ul><h3 id="e09268ab-19c9-4033-af82-05a16b653ccf" class="">4.3.2 Data Warehouse Design Process</h3><p id="4023e48e-c20e-4f44-89fe-b6d12a052d69" class="">A data warehouse can be built using a top-down approach, a bottom-up approach,
+or a combination of both. The top-down approach starts with overall design and plan-
+ning. It is useful in cases where the technology is mature and well known, and where
+the business problems that must be solved are clear and well understood. The bottom-
+up approach starts with experiments and prototypes. This is useful in the early stage
+of business modeling and technology development.</p><p id="7006bab1-ffef-47e3-a706-61b79703a4a9" class="">In general, the warehouse design process consists of the following steps:</p><ol type="1" id="4bf272b1-591e-4ce0-b6da-190bc8f02036" class="numbered-list" start="1"><li>Choose a business process to model (e.g., orders, invoices, shipments, inventory,
+account administration, sales, or the general ledger). If the business process is orga-
+nizational and involves multiple complex object collections, a data warehouse model
+should be followed. However, if the process is departmental and focuses on the
+analysis of one kind of business process, a data mart model should be chosen.</li></ol><ol type="1" id="8a8a4144-f53f-4765-b724-6f284990f0bb" class="numbered-list" start="2"><li>Choose the business process grain, which is the fundamental, atomic level of data
+to be represented in the fact table for this process (e.g., individual transactions,
+individual daily snapshots, and so on).</li></ol><ol type="1" id="67c984da-9c5d-4b60-b6e2-720ed01dec47" class="numbered-list" start="3"><li>Choose the dimensions that will apply to each fact table record. Typical dimensions
+are time, item, customer, supplier, warehouse, transaction type, and status.</li></ol><ol type="1" id="d8702cc2-7dda-4e90-a5df-dad4dbfb20f4" class="numbered-list" start="4"><li>Choose the measures that will populate each fact table record. Typical measures are
+numeric additive quantities like dollars sold and units sold.</li></ol><p id="8a39aff1-d746-48c3-9980-b88215966be9" class="">
+</p><h3 id="533d811e-0649-4c64-8bb3-2ee74939f024" class="">4.3.3 Data Warehouse Usage for Information Processing</h3><p id="9ada5c7b-7d19-4f18-b45c-7cd07ff48003" class="">There are three kinds of data warehouse applications: information processing, analyti-
+cal processing, and data mining.</p><ul id="ac33999a-d71c-4c53-a0c0-c6cfe67df083" class="bulleted-list"><li style="list-style-type:disc">Information processing supports querying, basic statistical analysis, and reporting
+using crosstabs, tables, charts, or graphs. A current trend in data warehouse infor-
+mation processing is to construct low-cost web-based accessing tools that are then
+integrated with web browsers.</li></ul><ul id="bd1f1473-8d7f-43b4-aecd-99245c24462b" class="bulleted-list"><li style="list-style-type:disc">Analytical processing supports basic OLAP operations, including slice-and-dice,
+drill-down, roll-up, and pivoting. It generally operates on historic data in both sum-
+marized and detailed forms. The major strength of online analytical processing over
+information processing is the multidimensional data analysis of data warehouse data.</li></ul><ul id="a7a2cd2f-d66e-4826-b497-d5a1015bc809" class="bulleted-list"><li style="list-style-type:disc">Data mining supports knowledge discovery by finding hidden patterns and associations, constructing analytical models, performing classification and prediction, and
+presenting the mining results using visualization tools.</li></ul><p id="f5447cca-ef3b-4dc7-9661-9af0a1d096d5" class="">
+</p><h3 id="fbe9f702-1341-4627-9e66-0032d7f96ccf" class="">4.3.4 From Online Analytical Processing
+to Multidimensional Data Mining</h3><p id="222dd8ea-1e3a-4bf9-8ac1-f86eb4b53d17" class="">
+</p><ul id="dcf8b11e-2ee2-43ea-ba5f-04b176ccc270" class="bulleted-list"><li style="list-style-type:disc">High quality of data in data warehouses: Most data mining tools need to work on
+integrated, consistent, and cleaned data, which requires costly data cleaning, data
+integration, and data transformation as preprocessing steps. A data warehouse con-
+structed by such preprocessing serves as a valuable source of high-quality data for
+OLAP as well as for data mining. Notice that data mining may serve as a valuable
+tool for data cleaning and data integration as well.</li></ul><ul id="ae6ba732-b865-4ab4-bca2-40ebefd0a77c" class="bulleted-list"><li style="list-style-type:disc">Available information processing infrastructure surrounding data warehouses:
+Comprehensive information processing and data analysis infrastructures have been
+or will be systematically constructed surrounding data warehouses, which include
+accessing, integration, consolidation, and transformation of multiple heterogeneous
+databases, ODBC/OLEDB connections, Web accessing and service facilities, and
+reporting and OLAP analysis tools. It is prudent to make the best use of the available
+infrastructures rather than constructing everything from scratch.</li></ul><ul id="4436d706-8db6-4da6-b084-c48e8c715154" class="bulleted-list"><li style="list-style-type:disc">OLAP-based exploration of multidimensional data: Effective data mining needs
+exploratory data analysis. A user will often want to traverse through a database, select
+portions of relevant data, analyze them at different granularities, and present knowl-
+edge/results in different forms. Multidimensional data mining provides facilities for
+mining on different subsets of data and at varying levels of abstraction—by drilling,
+pivoting, filtering, dicing, and slicing on a data cube and/or intermediate data min-
+ing results. This, together with data/knowledge visualization tools, greatly enhances
+the power and flexibility of data mining.</li></ul><ul id="575600e2-0df0-4aaf-9f87-d82a74f6f76d" class="bulleted-list"><li style="list-style-type:disc">Online selection of data mining functions: Users may not always know the specific
+kinds of knowledge they want to mine. By integrating OLAP with various data min-
+ing functions, multidimensional data mining provides users with the flexibility to
+select desired data mining functions and swap data mining tasks dynamically.</li></ul><p id="8b18b894-8596-48eb-a28d-6c6d9bf7f009" class="">
+</p><h2 id="d119d62e-a721-4cbf-b5cd-cc8f9df8b7d8" class="">4.4 Data Warehouse Implementation</h2><p id="7d59b3c1-2af3-432a-bada-2fb7b03c00c4" class="">
+</p><h3 id="5274a47a-10b3-4839-8267-6676b965cbd3" class="">4.4.1 Efficient Data Cube Computation: An Overview</h3><p id="9770e2ea-72d0-4338-846d-cb53ae0e2f30" class="">At the core of multidimensional data analysis are efficient aggregations or group-bys. Each one of these aggregations is called a cuboid. A set of these is a data cubes. One way to handle this is to extend SQL with compute cube operation that handles creating aggregations in multiple dimensions. The base cuboid is the cuboid that contains all the dimensions of a data cube, and the apex cube contains the 0-D cuboid where the group-by is empty. It is possible to precompute these cuboids, but this comes with the problem called the curse of dimensionality, this relates to the problem that comes with large dimensionality needing a lot of storage space. It is normal to say that you need 2^n space to store all your dimension, but some dimentions might have levels which leads to more storage need. A better model is Sum(1 - n, Li + 1) where Li is the number of levels for dimension i.  </p><p id="18fdf010-c269-49f5-b910-83a6979062e8" class="">
+</p><p id="5ca32550-3a7b-45df-8eeb-81e2847b95b6" class="">There are three choices for data cube materialization given a base cuboid:</p><ol type="1" id="356c45e6-5772-4f0b-bc07-7fe71ddd9e4e" class="numbered-list" start="1"><li>No materialization: Do not precompute any of the “nonbase” cuboids. This leads
+to computing expensive multidimensional aggregates on-the-fly, which can be extremely slow.</li></ol><ol type="1" id="fe4ab353-a681-4498-b2b0-ea44cd6b3c5e" class="numbered-list" start="2"><li>Full materialization: Precompute all of the cuboids. The resulting lattice of com-
+puted cuboids is referred to as the full cube. This choice typically requires huge
+amounts of memory space in order to store all of the precomputed cuboids.</li></ol><ol type="1" id="63b7c1bc-7176-4864-b331-0690a62594c7" class="numbered-list" start="3"><li>Partial materialization: Selectively compute a proper subset of the whole set of pos-
+sible cuboids. Alternatively, we may compute a subset of the cube, which contains
+only those cells that satisfy some user-specified criterion, such as where the tuple
+count of each cell is above some threshold. We will use the term subcube to refer to
+the latter case, where only some of the cells may be precomputed for various cuboids.
+Partial materialization represents an interesting trade-off between storage space and
+response time.</li></ol><p id="960a4852-2bf9-4615-9644-e7d39a5c2cf8" class="">The partial sterilization of cuboids or subcubes should consider three factores</p><ol type="1" id="cb20c2b4-50de-4975-b725-036005a2ce3c" class="numbered-list" start="1"><li>Identify the subset of cuboids or subcubes to materialize</li></ol><ol type="1" id="58f47627-19c4-43d4-9e00-8a461e55af7d" class="numbered-list" start="2"><li>Exploit the materialized cuboids or subcubes during query processing.</li></ol><ol type="1" id="6451abf9-5a98-4b94-b59d-d15d10b9fd6c" class="numbered-list" start="3"><li>Efficiently update the materialized cuboids or subcubes during load and refresh</li></ol><p id="c640ae87-f0e1-483f-bc1c-aee3fb3d63e6" class="">
+</p><p id="c8db4095-eba8-4737-9307-2eef63c7af69" class="">
+</p><p id="bac60a46-6f56-4b8c-ad46-e7d6d752a7e8" class="">The selection of the subset of cuboids or subcubes to materialize should take into account the queries in the workload, their frequencies, and their accessing costs. In addition, it should consider workload characteristics, the cost for incremental updates, and the total storage requirements. </p><p id="48afc795-2c9f-47dd-a302-0c49fd7fbdce" class="">A popular approach is to materialize the cuboids set on which other frequently referenced cuboids are based. Alternatively, we can compute an iceberg cube, which is a data cube that stores only those cube cells with an aggregate value (e.g., count) that is above some minimum support threshold.</p><p id="02ee417c-8105-4f56-a4d9-3bcbf247650a" class="">Another common strategy is to materialize a shell cube. This involves precomputing the cuboids for only a small number of dimensions (e.g., three to five) of a data cube.</p><p id="ad73d2b1-e963-4c29-b2ab-a18327255c37" class="">In the bitmap index for a given attribute, there is a distinct bit
+vector, Bv, for each value v in the attribute’s domain. If a given attribute’s domain consists of n values, then n bits are needed for each entry in the bitmap index (i.e., there are n bit vectors). If the attribute has the value v for a given row in the data table, then the bit representing that value is set to 1 in the corresponding row of the bitmap index. All other bits for that row are set to 0.</p><p id="5f27c629-5c2e-4ac8-8830-3f53d602dfbf" class="">Join indexing registers the joinable rows of two relations from a
+relational database. Join index records can identify joinable tuples without performing costly join operations. Join indexing is especially useful for maintaining the relationship between a foreign key
+and its matching primary keys, from the joinable relation.</p><p id="b4b4e744-344e-4cc4-b10e-35491dd8ed22" class="">
+</p><h3 id="322a9954-994c-45f7-a84e-9755af1b7f3e" class="">4.4.3 Efficient Processing of OLAP Queries</h3><p id="2f73b6ef-6c75-4a3a-8702-7268bcccad9d" class="">Given materialized views, query processing
+should proceed as follows:</p><ol type="1" id="ffbe5d62-817f-4dd8-b928-ca8684ba885e" class="numbered-list" start="1"><li>Determine which operations should be performed on the available cuboids: This involves transforming any selection, projection, roll-up (group-by), and drill-down operations specified in the query into corresponding SQL and/or OLAP operations. For example, slicing and dicing a data cube may correspond to selection and/or projection operations on a materialized cuboid.</li></ol><ol type="1" id="02d6ea97-97e4-4889-8141-6b029afffb00" class="numbered-list" start="2"><li>Determine to which materialized cuboid(s) the relevant operations should be applied: This involves identifying all of the materialized cuboids that may potentially be used to answer the query, pruning the set using knowledge of “dominance” relationships among the cuboids, estimating the costs of using the remaining materialized cuboids, and selecting the cuboid with the least cost.</li></ol><p id="86e1569b-1310-412b-ae86-96e00b5a5f4d" class="">
+</p><h3 id="cb42f88b-4eba-40bc-b11d-2d0ee8868c18" class="">4.4.4 OLAP Server Architectures: ROLAP versus MOLAP versus HOLAP</h3><p id="a140e698-baa7-4350-97b9-7cd291d0814c" class="">
+</p><p id="b7c555f7-fe98-4897-b654-acfd600e8716" class="">Implementations of a warehouse server for OLAP processing include
+the following:</p><ul id="d67068b4-0cd0-4bb4-bda6-36ab6761029b" class="bulleted-list"><li style="list-style-type:disc">Relational OLAP (ROLAP) servers: These are the intermediate servers that stand in between a relational back-end server and client front-end tools. They use a relational or extended-relational DBMS to store and manage warehouse data, and OLAP middleware to support missing pieces. ROLAP servers include optimization for each DBMS back end, implementation of aggregation navigation logic, and additional tools and services. ROLAP technology tends to have greater scalability than MOLAP technology. The DSS server of Microstrategy, for example, adopts the ROLAP approach.</li></ul><ul id="f2ca4bf0-bd89-4f89-bf93-841995481b4b" class="bulleted-list"><li style="list-style-type:disc">Multidimensional OLAP (MOLAP) servers: These servers support multidimensional data views through array-based multidimensional storage engines. They map multidimensional views directly to data cube array structures. The advantage of using a data cube is that it allows fast indexing to precomputed summarized data. Notice
+that with multidimensional data stores, the storage utilization may be low if the dataset is sparse. In such cases, sparse matrix compression techniques should be explored(Chapter 5).
+Many MOLAP servers adopt a two-level storage representation to handle dense and sparse data sets: Denser subcubes are identified and stored as array structures, whereas sparse subcubes employ compression technology for efficient storage utilization.</li></ul><ul id="0b338c47-f210-4b33-9f64-9498a9ce91fc" class="bulleted-list"><li style="list-style-type:disc">Hybrid OLAP (HOLAP) servers: The hybrid OLAP approach combines ROLAP and MOLAP technology, benefiting from the greater scalability of ROLAP and the faster computation of MOLAP. For example, a HOLAP server may allow large volumes4.5 Data Warehouse Implementation 165  of detailed data to be stored in a relational database, while aggregations are kept in a separate MOLAP store. The Microsoft SQL Server 2000 supports a hybrid OLAP server.</li></ul><ul id="cfe5cd65-dc1a-4da7-97e7-51ca6d965706" class="bulleted-list"><li style="list-style-type:disc">Specialized SQL servers: To meet the growing demand of OLAP processing in rela-
+tional databases, some database system vendors implement specialized SQL servers
+that provide advanced query language and query processing support for SQL queries
+over star and snowflake schemas in a read-only environment</li></ul><p id="e5a91728-d849-4cd3-9fbb-428aec933a6c" class="">
+</p><h2 id="fe4d8931-ae9d-499a-89cf-e081f20dde02" class="">4.5 Data Generalization by Attribute Oriented Induction</h2><h3 id="bf5b8e87-392c-40a4-9dc5-03056daba8ab" class="">4.5.1 Attribute-Oriented Induction for Data Characterization</h3><p id="0e269940-fea5-4123-9da0-713ba547eeb7" class="">The general idea of attribute-oriented induction is to first collect the task-relevant
+data using a database query and then perform generalization based on the examination
+of the number of each attribute’s distinct values in the relevant data set. The generali-
+zation is performed by either attribute removal or attribute generalization. Aggregation
+is performed by merging identical generalized tuples and accumulating their respec-
+tive counts. This reduces the size of the generalized data set. The resulting generalized
+relation can be mapped into different forms (e.g., charts or rules) for presentation to
+the user.</p><h3 id="3cde624e-b12b-48fc-8a19-af675b9134d4" class="">4.5.2 Efficient Implementation of Attribute-Oriented Induction</h3><p id="21e971cf-f353-48fe-89d8-97b0174b5fc1" class="">The efficiency of this algorithm is analyzed as follows:</p><ul id="7d7c40da-5f5f-4f05-b155-24a5100306c7" class="bulleted-list"><li style="list-style-type:disc">Step 1 of the algorithm is essentially a relational query to collect the task-relevant data
+into the working relation, W . Its processing efficiency depends on the query pro-
+cessing methods used. Given the successful implementation and commercialization
+of database systems, this step is expected to have good performance.</li></ul><ul id="2cd14090-9003-4643-b006-e349714bf380" class="bulleted-list"><li style="list-style-type:disc">Step 2 collects statistics on the working relation. This requires scanning the relation
+at most once. The cost for computing the minimum desired level and determining
+the mapping pairs, (v, v 0 ), for each attribute is dependent on the number of distinct</li></ul><h3 id="dd053504-e54c-42e8-986d-57f86c8ff219" class="">4.5.3 Attribute-Oriented Induction for Class Comparisons</h3><p id="d9bf77d2-aac2-46c1-b0ca-687f8ba7c5fe" class="">“How is class comparison performed?” In general, the procedure is as follows:</p><ol type="1" id="080ccd3a-ff80-4980-9b39-ea133819370b" class="numbered-list" start="1"><li>Data collection: The set of relevant data in the database is collected by query process-
+ing and is partitioned respectively into a target class and one or a set of contrasting
+classes.</li></ol><ol type="1" id="529ea590-6001-4db7-95b9-1a8fb7429e76" class="numbered-list" start="2"><li>Dimension relevance analysis: If there are many dimensions, then dimension rele-
+vance analysis should be performed on these classes to select only the highly relevant
+dimensions for further analysis. Correlation or entropy-based measures can be used
+for this step (Chapter 3).</li></ol><ol type="1" id="b1127f95-cde4-407b-a4d6-9fa00be20f08" class="numbered-list" start="3"><li>Synchronous generalization: Generalization is performed on the target class to the
+level controlled by a user- or expert-specified dimension threshold, which results in
+a prime target class relation. The concepts in the contrasting class(es) are generali-
+zed to the same level as those in the prime target class relation, forming the prime
+contrasting class(es) relation.</li></ol><ol type="1" id="8d606d40-eae8-41f3-9637-f56bdfe7a8a7" class="numbered-list" start="4"><li>Presentation of the derived comparison: The resulting class comparison description
+can be visualized in the form of tables, graphs, and rules. This presentation usually
+includes a “contrasting” measure such as count% (percentage count) that reflects the comparison between the target and contrasting classes. The user can adjust the com-
+parison description by applying drill-down, roll-up, and other OLAP operations to
+the target and contrasting classes, as desired.</li></ol><p id="a6556e41-2769-4e44-a258-88c5be6185ea" class="">
+</p></div></article></body></html>

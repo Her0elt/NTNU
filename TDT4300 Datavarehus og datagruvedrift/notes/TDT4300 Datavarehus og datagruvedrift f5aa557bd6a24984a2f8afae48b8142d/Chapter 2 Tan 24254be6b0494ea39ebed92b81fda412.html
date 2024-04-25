@@ -1,0 +1,702 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 2 Tan</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="24254be6-b049-4ea3-9ebe-d92b81fda412" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📖</span></div><h1 class="page-title">Chapter 2 Tan</h1><table class="properties"><tbody><tr class="property-row property-row-person"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesPerson"><path d="M10.9536 7.90088C12.217 7.90088 13.2559 6.79468 13.2559 5.38525C13.2559 4.01514 12.2114 2.92017 10.9536 2.92017C9.70142 2.92017 8.65137 4.02637 8.65698 5.39087C8.6626 6.79468 9.69019 7.90088 10.9536 7.90088ZM4.4231 8.03003C5.52368 8.03003 6.42212 7.05859 6.42212 5.83447C6.42212 4.63843 5.51245 3.68945 4.4231 3.68945C3.33374 3.68945 2.41846 4.64966 2.41846 5.84009C2.42407 7.05859 3.32251 8.03003 4.4231 8.03003ZM1.37964 13.168H5.49561C4.87231 12.292 5.43384 10.6074 6.78711 9.51807C6.18628 9.14746 5.37769 8.87231 4.4231 8.87231C1.95239 8.87231 0.262207 10.6917 0.262207 12.1628C0.262207 12.7974 0.548584 13.168 1.37964 13.168ZM7.50024 13.168H14.407C15.4009 13.168 15.7322 12.8423 15.7322 12.2864C15.7322 10.8489 13.8679 8.88354 10.9536 8.88354C8.04492 8.88354 6.17505 10.8489 6.17505 12.2864C6.17505 12.8423 6.50635 13.168 7.50024 13.168Z"></path></svg></span>Owner</th><td></td></tr><tr class="property-row property-row-verification"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesVerification"><path d="M3.86426 14.0459H5.32715C5.45475 14.0459 5.56185 14.0892 5.64844 14.1758L6.6875 15.2148C7.13411 15.6615 7.56934 15.8825 7.99316 15.8779C8.42155 15.8779 8.85677 15.6569 9.29883 15.2148L10.3379 14.1758C10.429 14.0892 10.5384 14.0459 10.666 14.0459H12.1221C12.751 14.0459 13.2158 13.8955 13.5166 13.5947C13.8219 13.2939 13.9746 12.8268 13.9746 12.1934V10.7305C13.9746 10.6029 14.0202 10.4958 14.1113 10.4092L15.1436 9.37012C15.5902 8.92806 15.8112 8.49284 15.8066 8.06445C15.8066 7.63607 15.5856 7.19857 15.1436 6.75195L14.1113 5.71289C14.0202 5.6263 13.9746 5.52148 13.9746 5.39844V3.92871C13.9746 3.30436 13.8242 2.83952 13.5234 2.53418C13.2227 2.22884 12.7555 2.07617 12.1221 2.07617H10.666C10.5384 2.07617 10.429 2.03288 10.3379 1.94629L9.29883 0.914062C8.85677 0.462891 8.42155 0.239583 7.99316 0.244141C7.56934 0.244141 7.13411 0.467448 6.6875 0.914062L5.64844 1.94629C5.56185 2.03288 5.45475 2.07617 5.32715 2.07617H3.86426C3.23535 2.07617 2.76823 2.22656 2.46289 2.52734C2.16211 2.82812 2.01172 3.29525 2.01172 3.92871V5.39844C2.01172 5.52148 1.96842 5.6263 1.88184 5.71289L0.849609 6.75195C0.402995 7.19857 0.179688 7.63607 0.179688 8.06445C0.179688 8.49284 0.402995 8.92806 0.849609 9.37012L1.88184 10.4092C1.96842 10.4958 2.01172 10.6029 2.01172 10.7305V12.1934C2.01172 12.8223 2.16211 13.2871 2.46289 13.5879C2.76823 13.8932 3.23535 14.0459 3.86426 14.0459ZM7.23438 11.4277C7.10221 11.4277 6.98372 11.4004 6.87891 11.3457C6.77409 11.291 6.67155 11.2021 6.57129 11.0791L4.89648 9.04199C4.83724 8.96452 4.79167 8.88477 4.75977 8.80273C4.72786 8.7207 4.71191 8.63639 4.71191 8.5498C4.71191 8.37663 4.77116 8.22852 4.88965 8.10547C5.0127 7.97786 5.16081 7.91406 5.33398 7.91406C5.44336 7.91406 5.54134 7.93685 5.62793 7.98242C5.71452 8.02799 5.80339 8.10775 5.89453 8.22168L7.20703 9.88965L10.0371 5.36426C10.1829 5.12728 10.3675 5.00879 10.5908 5.00879C10.7594 5.00879 10.9098 5.06348 11.042 5.17285C11.1787 5.28223 11.2471 5.42578 11.2471 5.60352C11.2471 5.68099 11.2288 5.76302 11.1924 5.84961C11.1559 5.93164 11.1149 6.00911 11.0693 6.08203L7.87012 11.0723C7.78809 11.1908 7.69238 11.2796 7.58301 11.3389C7.47819 11.3981 7.36198 11.4277 7.23438 11.4277Z"></path></svg></span>Verification</th><td></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td></td></tr><tr class="property-row property-row-last_edited_time"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesCreatedAt"><path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM4.54102 8.91211H7.99316C8.30078 8.91211 8.54004 8.67285 8.54004 8.37207V3.8877C8.54004 3.58691 8.30078 3.34766 7.99316 3.34766C7.69238 3.34766 7.45312 3.58691 7.45312 3.8877V7.83203H4.54102C4.2334 7.83203 4.00098 8.06445 4.00098 8.37207C4.00098 8.67285 4.2334 8.91211 4.54102 8.91211Z"></path></svg></span>Last edited time</th><td><time>@April 13, 2023 3:01 PM</time></td></tr></tbody></table></header><div class="page-body"><p id="faa501d3-e1f8-42c4-8606-96d2671df7f5" class=""><strong>Type of data</strong></p><p id="c1fa017c-cb11-4e0a-ab66-80e83d5987f9" class="">The are different types of data. Data can be quantitative or qualitative. Some data sets contain time series or objects with explicit relationships. The type of data determines the tools and techniques that can be used to analyze the data.</p><p id="de2a2bb3-34ed-4e26-b8c0-748cadf79742" class=""><strong>The Quality of the data</strong></p><p id="5aced9eb-a0d7-45fe-b73e-2e1e59ab865b" class="">Data is often far from perfect. Most data techniques do tolerate a bit of imperfection in the data, but some types of imperfections needs to be addressed for example noise and outliers, inconsistencies and duplicates.</p><p id="5335e8cd-48e6-473b-a4d8-9a637e6e2903" class=""><strong>Preprocessing Steps to Make the Data More Suitable for Data Mining</strong></p><p id="ce0d38d8-2e2a-4fe1-b3b4-0468bdb7e9ca" class="">Often, the raw data must be processed in order to make it suitable for
+analysis. While one objective may be to improve data quality, other goals focus
+on modifying the data so that it better ﬁts a speciﬁed data mining technique
+or tool.</p><p id="67344ebb-3273-424b-a533-b5f7e78e2ee0" class=""><strong>Analyzing Data in Terms of Its Relationships</strong></p><p id="ca1263f1-34be-4df4-a0a6-9a80d60b5bae" class="">One approach to data
+analysis is to ﬁnd relationships among the data objects and then perform
+the remaining analysis using these relationships rather than the data objects
+themselves. For instance, we can compute the similarity or distance between
+pairs of objects and then perform the analysis—clustering, classiﬁcation, or
+anomaly detection—based on these similarities or distances. There are many
+such similarity or distance measures, and the proper choice depends on the
+type of data and the particular application.</p><h2 id="fb8d30c9-2a0b-45b5-a473-97efd5b2111f" class="">2.1 Types of data</h2><p id="d4169bcd-c5b9-4fa7-912e-ac75e5e05104" class="">A data set can often be viewed as a collection of data objects. In turn, data objects are described by a number of attributes that capture the characteristics of an object. </p><h3 id="70c42876-ab85-449f-bdf6-706a8236244d" class="">2.1.1 Attributes and Measurement</h3><p id="7aad20ad-2fd9-4c86-aca6-ef356f1a3bac" class="">An attribute is a property or characteristic of an object that can vary either from one object to another or from one time to another. At the most basic level, attributes are not about numbers or symbols.However, to discuss and more precisely analyze the characteristics of objects,
+we assign numbers or symbols to them. To do this in a well-deﬁned way, we need a measurement scale.</p><p id="fa34ce62-3cae-4b11-bfff-d59251a10513" class="">A measurement is a rule that associates a numerical or symbolic value with an attribute of an object. Formally, the process of measurement is the application of a measurement scale to associate a value with a particular attribute of a speciﬁc object. While this may seem a bit abstract, we engage in the process of measurement
+all the time.</p><p id="b98da90f-b68c-476e-aaef-62834202ef8f" class="">The simplest way to define different types of data is in these for groups</p><ol type="1" id="9ac759ea-3801-4b48-9517-51c9edb83ed6" class="numbered-list" start="1"><li>Distinctness = and ≠</li></ol><ol type="1" id="80459902-52e8-4074-8dcd-5fa32467701f" class="numbered-list" start="2"><li>Order &lt;, ≤, &gt; and ≥</li></ol><ol type="1" id="afafaead-7915-43aa-ab0b-d040b1fdcc34" class="numbered-list" start="3"><li>Addition + and -</li></ol><ol type="1" id="1cb2a81f-8a0d-4e60-a894-d3c23295a109" class="numbered-list" start="4"><li>Multiplication x and / </li></ol><p id="b6d24ee1-f5f6-4029-9666-1d73e173cce5" class="">
+</p><p id="bbc81178-40e1-4016-a2ad-52fbe571bf61" class="">These attributes relate to different types of attributes</p><figure id="ea88579a-1ebd-46bd-9cb0-2db058df0862" class="image"><a href="Chapter%202%20Tan%2024254be6b0494ea39ebed92b81fda412/Untitled.png"><img style="width:651px" src="Chapter%202%20Tan%2024254be6b0494ea39ebed92b81fda412/Untitled.png"/></a></figure><figure id="cc6214f4-4438-443d-baca-8563fbe6af94" class="image"><a href="Chapter%202%20Tan%2024254be6b0494ea39ebed92b81fda412/Untitled%201.png"><img style="width:627px" src="Chapter%202%20Tan%2024254be6b0494ea39ebed92b81fda412/Untitled%201.png"/></a></figure><p id="05586124-8ad2-4000-9c79-076e6b322f95" class="">
+</p><p id="b55e6f55-80ba-4cb5-ab3a-4b099e15f41b" class=""><strong>Describing Attributes by the Number of Values</strong></p><p id="9f78df91-6468-49fd-90f6-5b6e0a0e9594" class=""><strong>Discrete</strong> A discrete attribute has a ﬁnite or countably inﬁnite set of values. Such attributes can be categorical, such as zip codes or ID numbers, or numeric, such as counts. Discrete attributes are often represented using integer variables. Binary attributes are a special case of discrete attributes and assume only two values, e.g., true/false, yes/no,male/female, or 0/1. Binary attributes are often represented as Boolean variables, or as integer variables that only take the values 0 or 1.
+<strong>Continuous</strong> A continuous attribute is one whose values are real numbers. Examples include attributes such as temperature, height, or weight.Continuous attributes are typically represented as ﬂoating-point variables. Practically, real values can be measured and represented only with limited precision.</p><p id="62aac922-1299-454c-8105-74d0d2e44464" class="">
+</p><p id="967d0a09-15bd-4925-9c0d-108e46c3b879" class=""><strong>Asymmetric Attributes</strong></p><p id="7ee7d39c-8bf2-482e-9b48-a19dddd4278e" class="">where only the presence of a non-zero attribute value is important. This type of attribute is particularly useful for association analysis. The article also notes that there are many diverse types of data, and the previous discussion of measurement scales has limitations. The final evaluation of any data analysis is whether the results make sense from a domain point of view. Determining which operations can be performed on a particular attribute or collection of attributes without compromising the integrity of the analysis can be challenging, but established practices often serve as a reliable guide.</p><h3 id="9d6ba1db-399d-4dc2-915c-870a148a564d" class="">2.1.2 Types of Data Sets</h3><p id="253b4dbb-b043-4c6b-a9ab-3914538ad52c" class="">Different types of data sets that are commonly used in data mining, including record data, graph-based data, and ordered data. The passage also discusses three important characteristics that apply to many data sets: dimensionality, distribution, and resolution. Dimensionality refers to the number of attributes possessed by objects in the data set, distribution refers to the frequency of occurrence of various attribute values, and resolution refers to the level of detail or granularity in the data. These characteristics can have a significant impact on the data mining techniques used. The passage also mentions the impact of skewed data and sparsity on data analysis, and notes that the properties of the data can be different at different levels of resolution.</p><p id="4a18d975-67c8-4244-a14b-588b60f2cffe" class=""><strong>Record Data</strong></p><p id="66570d6f-99f2-4bde-ba69-c81c8364c7f6" class="">Record data assumes a fixed set of data fields for each data object, while transaction or market basket data involves sets of items and can be viewed as a set of records with asymmetric attributes. A data matrix is used when all data objects have the same set of numeric attributes, while a sparse data matrix is used when only non-zero values are important. Sparse data matrices are commonly used for transaction data or document data represented as a document-term matrix. Standard matrix operations can be applied to data matrices to manipulate the data.<strong>
+</strong></p><p id="571971ec-e6e4-4c6c-a842-9180b72d64a6" class=""><strong>Graph-Based Data</strong></p><p id="0fba15d3-7b0d-4420-b65c-8c7671a18a4f" class="">There are two specific cases: (1) when the relationships between data objects are important and can be captured by links between nodes in a graph, and (2) when the data objects themselves have a structure that can be represented by a graph. Examples include web pages connected by hyperlinks and chemical compounds represented by atoms and bonds</p><p id="b43a7468-b6a0-4892-899e-363a7eddb483" class="">
+</p><p id="4be48ca4-4ed9-4faf-bc07-0a0d8d62e5bd" class=""><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Ordered data</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p><p id="2407b43b-f6f0-47b4-a0bc-3fc3f374cd1d" class="">Sequential transaction data involves transactions with time stamps, allowing for analysis of patterns over time. Time series data consists of measurements taken over time, such as financial data. Sequence data is an ordered sequence of individual entities, like genetic information. Spatial and spatio-temporal data involve objects with spatial attributes and may have time stamps. Spatial and spatio-temporal data analysis requires consideration of both the spatial and temporal aspects of the data.</p><h2 id="3feacd00-23fb-4cec-babb-5fc08c8229da" class="">2.2 Data quality</h2><h3 id="1d85a07e-41fb-4f5f-ad2d-05c76ca4ef0c" class="">2.2.1 Measurement and Data Collection Issues</h3><p id="888a2734-5e29-4ccf-9e72-43d8730b02d7" class="">Data is often imperfect due to various reasons such as human error, measurement limitations, and flaws in data collection processes. Even when all data is present, there may be inconsistencies or duplicates. The article then delves into various aspects of data quality such as measurement errors, noise, artifacts, bias, precision, and accuracy. It concludes by addressing data quality issues related to outliers, missing and inconsistent values, and duplicate data.</p><p id="5dd50ca0-171b-48e5-81c9-c8c6eeb4e87f" class="">
+</p><p id="0f879ff2-79b5-4cbc-8f3c-0eb5e49223bf" class=""><strong>Measurement and Data Collection Errors</strong></p><p id="1409ac43-5a3e-4460-9680-d31381f61e4a" class="">Measurement errors occur when the recorded value differs from the true value, while data collection errors include issues like omitting data objects or inappropriately including them. These errors can be systematic or random. Certain domains may have their own common types of data errors, but this passage focuses on general types of errors. Techniques exist to detect and correct errors, such as detecting keyboard errors in manual data entry programs.</p><p id="99c971e6-6d3c-448a-a897-da954a2de594" class=""><strong>Noise and Artifacts</strong></p><p id="7670c091-9623-4366-b7b0-7689ab905ce6" class="">the concept of noise is the random component of a measurement error that distorts a value or adds spurious objects to a dataset. Noise is often present in data with a spatial or temporal component, and techniques from signal or image processing can be used to reduce it. In contrast, artifacts are deterministic distortions of data, such as streaks in the same place on a set of photographs. Eliminating noise is difficult, and data mining often focuses on developing robust algorithms that produce acceptable results even when noise is present.</p><p id="ff696b0c-c018-450c-ab8f-a1cce6533d8f" class=""><strong>Precision, Bias, and Accuracy</strong></p><p id="0ec48c15-846c-42d0-8bd8-a17b4f792882" class="">Precision is the closeness of repeated measurements of the same quantity to each other, while bias is a systematic variation of measurements from the quantity being measured. Accuracy is the degree of measurement error in data, and it depends on precision and bias. The section also touches on the use of significant digits to represent the results of a measurement, and the importance of understanding the accuracy of data and results for data analysis.</p><p id="54d36fd7-d6fa-463d-9b7d-35a41fcd093d" class=""><strong><strong><strong><strong><strong><strong><strong><strong>Outliers</strong></strong></strong></strong></strong></strong></strong></strong>
+Outliers are data objects or attribute values that are different or unusual compared to the majority of the other data objects or values in the dataset. They are also known as anomalous objects or values. Outliers can be legitimate data that needs to be detected, unlike noise, which is a random error that can distort data. Outliers can be important in detecting unusual objects or events in applications such as fraud and network intrusion detection. The definition of outliers can vary, and different definitions have been proposed by the statistics and data mining communities.</p><p id="d88fdd20-d86e-438d-8b7f-2a4f53788e47" class=""><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Missing values</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p><p id="c4238e3a-e1c0-4dc1-b4ab-4f45590dc404" class="">One approach is to eliminate data objects or attributes with missing values, but this can result in a loss of information. Another strategy is to estimate the missing values using interpolation or using nearby values. Lastly, some data mining approaches can be modified to ignore missing values during analysis. The article emphasizes the importance of considering missing values during data analysis.</p><p id="3870e336-1951-452a-89dc-540dd89d7cfb" class=""><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Inconsistent values</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p><p id="ebc96815-6758-4ec3-95de-2eb19e055756" class="">Data may contain inconsistent values, and it&#x27;s important to detect and correct them. Inconsistencies can be easy or difficult to detect, and sometimes external sources of information may be needed. Once an inconsistency is detected, it may be possible to correct it using additional information. For example, a product code may have &quot;check&quot; digits, or it may be possible to double-check it against a list of known codes. An example of inconsistent data is sea surface temperature data, which may come from different sources and have subtle differences. This can affect data mining analysis, and the analyst should consider the potential impact.</p><p id="911f7cad-4672-4287-97da-9f8632bb37a2" class=""><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Duplicate data
+</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>Duplicates in a data set can cause issues, such as receiving multiple mailings due to appearing multiple times in a database. To detect and eliminate duplicates, inconsistent values must be resolved and care taken to avoid combining similar but not identical objects. The term &quot;deduplication&quot; refers to this process. However, sometimes duplicates are legitimate and can still cause issues for algorithms.</p><h3 id="bec6f190-4eb1-4e5d-893b-21ff066fa4ac" class="">2.2.2 Issues Related to Applications</h3><p id="5eb30e38-0958-4b6f-a64b-c8c7d0cbf475" class="">Data quality is evaluated based on whether it&#x27;s suitable for its intended use, which is particularly useful in business and industry. However, data quality issues are specific to particular applications and fields. Timeliness is a concern as some data ages quickly and may no longer be relevant to ongoing processes. Data relevance is important and sampling bias can lead to erroneous results. Documentation of data is necessary and poor documentation can lead to faulty analysis. Important characteristics include precision, type of features, scale of measurement, and origin of data.</p><h2 id="fb0e06d4-6403-48ab-bcfc-7d648df1628e" class="">2.3 Data preprocessing</h2><h3 id="1c26d843-7d20-4ea9-a7ef-9e47464ddc8a" class="">2.3.1 Aggregation</h3><p id="b7f2ee72-476b-444c-a940-7a55a091fe73" class="">Aggregation is the process of combining two or more objects into a single object, which is useful for reducing the size of data sets. For example, daily transactions of a single store can be aggregated into a single storewide transaction. Quantitative attributes like price can be aggregated by taking a sum or average, while qualitative attributes like item can be summarized in higher-level categories. Aggregation is commonly used in Online Analytical Processing (OLAP) and has several benefits, including requiring less memory and processing time and providing a high-level view of the data. However, it may result in the loss of interesting details. The behavior of groups of objects or attributes is often more stable than that of individual objects or attributes, as aggregate quantities have less variability than individual values.</p><h3 id="9f593532-29f1-4e43-88dd-f7332fbce21f" class="">2.3.2 Sampling</h3><p id="0ddf8a91-ec9e-4d57-a739-36866a61d2d0" class="">Sampling is a commonly used approach for selecting a subset of data objects for analysis in statistics and data mining. Sampling can be useful in reducing the computational expense of processing all data, and a representative sample should have the same properties of interest as the original data. Choosing the appropriate sample size and technique can help guarantee a high probability of obtaining a representative sample.</p><p id="35c8a41a-c502-456e-b1ba-4f4694aa6cd6" class=""><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Sampling Approaches</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p><p id="236f4e04-4775-4be4-a2df-8d57b7fec9ba" class="">Sampling is a commonly used approach for selecting a subset of data objects for analysis in statistics and data mining. Sampling can be useful in reducing the computational expense of processing all data, and a representative sample should have the same properties of interest as the original data. Choosing the appropriate sample size and technique can help guarantee a high probability of obtaining a representative sample.</p><p id="a6cd1929-9762-4602-8df7-247b37408cf1" class=""><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Progressive Sampling</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p><p id="74223f5d-4c30-44c6-83eb-984b954cc916" class="">Adaptive or progressive sampling is used when determining the proper sample size is difficult. It starts with a small sample and increases the size until it is sufficient. This eliminates the need to determine the correct size initially, but requires a way to evaluate the sample&#x27;s adequacy. For example, if used to learn a predictive model, accuracy increases with sample size but eventually levels off. By monitoring changes in accuracy as samples increase and taking similar-sized samples, the leveling-off point can be estimated and sampling can stop.</p><h3 id="757ef1a0-7c4a-4062-8fa5-6f0193ebc017" class="">2.3.3 Dimensionality Reduction</h3><p id="f667f1cf-56a3-416f-9032-991fdbbd3931" class="">Data sets can have many features, such as the frequencies of thousands of words in a set of documents or the prices of thousands of stocks over 30 years. Dimensionality reduction offers several benefits, such as eliminating irrelevant features and reducing noise, which can lead to better results for data mining algorithms. It can also make models more understandable and allow for easier visualization of data. Dimensionality reduction techniques can create new attributes that combine old ones, while feature selection involves choosing a subset of the old attributes. The curse of dimensionality and linear algebra approaches such as PCA are important topics in dimensionality reduction.</p><p id="3d6c26bc-27f2-4026-885b-73fa8028f4df" class="">
+</p><p id="ae95b036-e18a-49b7-b0f3-5c7a9bb61701" class=""><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>The curse of Dimensionality</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p><p id="8be8d841-e1f5-4235-b151-3d49aebf3b34" class="">The curse of dimensionality makes data analysis more difficult as the number of dimensions increases. This is because the data becomes sparse and may not represent all possible objects, which can lead to unreliable classification models and less meaningful clustering. As a result, many algorithms struggle with high-dimensional data, resulting in reduced accuracy and poor quality clusters.</p><p id="ff5928ec-7c24-406c-9f20-6df7fd3086b5" class=""><strong>Linear Algebra Techniques for Dimensionality Reduction</strong></p><p id="cb0b75f5-424f-4f38-8fe5-c4403238b764" class="">Dimensionality reduction often uses linear algebra to project high-dimensional data into a lower-dimensional space. Principal Components Analysis (PCA) is a linear algebra technique that finds new, orthogonal attributes that capture the maximum amount of variation in the data. Singular Value Decomposition (SVD) is another commonly used linear algebra technique for dimensionality reduction.</p><p id="33370230-d57e-4510-8d3e-e820b3f9aee9" class="">
+</p><h3 id="0b83cc0b-3e84-4496-b355-8ea614d635a1" class="">2.3.4 Feature Subset Selection</h3><p id="d40c230c-39cc-45d4-b1ff-0bce442d60aa" class="">To reduce dimensionality, one can use only a subset of features, particularly if there are redundant and irrelevant features present, which can reduce accuracy and quality of clusters. Selecting the best subset of features typically requires a systematic approach. There are three standard approaches to feature selection: embedded, filter, and wrapper. The feature selection process consists of four parts: a measure for evaluating a subset, a search strategy that controls the generation of a new subset of features, a stopping criterion, and a validation procedure. Many different types of search strategies can be used, but they should be computationally inexpensive and should find optimal or near optimal sets of features. Evaluation measures attempt to determine the goodness of a subset of attributes with respect to a particular data mining task. For the filter approach, such measures attempt to predict how well the actual data mining algorithm will perform on a given set of attributes. For the wrapper approach, the subset evaluation function is simply the criterion normally used to measure the result of the data mining. Finally, once a subset of features has been selected, the results of the target data mining algorithm on the selected subset should be validated.
+</p><h3 id="0fc80aab-751b-4e4f-affa-11c243f2697b" class="">2.3.5 Feature Creation</h3><p id="f10cd41a-c616-4377-9ceb-d7bb6c038e63" class="">Dimensionality reduction can be achieved by creating a new set of attributes that captures the essential information in a dataset more effectively than the original attributes. Feature extraction and mapping the data to a new space are two related techniques used for creating new attributes.</p><p id="98f9bafe-a5b1-4160-b9bd-ebfae125d96c" class="">Feature extraction involves creating a new set of features from the original raw data. This technique is domain-specific, and various features and techniques have been developed over time for each field. However, new features and feature extraction methods may need to be developed whenever data mining is applied to a relatively new area.</p><p id="a3c4cff1-cacc-43ff-8b27-8d812513c14d" class="">Mapping the data to a new space involves viewing the data from a different perspective to reveal important and interesting features. For example, applying a Fourier transform to time series data can reveal periodic patterns that are hard to detect otherwise. Other types of transformations, such as the wavelet transform, have also proven useful for time series and other types of data.</p><h3 id="93f18ef7-9c29-4d40-accb-8654aaf8c7d2" class="">2.3.6 Discretization and Binarization</h3><p id="cb72b216-c924-4b0d-8cac-8e16c19eea7b" class="">Data mining algorithms may require data to be in specific forms, such as categorical or binary attributes, which may necessitate the transformation of continuous or discrete attributes into categorical or binary attributes. It may also be necessary to combine categories in a categorical attribute with many values or infrequent occurrences. The most effective approach for discretization or binarization is dependent on the data mining algorithm being used, but is typically performed based on a criterion related to good performance for the task at hand. The best discretization approach varies depending on the attributes being considered, and is usually evaluated separately for each attribute.</p><p id="9b1cd6ca-c517-4fc5-890f-1d9d26cf8eda" class=""><strong>Binarization</strong>
+To binarize a categorical attribute, assign each value to an integer in the interval [0, m-1], then convert each integer to a binary number using n binary attributes, where n = log2(m). For association analysis, introduce one asymmetric binary attribute for each categorical value. Gender must be transformed into two asymmetric binary attributes, one for males and one for females.</p><p id="101cf284-c354-4d5f-8ca9-41420a16e8ef" class=""><strong>Discretization of Continuous Attributes</strong>
+Discretization involves transforming a continuous attribute into a categorical attribute, which is typically used in classification or association analysis. This process requires deciding the number of categories, n, and mapping the continuous attribute&#x27;s values to these categories. One approach involves sorting the values and dividing them into n intervals, specifying n-1 split points. Another approach is clustering methods, like K-means, or visually inspecting the data. If class information is available, supervised approaches that use class labels often perform better than unsupervised approaches. Entropy-based methods are one of the most promising methods for discretization, with bottom-up and top-down approaches merging adjacent intervals or bisecting the initial values to produce minimum entropy. The best discretization approach will depend on the application, and domain-specific discretization may be necessary.</p><p id="07ceec70-6e84-4628-8b9c-ae574f5443e6" class="">
+</p><p id="11e6f1f1-aee4-4e51-adf9-ae2f27a29d5c" class=""><strong>Categorical Attributes with Too Many Values</strong></p><p id="c656e357-9ca6-4724-8df9-93654be066ac" class="">Categorical attributes with many values can be reduced using techniques similar to those for continuous attributes if the attribute is ordinal. For nominal attributes, other approaches are needed. For example, a university with many departments could group them into larger categories based on domain knowledge or use an empirical approach to group values for improved classification accuracy.</p><h3 id="5aaef57a-925e-454c-a43a-2fc17ded25df" class="">2.3.7 Variable Transformation</h3><p id="1ac654be-8c55-4a1b-a266-ac6dbba2ad96" class="">Variable transformations change the values of a variable using a mathematical function. Simple functional transformations involve applying a mathematical function to each value of a variable, such as square root, logarithm, or inverse. These transformations can be useful for normalizing data and compressing large ranges. However, they can also change the nature of the data and should be used with caution. Normalization or standardization is another type of transformation used to make a set of values have a particular property. For example, standardizing a variable in statistics involves transforming it to have a mean of 0 and a standard deviation of 1. This is often necessary when comparing variables with different ranges of values. Mean and standard deviation can be strongly affected by outliers, so more robust measures may be used instead.</p><p id="d99937e2-6063-4ffe-808a-7fbd8f7d0eeb" class="">
+</p><p id="50ff920c-8c2d-4f49-ae5b-c813eee4656e" class="">
+</p><h2 id="a9606664-900e-4980-9395-0a05483203e1" class="">2.4 Measures of Similarity and Dissimilarity</h2><p id="d624bf95-6598-40ca-bd7d-0b6a106ca556" class="">Similarity and dissimilarity are crucial in data mining techniques like clustering, nearest neighbor classification, and anomaly detection. Once similarities or dissimilarities are computed, the initial dataset is often unnecessary. Kernel methods are a powerful way to transform the data into a similarity or dissimilarity space for analysis. This section covers high-level definitions of similarity and dissimilarity and how they are related, starting with proximity, which is used interchangeably with similarity or dissimilarity. This section also discusses measuring proximity between objects with one or multiple attributes, including measures like Jaccard and cosine similarity, correlation, Euclidean distance, and mutual information. It also covers important issues such as computing proximity between objects with heterogeneous attribute types, scaling and correlation differences among numerical objects, and selecting the right proximity measure. Proximity can also be computed between attributes, and correlation and mutual information measures are often used to eliminate redundancy.</p><h3 id="f0d6bf3f-dab2-41e1-9765-605bb984bd9d" class="">2.4.1 Basics</h3><p id="81dea252-f8fe-408d-bb82-7c713e86a6a9" class="">Definitions: Similarity is a measure of how alike two objects are, often represented as a non-negative value between 0 and 1. Dissimilarity is a measure of how different two objects are, often represented as a value between 0 and infinity. The terms similarity and dissimilarity are used interchangeably with proximity and distance.</p><p id="331405ec-bda7-4384-9c18-ae5b8d8fa916" class="">Transformations: Transformations are often used to convert similarity measures to dissimilarity measures or to map proximity measures to a particular range, such as [0,1]. Linear transformations are often used to convert proximity measures to the interval [0,1], but nonlinear transformations may be required for measures that originally have values in the interval [0,∞]. However, mapping proximity measures to [0,1] can change their meaning and affect the application.</p><p id="c347e51f-e471-46ae-9573-10c145927603" class="">Transforming similarities to dissimilarities and vice versa is straightforward using formulas like d = 1 - s or s = 1 - d, but negation may also be used. To restrict the range of the transformed similarity measure to [0,1], various transformations such as s = 1/(d + 1) or s = exp(-d) may be used.</p><h3 id="b36d6c46-e49c-4327-b6b2-43c2f328fd10" class="">2.4.2 Similarity and Dissimilarity between Simple Attributes
+</h3><figure id="c633be9b-f750-44be-9723-99045e208c71" class="image"><a href="Chapter%202%20Tan%2024254be6b0494ea39ebed92b81fda412/Untitled%202.png"><img style="width:428px" src="Chapter%202%20Tan%2024254be6b0494ea39ebed92b81fda412/Untitled%202.png"/></a></figure><p id="34a81c22-cba4-416a-9c34-f6f15034f513" class="">When considering the proximity of objects with multiple attributes, the proximity of objects with a single attribute must be defined first. For objects with a single nominal attribute, similarity is defined as 1 if the attribute values match and as 0 otherwise. A dissimilarity is defined in the opposite way: 0 if the attribute values match and 1 if they do not.</p><p id="29703d72-da9a-49b2-9f65-3cce88a2a0a6" class="">For objects with a single ordinal attribute, the situation is more complicated because information about order should be taken into account. To make this observation quantitative, the values of the ordinal attribute are often mapped to successive integers, beginning at 0 or 1. A similarity for ordinal attributes can then be defined as s = 1 - d, where d is the dissimilarity between the objects.</p><p id="278ab047-e5fd-4091-a651-4e1506e89a72" class="">The definition of similarity (dissimilarity) for an ordinal attribute assumes equal intervals between successive values of the attribute, which may not always be true. Otherwise, the attribute would be an interval or ratio attribute. In the absence of more information, this is the standard approach for defining proximity between ordinal attributes.</p><p id="a18e5fe0-d1b2-4ded-8d1d-56771a7f5e9f" class="">For interval or ratio attributes, the natural measure of dissimilarity between two objects is the absolute difference of their values. In cases such as these, the dissimilarities typically range from 0 to ∞, rather than from 0 to 1. The similarity of interval or ratio attributes is typically expressed by transforming a dissimilarity into a similarity, as previously described.</p><h3 id="a60289cf-1bb9-4415-b270-723b834ac7a7" class="">2.4.3 Dissimilarities between Data Objects
+</h3><p id="eef48d43-a396-4a99-b576-becc7cd94502" class="">Distances can be represented by the Euclidean distance formula (Equation 2.1), which is used to calculate the distance between two points, x and y, in a one-, two-, three-, or higher-dimensional space. This formula illustrates the relationship between the number of dimensions (n), the attributes of x and y (xk and yk), and the pairwise distance between x and y. The Minkowski distance metric (Equation 2.2) is a generalization of the Euclidean distance formula, where r is a parameter. The three most common examples of the Minkowski distances are the City block (Manhattan, taxicab, L1 norm) distance, the Euclidean distance (L2 norm), and the Supremum (Lmax or L∞ norm) distance.</p><p id="dac74592-fff0-4f22-b973-5cf01109aadc" class="">Distances such as the Euclidean distance have several well-known properties. For instance, if d(x, y) is the distance between two points, x and y, then the following properties hold:</p><ol type="1" id="c8d6da4c-90f5-42d0-811f-17285510ff4b" class="numbered-list" start="1"><li>Positivity:
+(a) d(x, y) ≥ 0 for all x and y
+(b) d(x, y) = 0 only if x = y</li></ol><ol type="1" id="ed616e1f-4402-4124-9aad-9ea4c4d42b4a" class="numbered-list" start="2"><li>Symmetry: d(x, y) = d(y, x) for all x and y.</li></ol><ol type="1" id="1be72176-f9fa-4cfe-8f1d-614332e05cf2" class="numbered-list" start="3"><li>Triangle Inequality: d(x, z) ≤ d(x, y) + d(y, z) for all points x, y, and z.</li></ol><p id="5c6d0262-eceb-4b01-b05e-1a649b062765" class="">Measures that satisfy all three properties are known as metrics. However, many dissimilarities do not meet one or more of the metric properties</p><p id="1b1b992b-d021-4ef1-89ce-8b9a9e2ee0ce" class=""><strong>Diﬀerences Among Measures For Continuous Attributes</strong></p><p id="ff298d2a-ceb8-4ba0-abab-fb7d09e4a5f1" class="">This section compares the invariance of three proximity measures for continuous attributes, namely cosine, correlation, and Minkowski distance, with two common data transformations: scaling and translation. A proximity measure is considered invariant to a data transformation if its value remains unchanged even after performing the transformation. The table summarizes the properties of the three proximity measures regarding their invariance to scaling and translation operations. Cosine is invariant to scaling but not to translation, correlation is invariant to both scaling and translation, while Minkowski distance measures are sensitive to both scaling and translation and are thus invariant to neither.</p><p id="67f55ee7-22ea-4e19-b1a4-2e7a35ce529e" class="">To illustrate the significance of these differences among different proximity measures, an example is given. Two vectors, x and y, with seven numeric attributes, are considered, and the cosine, correlation, and Euclidean distance between the two vectors are computed. The vectors are then scaled and translated, and the measures of proximity for the pairs (x, y), (x, ys), and (x, yt) are computed. It is observed that different proximity measures behave differently when scaling or translation operations are applied to the data, and the choice of the right proximity measure depends on the desired notion of similarity between data objects that is meaningful for a given application.</p><p id="83d35b55-f31e-49b8-a4ab-de2f3dc9cc8c" class="">For example, if x and y represented the frequencies of different words in a document-term matrix, it would be meaningful to use a proximity measure that remains unchanged when y is replaced by ys because ys is just a scaled version of y with the same distribution of words occurring in the document. However, if yt contains a large number of words with non-zero frequencies that do not occur in y, cosine, which is invariant to scaling but not to translation, will be an ideal choice of proximity measure for this application.</p><h3 id="6688fbfe-5191-42c3-a85a-569fc307b3e6" class="">2.4.6 Mutual Information</h3><p id="54c19979-3499-4512-bfc6-c9989f04a86e" class="">Mutual information is a measure of similarity between two sets of paired values and is used as an alternative to correlation when a nonlinear relationship is suspected. It measures how much information one set of values provides about another, given that the values come in pairs. The two sets of values have maximum mutual information when they are completely dependent, and mutual information ranges between 0 and 1. Mutual information is defined using entropy, which measures the average information in a single set of values and in the pairs of their values. The mutual information of X and Y can be defined straightforwardly using the individual and joint entropy of X and Y. Mutual information is symmetric, and it is either the values in two attributes or two rows of the same data set. Mutual information can be normalized in a variety of ways, but for this example, we will apply one that produces a result between 0 and 1.</p><h3 id="18b71736-8497-4960-9879-8d4e5af4271a" class="">2.4.7 Kernel Functions</h3><p id="e48d2ecd-9244-4999-88fe-8f645da5de33" class="">Kernel matrices are useful for various data analysis tasks such as clustering, predictive modeling, and dimensionality reduction. The kernel matrix is an m by m matrix, where m is the number of data objects, and the ij-th entry of K is computed by a kernel function. The use of a kernel matrix allows algorithms to be data independent and enables them to be used with any type of data for which an appropriate kernel function can be defined. Furthermore, mapping data into a higher dimensional space can allow for modeling of nonlinear relationships, which is important in kernel-based methods. The kernel trick involves defining a function that maps data points to a higher dimensional space such that the inner product of the points gives the desired measure of proximity. This approach can increase the computational complexity of the analysis, but it allows for the modeling of complex nonlinear relationships.</p><h3 id="4c174f28-e069-4996-ba26-ba5b9f494d5c" class="">2.4.8 Bregman Divergence</h3><p id="032bb86e-3766-4ce0-a254-9e50d341627c" class="">This section introduces Bregman divergences, a family of proximity functions that can be used to construct general data mining algorithms, such as clustering algorithms. Bregman divergences are loss or distortion functions that can be used as dissimilarity functions. The Bregman divergence generated by a strictly convex function φ is given by the equation D(x, y) = φ(x) − φ(y) − ∇φ(y), (x − y), where ∇φ(y) is the gradient of φ evaluated at y, x − y is the vector difference between x and y, and ∇φ(y), (x − y) is the inner product between ∇φ(y) and (x − y). The Bregman divergence can also be written as D(x, y) = φ(x) − L(x), where L(x) is the linearization of φ around the point y. Different Bregman divergences are obtained by using different choices for φ. An example using squared Euclidean distance is provided in which the Bregman divergence is shown for two values of x: x = 2 and x = 3.</p><h3 id="94b8b9f7-f0fe-4866-80d7-cfeeaf4f84ce" class="">2.4.9 Data Issues in Proximity Calculation</h3><p id="2e39cbb5-3a04-41fc-bcb5-ca0e4121b1ac" class="">This section covers important issues related to proximity measures, including handling attributes with different scales and/or correlations, calculating proximity between objects composed of different attribute types, and dealing with different attribute weights in proximity calculations.</p><p id="96b23fe6-48db-4246-ab63-8ebacffc18b8" class="">One significant challenge with distance measures is handling situations where attributes have different ranges of values or scales. This situation can dominate the distance between two objects if not standardized. For instance, in a previous example, Euclidean distance was used to measure the distance between people based on two attributes: age and income. However, unless these two attributes are standardized, the distance between two people will be dominated by income.</p><p id="641fdba6-5f00-429f-a45e-61720460c942" class="">Another issue is computing distance when there is correlation between some of the attributes, in addition to differences in the ranges of values. In such cases, the Mahalanobis distance is a useful generalization of Euclidean distance. It is especially effective when attributes are correlated, have different ranges of values (different variances), and the data distribution is approximately Gaussian (normal). Correlated variables have a significant impact on standard distance measures since a change in any of the correlated variables reflects a change in all the correlated variables. The Mahalanobis distance between two objects (vectors) x and y is defined as (x - y) * Σ^-1 * (x - y), where Σ^-1 is the inverse of the covariance matrix of the data.</p><p id="d4263a40-e1dd-4661-8d6c-86fdf6c6d14f" class="">When attributes are of different types, combining similarities is another issue that arises. A straightforward approach is to compute the similarity between each attribute separately and combine these similarities using a method that results in a similarity between 0 and 1. However, this approach is not effective if some of the attributes are asymmetric binary attributes. One possible solution is to omit asymmetric attributes from the similarity calculation when their values are 0 for both of the objects whose similarity is being computed. A similar approach also works well for handling missing values.</p></div></article></body></html>

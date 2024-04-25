@@ -1,0 +1,699 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 6 Tan</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="c1858389-4a4a-462a-9c01-d2a42acb6add" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📖</span></div><h1 class="page-title">Chapter 6 Tan</h1><table class="properties"><tbody><tr class="property-row property-row-person"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesPerson"><path d="M10.9536 7.90088C12.217 7.90088 13.2559 6.79468 13.2559 5.38525C13.2559 4.01514 12.2114 2.92017 10.9536 2.92017C9.70142 2.92017 8.65137 4.02637 8.65698 5.39087C8.6626 6.79468 9.69019 7.90088 10.9536 7.90088ZM4.4231 8.03003C5.52368 8.03003 6.42212 7.05859 6.42212 5.83447C6.42212 4.63843 5.51245 3.68945 4.4231 3.68945C3.33374 3.68945 2.41846 4.64966 2.41846 5.84009C2.42407 7.05859 3.32251 8.03003 4.4231 8.03003ZM1.37964 13.168H5.49561C4.87231 12.292 5.43384 10.6074 6.78711 9.51807C6.18628 9.14746 5.37769 8.87231 4.4231 8.87231C1.95239 8.87231 0.262207 10.6917 0.262207 12.1628C0.262207 12.7974 0.548584 13.168 1.37964 13.168ZM7.50024 13.168H14.407C15.4009 13.168 15.7322 12.8423 15.7322 12.2864C15.7322 10.8489 13.8679 8.88354 10.9536 8.88354C8.04492 8.88354 6.17505 10.8489 6.17505 12.2864C6.17505 12.8423 6.50635 13.168 7.50024 13.168Z"></path></svg></span>Owner</th><td></td></tr><tr class="property-row property-row-verification"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesVerification"><path d="M3.86426 14.0459H5.32715C5.45475 14.0459 5.56185 14.0892 5.64844 14.1758L6.6875 15.2148C7.13411 15.6615 7.56934 15.8825 7.99316 15.8779C8.42155 15.8779 8.85677 15.6569 9.29883 15.2148L10.3379 14.1758C10.429 14.0892 10.5384 14.0459 10.666 14.0459H12.1221C12.751 14.0459 13.2158 13.8955 13.5166 13.5947C13.8219 13.2939 13.9746 12.8268 13.9746 12.1934V10.7305C13.9746 10.6029 14.0202 10.4958 14.1113 10.4092L15.1436 9.37012C15.5902 8.92806 15.8112 8.49284 15.8066 8.06445C15.8066 7.63607 15.5856 7.19857 15.1436 6.75195L14.1113 5.71289C14.0202 5.6263 13.9746 5.52148 13.9746 5.39844V3.92871C13.9746 3.30436 13.8242 2.83952 13.5234 2.53418C13.2227 2.22884 12.7555 2.07617 12.1221 2.07617H10.666C10.5384 2.07617 10.429 2.03288 10.3379 1.94629L9.29883 0.914062C8.85677 0.462891 8.42155 0.239583 7.99316 0.244141C7.56934 0.244141 7.13411 0.467448 6.6875 0.914062L5.64844 1.94629C5.56185 2.03288 5.45475 2.07617 5.32715 2.07617H3.86426C3.23535 2.07617 2.76823 2.22656 2.46289 2.52734C2.16211 2.82812 2.01172 3.29525 2.01172 3.92871V5.39844C2.01172 5.52148 1.96842 5.6263 1.88184 5.71289L0.849609 6.75195C0.402995 7.19857 0.179688 7.63607 0.179688 8.06445C0.179688 8.49284 0.402995 8.92806 0.849609 9.37012L1.88184 10.4092C1.96842 10.4958 2.01172 10.6029 2.01172 10.7305V12.1934C2.01172 12.8223 2.16211 13.2871 2.46289 13.5879C2.76823 13.8932 3.23535 14.0459 3.86426 14.0459ZM7.23438 11.4277C7.10221 11.4277 6.98372 11.4004 6.87891 11.3457C6.77409 11.291 6.67155 11.2021 6.57129 11.0791L4.89648 9.04199C4.83724 8.96452 4.79167 8.88477 4.75977 8.80273C4.72786 8.7207 4.71191 8.63639 4.71191 8.5498C4.71191 8.37663 4.77116 8.22852 4.88965 8.10547C5.0127 7.97786 5.16081 7.91406 5.33398 7.91406C5.44336 7.91406 5.54134 7.93685 5.62793 7.98242C5.71452 8.02799 5.80339 8.10775 5.89453 8.22168L7.20703 9.88965L10.0371 5.36426C10.1829 5.12728 10.3675 5.00879 10.5908 5.00879C10.7594 5.00879 10.9098 5.06348 11.042 5.17285C11.1787 5.28223 11.2471 5.42578 11.2471 5.60352C11.2471 5.68099 11.2288 5.76302 11.1924 5.84961C11.1559 5.93164 11.1149 6.00911 11.0693 6.08203L7.87012 11.0723C7.78809 11.1908 7.69238 11.2796 7.58301 11.3389C7.47819 11.3981 7.36198 11.4277 7.23438 11.4277Z"></path></svg></span>Verification</th><td></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td></td></tr><tr class="property-row property-row-last_edited_time"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesCreatedAt"><path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM4.54102 8.91211H7.99316C8.30078 8.91211 8.54004 8.67285 8.54004 8.37207V3.8877C8.54004 3.58691 8.30078 3.34766 7.99316 3.34766C7.69238 3.34766 7.45312 3.58691 7.45312 3.8877V7.83203H4.54102C4.2334 7.83203 4.00098 8.06445 4.00098 8.37207C4.00098 8.67285 4.2334 8.91211 4.54102 8.91211Z"></path></svg></span>Last edited time</th><td><time>@April 13, 2023 1:45 PM</time></td></tr></tbody></table></header><div class="page-body"><h2 id="128214c5-59e3-47e3-ba31-4c4bb0c6f8e7" class="">6.1 Types of Classifiers</h2><p id="6b2bfa87-e01b-42e7-83d7-26b9a0b9fb63" class="">In classifying data instances, there are different types of classifiers that can be distinguished based on the characteristics of their output. One way to classify classifiers is by the number of possible labels they assign to data instances, binary classifiers assign each instance to one of two labels, while multiclass classifiers are used when there are more than two possible labels. Some techniques can transform binary classifiers into multiclass classifiers. Another way to distinguish classifiers is based on the technique used to discriminate instances from different classes. Linear classifiers use a linear separating hyperplane, while nonlinear classifiers enable the construction of more complex decision surfaces. Global classifiers fit a single model to the entire data set, while local classifiers partition the input space into smaller regions and fit a distinct model to training instances in each region. Finally, there are generative classifiers that learn a model of every class in the process of predicting class labels, while discriminative classifiers directly predict class labels without explicitly describing the distribution of every class label.</p><h2 id="f10015ce-bbdf-4441-8f39-b14edee681b7" class="">6.2 Rule-Based Classifier</h2><p id="b002cfbf-6d61-42ec-a61b-f845f3312425" class="">
+</p><p id="d352ad6f-d6e0-4fe4-a550-9427778f11ee" class="">A rule-based classifier is a type of classification model that utilizes a collection of &quot;if ... then ...&quot; rules to classify data instances. Each classification rule in the rule set contains a condition (or precondition) and a predicted class (or consequent). The condition is expressed as a conjunction of attribute test conditions, where each attribute test is a conjunct and contains an attribute-value pair and a comparison operator. The predicted class is the class label that is associated with the rule.</p><p id="af8e2106-185c-442c-ab49-225b52e62787" class="">When a data instance is presented to the rule-based classifier, each rule is evaluated to determine if its condition matches the attributes of the instance. If a rule&#x27;s condition is satisfied, then the rule is said to cover the instance. If multiple rules cover an instance, then the rule with the highest accuracy (i.e., the rule that predicts the correct class label for the largest fraction of covered instances) is chosen to classify the instance.</p><p id="71966e38-a7ed-4ce4-a5ab-6960a58ed973" class="">The quality of a classification rule can be evaluated using measures such as coverage and accuracy. Coverage is the fraction of instances in a dataset that satisfy the rule antecedent, while accuracy (or confidence factor) is the fraction of instances that satisfy both the antecedent and consequent of the rule. Rule-based classifiers can be effective in situations where the decision-making process is based on a set of explicit and easily understandable rules, such as in expert systems or diagnosis systems.</p><h3 id="9ef8ee4c-25c0-4baf-9009-75af2b361b64" class="">6.2.1 How a Rule-Based Classifier Works</h3><p id="a40142f0-fd81-4a66-b87e-aada92d92137" class="">
+</p><ul id="c758204b-2c07-4239-8799-4b0c9844553c" class="bulleted-list"><li style="list-style-type:disc">The ﬁrst vertebrate, which is a lemur, is warm-blooded and gives birth
+to its young. It triggers the rule r3 , and thus, is classiﬁed as a mammal.</li></ul><ul id="5e8fad4c-2bb5-4bb2-8668-ecccd80662f5" class="bulleted-list"><li style="list-style-type:disc">The second vertebrate, which is a turtle, triggers the rules r4 and r5 .
+Since the classes predicted by the rules are contradictory (reptiles versus
+amphibians), their conﬂicting classes must be resolved.</li></ul><ul id="9d8e5b98-b92c-4421-951d-a579350012c6" class="bulleted-list"><li style="list-style-type:disc">None of the rules are applicable to a dogﬁsh shark. In this case, we need
+to determine what class to assign to such a test instance.</li></ul><h3 id="1722cce6-d59a-445b-9bbd-e50a7c0c8987" class="">6.2.2 Properties of a Rule Set</h3><p id="cb9f1672-f611-4475-b145-5f20bb281dc8" class="">A rule set generated by a rule-based classifier can have two properties: mutually exclusive and exhaustive. Mutually exclusive rules ensure that an instance is covered by only one rule, while exhaustive rules ensure that every instance is covered by at least one rule. A table with mutually exclusive and exhaustive rules is shown as an example. If a rule set is not exhaustive, a default rule must be added to cover remaining cases. If it is not mutually exclusive, an instance can be covered by multiple rules with conflicting predictions. Ordered rule sets are ranked by priority and used to avoid conflicts. Unordered rule sets consider the consequent of each rule triggered by a test instance as a vote for a class, and the instance is assigned to the class with the highest number of votes. Extracting an ordered rule set can be done using direct or indirect methods.</p><h3 id="dc6da66d-42ec-45c7-a328-700515eba468" class="">6.2.3 Direct Methods for Rule Extraction</h3><p id="b2e9b13f-2126-4d54-889f-9feb77e4efb2" class="">RIPPER is a rule induction algorithm that directly extracts rules from data. It uses the sequential covering algorithm to extract rules in a greedy fashion, one class at a time, and scales almost linearly with the number of training instances. RIPPER is particularly suited for building models from data sets with imbalanced class distributions and noisy data. In binary class problems, RIPPER chooses the majority class as its default class and learns the rules to detect instances from the minority class. In multiclass problems, the classes are ordered according to their prevalence in the training set. The sequential covering algorithm is used to learn a set of rules to discriminate positive from negative examples. The algorithm starts with an empty decision list and extracts rules for each class based on the ordering specified by the class prevalence. It iteratively extracts the rules for a given class using the Learn-One-Rule function. The Learn-One-Rule function grows rules in a greedy fashion using FOIL&#x27;s information gain measure to choose the best conjunct to add to the rule antecedent.</p><h3 id="f594eac2-0963-4375-a8c8-34e16646cef0" class="">6.2.4 Indirect Methods for Rule Extraction</h3><p id="63d7682e-0ba2-4e45-985f-5fb1f29d1ddc" class="">This section presents a method for generating a rule set from a decision tree. Each path from the root node to the leaf node can be expressed as a classification rule where the test conditions along the path form the antecedent and the class label at the leaf node is the consequent. The resulting rule set is exhaustive and mutually exclusive but can be simplified by removing redundant rules. The C4.5rules algorithm generates a rule set by extracting rules for every path from the root to the leaf nodes and simplifying them through rule pruning. After generating the rule set, C4.5rules uses a class-based ordering scheme to order the rules based on their total description length. The total description length for a class is given by Lexception + g × Lmodel, where Lexception is the number of bits needed to encode the misclassified examples, Lmodel is the number of bits needed to encode the model, and g is a tuning parameter. The value of g depends on the number of redundant attributes in the model.</p><h3 id="95771318-fd3f-4851-ba13-c269586e44c3" class="">6.2.5 Characteristics of Rule-Based Classifiers</h3><ol type="1" id="89eaa17b-a5a3-49e4-8640-752885c27cf0" class="numbered-list" start="1"><li>Rule-based and decision tree classifiers are similar in that they both create rectilinear partitions of the attribute space and assign a class to each partition. However, rule-based classifiers can allow multiple rules to be triggered for a given instance, enabling the learning of more complex models than decision trees.</li></ol><ol type="1" id="fb946daa-2f11-49c3-8ad9-90f234b32c70" class="numbered-list" start="2"><li>Like decision trees, rule-based classifiers can handle varying types of categorical and continuous attributes and can work in multiclass classification scenarios. Rule-based classifiers are generally used to produce descriptive models that are easier to interpret but give comparable performance to decision trees.</li></ol><ol type="1" id="fb28e774-264f-42d6-83b4-c79e19019739" class="numbered-list" start="3"><li>Rule-based classifiers can handle redundant attributes that are highly correlated with each other by ignoring remaining redundant attributes once one has been used as a conjunct in a rule antecedent.</li></ol><ol type="1" id="78660d5f-3b3d-4657-a9b4-c1e9cd1fa91e" class="numbered-list" start="4"><li>Rule-based classifiers can avoid selecting irrelevant attributes if there are other relevant attributes that show better information gain. However, they can show poor performance in the presence of interacting attributes or a large number of irrelevant attributes.</li></ol><ol type="1" id="f7868dd5-fdd4-414d-ac13-b24b6a90f855" class="numbered-list" start="5"><li>The class-based ordering strategy used by RIPPER is well-suited for handling training data sets with imbalanced class distributions.</li></ol><ol type="1" id="fac08b4d-0db0-4e70-bd13-a243eedd72b0" class="numbered-list" start="6"><li>Rule-based classifiers are not well-suited for handling missing values in the test set because the position of rules in a rule set follows a certain ordering strategy, and if a certain rule involves an attribute that is missing in a test instance, it is difficult to ignore the rule and proceed to the subsequent rules in the rule set without the risk of incorrect class assignments.</li></ol><p id="067b97ab-3807-4a59-a0b7-22bc18626020" class="">
+</p><h2 id="fdfd1253-fac3-459e-8eb1-eaaddd6c76ff" class="">6.3 Nearest Neighbor Classifiers</h2><p id="a2df982c-38e0-4a7d-8cc5-6776de5c0bb1" class="">The classification framework involves two steps: (1) constructing a classification model from data, and (2) applying the model to test examples. Decision tree and rule-based classifiers are eager learners, while lazy learners delay modeling the training data until it&#x27;s needed to classify the test instances. One example of a lazy learner is the Rote classifier, which memorizes the training data and performs classification only if the attributes of a test instance match one of the training examples exactly.</p><p id="b2a3458d-4d61-47b3-b1a8-84fc4be9c03c" class="">A way to make this approach more flexible is to find all the training examples that are relatively similar to the attributes of the test instances, known as nearest neighbors. A nearest neighbor classifier represents each example as a data point in a d-dimensional space, where d is the number of attributes. Given a test instance, we compute its proximity to the training instances according to one of the proximity measures. The k-nearest neighbors of a given test instance refer to the k training examples that are closest to it.</p><p id="d58e68f1-5344-4ee9-a722-724aff5d9991" class="">To classify the test instance, we use the class labels of its neighbors. If the neighbors have more than one label, we assign the test instance to the majority class of its nearest neighbors. The importance of choosing the right value for k is emphasized; if k is too small, the nearest neighbor classifier may overfit due to noise in the training data, while if k is too large, the classifier may misclassify the test instance because its list of nearest neighbors includes training examples that are located far away from its neighborhood.</p><h3 id="0235a783-7fca-40d8-912e-d3ee67fd1643" class="">6.3.1 Algorithm</h3><figure id="a66ef0db-bbc3-455f-a5fb-338c2dd7e418" class="image"><a href="Chapter%206%20Tan%20c18583894a4a462a9c01d2a42acb6add/Untitled.png"><img style="width:440px" src="Chapter%206%20Tan%20c18583894a4a462a9c01d2a42acb6add/Untitled.png"/></a></figure><p id="10ea1c54-07f2-4b8e-91f7-a4162d78eb41" class="">Algorithm 6.2 summarizes the k-nearest neighbor classification method, which involves computing the distance or similarity between a test instance and all training examples to determine its nearest neighbors. Efficient indexing techniques can be used to reduce the computation needed to find the nearest neighbors. Once the nearest neighbor list is obtained, the test instance is classified using majority voting, which can be sensitive to the choice of k. To reduce the impact of k, distance-weighted voting can be used instead, where the influence of each nearest neighbor is weighted by its distance to the test instance. The class label is then determined based on the weighted majority.</p><h3 id="20b477db-3ab9-42c0-b499-b7c9cdc6502e" class="">6.3.2 Characteristics of Nearest Neighbor Classifiers</h3><p id="9bcbaa4b-8cf8-48bb-8bc0-025d219c37f5" class="">Nearest neighbor classification is a model-free technique that uses training examples to make predictions for a test instance by determining its similarity or distance to other instances. Although they don&#x27;t require model building, nearest neighbor classifiers can be computationally expensive because they need to compute proximity values individually. These classifiers make predictions based on local information and can produce decision boundaries of arbitrary shape, but are susceptible to noise and have difficulty handling missing values and irrelevant attributes. Without appropriate data preprocessing steps and proximity measures, nearest neighbor classifiers can produce incorrect predictions.</p><h2 id="2e8d5a34-7076-4336-a768-18fe82cf7faa" class="">6.4 Naı̈ve Bayes Classifier</h2><p id="60e2a698-cae3-43cb-9ed1-4b2c11a46804" class="">Classification problems often involve uncertainty, such as unreliable observations and imperfect representation of target class attributes. For example, predicting the risk of heart disease based on diet and exercise may not account for latent factors like heredity, smoking, and alcohol abuse. Additionally, finite training sets may not fully capture true relationships in the data, and real-world systems have inherent randomness. To address uncertainty, probabilistic classification models are used to provide a measure of confidence for every prediction. The naı̈ve Bayes classifier is a widely-used and simple example of such models.</p><h3 id="01089029-c510-44f1-bdf6-6ca8f9b486d3" class="">6.4.1 Basics of Probability Theory</h3><p id="5457d405-7714-419e-b580-80c71735af72" class="">Introducing Probability Theory:
+We define the concept of probability and introduce some common approaches for manipulating probability values. We consider a variable X, which can take any discrete value from the set {x1, . . . , xk}. When we have multiple observations of that variable, we can compute the relative frequency with which each value occurs, i.e., the probability. The probability of an event e, such as P(X = xi), measures how likely it is for the event e to occur. The traditional view of probability is based on relative frequency of events (frequentist), while the Bayesian viewpoint takes a more flexible view of probabilities. Joint probabilities form the basic building blocks of many probabilistic classification models discussed in this chapter. Marginal probability and joint probability are used to answer questions based on random variables.</p><p id="33de5be8-79c5-4d94-b595-c620e060426f" class="">Bayes Theorem:
+Bayes theorem presents the statistical principle for answering questions where evidence from multiple sources has to be combined with prior beliefs to arrive at predictions. Let P(Y|X) denote the conditional probability of observing the random variable Y whenever the random variable X takes a particular value. Conditional probabilities of X and Y are related to their joint probability.</p><p id="b7b3713b-2c4e-4356-aade-6cedf07cae8b" class="">
+</p><p id="9dffd1fc-8969-473a-b6e1-5fcf19c1df6c" class="">
+</p><p id="4b816af5-d05a-4bc0-87e4-e3efc97b2ffd" class=""><strong>Using Bayes Theorem for Classification</strong></p><p id="bece874d-2026-46f0-b60f-1da6d9c5d831" class="">To classify data, we need to find the probability of a class label y given its attributes x, represented as P(y|x). Bayes Theorem helps us represent this as P(y|x) = P(x|y)P(y) / P(x). The numerator has two terms: P(x|y) is the likelihood of observing attributes x from class y, and P(y) is the prior probability of y. The denominator, P(x), is a normalization constant. During training, we learn P(y) and P(x|y) from the training set. P(y) can be estimated as the fraction of instances in each class, while P(x|y) can be estimated by counting the instances with each combination of attribute values. This becomes computationally prohibitive as the number of attributes increases, but the naive Bayes classifier simplifies this by assuming independence between the attributes. This helps obtain reliable estimates of P(x|y) even with large numbers of attributes.</p><h3 id="828e2607-47cf-41af-815a-ee80b62ebb8a" class="">6.4.2 Naı̈ve Bayes Assumption</h3><p id="5be7ad12-6844-4329-84f8-ffb1dce15229" class="">The Naive Bayes classifier is based on the assumption that the class-conditional probability of all attributes x can be factored as a product of class-conditional probabilities of each attribute xi. This assumption is based on the concept of conditional independence, which means that the attribute values xi are independent of each other given the class label y. This assumption greatly simplifies the computation of the class-conditional probability, reducing the number of parameters needed to learn class-conditional probabilities from dk to dk. The Naive Bayes classifier computes the posterior probability for a test instance x by using an equation that involves the prior probability of y and the conditional probabilities of each xi given y. One of the useful properties of the Naive Bayes classifier is that it can easily work with incomplete information about data instances.
+
+The naı̈ve Bayes assumption for estimating class-conditional probabilities can pose a problem if any attribute&#x27;s conditional probability is zero. Zero probabilities occur when the number of training instances is small, and the number of possible attribute values is large. In such cases, there may be combinations of attribute values and class labels that are never observed, leading to a zero conditional probability. This may result in the inability to classify some test instances. To address this problem, alternate estimates of conditional probability, such as the Laplace and m-estimates, can be used. These estimates provide non-zero values of conditional probabilities, even if nc=0, and are more robust than using fractions of training instances. Naı̈ve Bayes classifiers are probabilistic and generative models that provide posterior probability estimates, which quantify the uncertainty in predictions. They are simple and effective in high-dimensional settings and are robust to isolated noise points and irrelevant attributes. However, they can be affected by correlated attributes.</p><h2 id="b89bd1b9-5004-4fea-87b6-7b028c8b1fb0" class="">6.5 Bayesian Networks</h2><p id="7caad95d-3f3d-43ac-a199-f2a8c088fec4" class="">To capture more complex relationships between attributes in classification problems, we need to relax the rigid conditional independence assumption of naı̈ve Bayes classifiers. Bayesian Networks offer a flexible framework for modeling probabilistic relationships between attributes and class labels. By combining probability and graph theory, Bayesian Networks can represent various forms of conditional independence using simple schematics. They also provide efficient computational structures for performing inferences over random variables. This section presents the basic representation of a Bayesian network and methods for performing inference and learning model parameters in the context of classification.
+</p><h3 id="48b03faf-21aa-405d-b863-946218ae3066" class="">6.5.1 Graphical Representation</h3><p id="f53cd9db-cf25-4309-8ecd-929a790057b9" class="">Bayesian networks are part of probabilistic graphical models which capture the relationships between random variables using graphs where nodes represent variables and edges express probabilistic relationships. Directed edges represent Bayesian networks, while undirected edges represent Markov random fields. Bayesian networks use directed acyclic graphs and the local Markov property to express conditional independence among random variables. In a Bayesian network, a node is conditionally independent of its non-descendants given its parents. This property helps in interpreting parent-child relationships as conditional probabilities. Bayesian networks can express a richer class of conditional independence statements than the naive Bayes classifier, which can be viewed as a special type of Bayesian network where the target class is at the root of a tree and every attribute is connected to the root node by a directed edge.</p><h3 id="a5697425-3c41-4bed-a3c4-58e4aa2c8906" class="">6.5.2 Inference and Learning</h3><p id="0dc533f2-b61a-41f4-b8ea-82f2f962016f" class="">The problem of Bayesian inference is to compute the probabilities of different sets of random variables using the probability tables corresponding to every node in a Bayesian network. In classification, an essential inference problem is to compute the probability of a target class Y taking on a specific value y given the set of observed attributes at a data instance. To estimate the marginal probabilities P(y, x), the joint probability P(y, x, H) can be obtained using the factorization described in Equation 6.23, and by marginalizing out the hidden variables H. To efficiently perform inferences in Bayesian networks, different computational techniques such as variable elimination can be used to reduce the computational complexity. The variable elimination approach rearranges summations and uses algebraic manipulations, exploiting the distributive nature of multiplication over addition operations. The efficiency of variable elimination depends on the order of hidden variables used for performing summations. Unfortunately, finding the optimal order of summations for a generic Bayesian network is a challenging problem.</p><h3 id="4bdaa4cc-f86b-4b61-89b5-9842634fc316" class="">6.5.3 Characteristics of Bayesian Networks</h3><p id="e26c2493-01ab-4467-8ca7-78888a3113d4" class="">Bayesian networks are a powerful way to represent probabilistic relationships between attributes and class labels. They can handle correlated or redundant attributes and are robust to noise and missing values. They are also able to handle irrelevant attributes and can work with partial information. However, learning the structure of a Bayesian network can be difficult, and they are more susceptible to overfitting than the naive Bayes classifier. Inference over large generic graphs can be computationally challenging, and approximate inference techniques are often used.</p><h2 id="bb5175ac-99b1-40a1-8e39-7ef83cbe77cc" class="">6.6 Logistic Regression</h2><p id="ffc82f02-cb8b-4f9c-aad0-4ffb12ccacca" class="">The Naive Bayes and Bayesian network classifiers estimate the conditional probability P(x|y) in different ways. These are probabilistic generative models that describe the behavior of instances generated from class y in the attribute space. To make predictions, we need to compute the posterior probability P(y|x). Logistic regression is a probabilistic discriminative model that directly estimates the odds of a data instance x using its attribute values, without the need to compute P(x|y) as an intermediate quantity in the Bayes theorem. It uses a linear predictor z=wT x+b to represent the odds of x, and the logistic or sigmoid function σ(z) to estimate the posterior probabilities of any data instance x and determine its class label.</p><h3 id="d9079a33-db75-43e6-adbe-d303a97fa119" class="">6.6.1 Logistic Regression as a Generalized Linear Model</h3><p id="280759d0-3716-40f5-9386-810234812e6e" class="">Logistic regression estimates posterior probabilities as a regression problem, using a link function to estimate the mean of the probability distribution. Logistic regression is a member of the generalized linear models (GLM) family of statistical regression models. GLMs represent a wide range of regression models and use different approaches to estimate the model parameters. Logistic regression&#x27;s link function is the logit function and is used to estimate the mean probability of a Bernoulli distribution. Although logistic regression is a regression model, it is a classification model since it ultimately determines the class label of a data instance.</p><h3 id="13629e57-fc66-427b-88a3-9508ed102ed1" class="">6.6.2 Learning Model Parameters
+</h3><p id="ef70fdda-0f3e-49bd-b7ae-9fcba343f98e" class="">Logistic regression is a statistical approach to modeling the relationship between a binary dependent variable and one or more independent variables. The logistic regression algorithm estimates the parameters of the model during training using a statistical approach known as maximum likelihood estimation. The likelihood of observing the training data given the model parameters is computed, and the model parameters that yield maximum likelihood are determined.</p><p id="5066adce-63c8-47bc-9b94-06d1378ea25d" class="">During training, a set of n training instances is used, where each instance has a binary variable (0 or 1) associated with it. The posterior probabilities of each instance can be computed, and the likelihood of observing the binary variable given the instance and model parameters can be expressed as a product of probabilities. The product of individual likelihoods for all training instances, assuming independence, can be used to compute the likelihood of all training instances.</p><p id="9e47c1f9-f5c5-43c0-b55e-1ec70e2c877c" class="">To avoid numerical instability when n is large, the negative logarithm of the likelihood function is computed instead. This function is known as the cross-entropy function and measures how unlikely it is for the training data to be generated from the logistic regression model with parameters. The objective of the algorithm is to find the model parameters that result in the lowest cross-entropy.</p><p id="02043b0f-f11d-4782-98b2-75803c7eb209" class="">The Newton-Raphson method is a commonly used iterative method for estimating the parameters of logistic regression. It uses the first- and second-order derivatives of the loss function with respect to the model parameters to update the model parameters at every iteration. The intuition behind the method is to move the model parameters in the direction of maximum gradient, such that they take larger steps when the gradient is large. When the model parameters arrive at a minimum after some number of iterations, the gradient becomes zero, resulting in convergence.</p><h3 id="dd365d12-a290-47ca-be6b-7f4df6dd87bb" class="">6.6.3 Characteristics of Logistic Regression</h3><p id="b3e15ff1-d78e-45d3-bb67-520cc6e522f9" class="">Logistic regression is a versatile and widely applicable classification model that can compute poster probabilities without assuming anything about class conditional probabilities. It can handle multiclass classification and provide insights into attribute-class relationships. Unlike distance-based methods, logistic regression does not involve computing densities or distances in the attribute space, making it more robust in high-dimensional settings. However, it does not provide a way to balance model complexity and training performance, and it may overfit if there are too many irrelevant or redundant attributes. Logistic regression cannot handle missing values in data instances, and it may fail to predict the class label of a test instance with missing values.</p><h2 id="fd2534d6-a853-40ee-8b58-7b9ecd7f4a42" class="">6.7 Artificial Neural Network (ANN)</h2><p id="6436e6c9-7704-4f31-8433-71bb730a9814" class="">Artificial neural networks (ANN) are classification models that learn complex decision boundaries from data. They excel in vision, speech, and language processing, often outperforming humans. ANN is inspired by the human brain, which consists of neurons that transmit activations via axons and dendrites. ANN is composed of processing units called nodes, connected by directed links, representing synaptic strength. ANN extracts useful features from data for classification, using complex combinations of interconnected nodes. ANN models a hierarchy of features, from low-level features like edges to higher-level features like facial parts. ANN has a long history of development, spanning over five decades, with recent advancements in deep learning making it possible to learn modern ANN models with deep architectures.</p><h3 id="c65b30d6-e3ba-4225-9729-b164291d0703" class="">6.7.1 Perceptron</h3><p id="c0913acf-ca58-4ea9-a618-2b715dfb2f2b" class="">A perceptron is a basic type of artificial neural network (ANN) that has input nodes representing input attributes and an output node representing the model output. The perceptron takes three input attributes, x1, x2, and x3, and produces a binary output y. The input node corresponding to an attribute xi is connected to the output node via a weighted link wi, which is used to emulate the strength of a synaptic connection between neurons. The output node computes a weighted sum of its inputs, adds a bias factor b to the sum, and then examines the sign of the result to produce the output ŷ. The perceptron learning algorithm is used to learn the parameters w̃ such that ŷ closely resembles the true y of training instances. The algorithm halts when the average number of discrepancies is smaller than a threshold γ. The perceptron is a simple classification model that learns linear decision boundaries in the attribute space, but it is only guaranteed to converge when the classes are linearly separable.</p><h3 id="80cf8749-3dc1-4dcc-8c20-71a77d15f960" class="">6.7.2 Multi-layer Neural Network</h3><p id="05836b92-d9f3-49c2-b515-f887ed0e9ff7" class="">A multi-layer neural network is a complex architecture of nodes that learn nonlinear decision boundaries. It is composed of layers of nodes arranged in a chain where every layer operates on the outputs of the preceding layer. The layers represent different levels of abstraction applied to input features in a sequential manner. The output of the last layer is used for making predictions. The network includes an input layer for representing inputs from attributes, hidden layers made up of processing units called hidden nodes that operate on signals received from input nodes or hidden nodes at the preceding layer, and an output layer that produces predictions of output variables. Multi-layer neural networks learn a hierarchy of features at different levels of abstraction that are finally combined at the output nodes to make predictions. They can represent arbitrarily complex decision boundaries and are highly expressive, distinguishing them from other classification models such as decision trees. The activation value at each node is generated as a function of the inputs received from nodes at the preceding layer and can be expressed using the weight of the connection and a bias term.</p><h3 id="781594ca-1a27-4042-9abb-6013bcddef21" class="">6.7.3 Characteristics of ANN</h3><ol type="1" id="35334e52-ff7f-4501-8646-ec2d61a455b8" class="numbered-list" start="1"><li>Multi-layer neural networks with at least one hidden layer can learn any target function, but are prone to overfitting. Deep learning techniques can help overcome this.</li></ol><ol type="1" id="14917c8f-76df-48f3-ac55-286984c4189d" class="numbered-list" start="2"><li>ANN can represent features at multiple levels of abstraction, which can be used in other classification models.</li></ol><ol type="1" id="4dcd4e42-0c7e-441f-9949-ff1dec9718a0" class="numbered-list" start="3"><li>ANN represents complex features as compositions of simpler ones, allowing for increased complexity with more hidden layers.</li></ol><ol type="1" id="f0dc7e32-47df-48b9-aac0-4d9275b0d47e" class="numbered-list" start="4"><li>ANN can handle irrelevant and redundant attributes, but may suffer from overfitting if there are too many.</li></ol><ol type="1" id="06c3f66b-1ad2-4044-a02e-d511df962498" class="numbered-list" start="5"><li>ANN can get stuck in local minima during training, but this can be addressed with deep learning techniques.</li></ol><ol type="1" id="93c26e65-c3ab-4835-bca2-03ae970bd2db" class="numbered-list" start="6"><li>Training an ANN can be time-consuming, but classification of test examples is rapid.</li></ol><ol type="1" id="22e20f84-113d-4ed5-ba20-9b007caeefa2" class="numbered-list" start="7"><li>ANN can handle interacting variables but cannot handle instances with missing values.</li></ol><h2 id="c99d916a-162c-420c-83f5-30c0e839a283" class="">6.8 Deep Learning</h2><p id="08615706-6f1c-4b28-8244-44d22480be34" class="">ANNs use hidden layers to combine simple features into complex high-level features. Deep neural networks with long chains of hidden layers can represent features at multiple levels of abstraction, and often require fewer nodes per layer for similar performance compared to shallow networks. However, learning deep neural networks has been challenging due to limited computational resources, the vanishing gradient problem, sensitivity to initial parameter values, and susceptibility to overfitting. Recent advances in deep learning have addressed these challenges, including larger labeled datasets, advances in hardware and computational abilities, and algorithmic advancements such as better loss functions, initialization techniques, regularization, architecture designs, and hyperparameter selection. These advances have unlocked the potential of deep neural networks and led to breakthroughs in solving difficult classification problems.
+</p><h3 id="306df153-dfc4-477d-aeca-b96a0b8390f6" class="">6.8.1 Using Synergistic Loss Functions</h3><p id="6589b168-1210-49fa-8aa7-a3d1f9e527d4" class="">Deep learning realizes the importance of selecting appropriate combinations of activation and loss functions. Classical ANN models used the sigmoid activation function at the output layer with a squared loss objective for gradient descent. This combination resulted in output activation values saturation, leading to poor learning. It is crucial to choose a synergistic combination of loss function and activation function that does not suffer from the saturation of outputs. The cross-entropy loss function, which measures the amount of disagreement between y and ŷ, can significantly avoid the problem of saturating outputs when used with the sigmoid activation function. It has been a major breakthrough in the learning of modern ANN models.
+</p><h3 id="6b798e2e-9a75-424f-9559-c00532540d02" class="">6.8.2 Using Responsive Activation Functions</h3><p id="281b1164-b2d3-4e41-ab87-5ef9b525d0b9" class="">The cross entropy loss function helps to overcome saturation at the output layer, but the use of sigmoid activation functions in hidden nodes causes the vanishing gradient problem. This problem occurs due to decreasing gradients in deeper hidden layers, and it is one of the major hindrances in learning deep neural networks. The ReLU activation function overcomes this problem by providing a stable and significant gradient whenever a hidden node is active. ReLU is defined as follows: a node is activated if z &gt; 0, and the gradient is equal to 1 whenever z &gt; 0. ReLU&#x27;s linearity promotes better flows of gradients during backpropagation and simplifies the learning of ANN model parameters. It is also highly responsive at large values of z away from 0.</p><h3 id="9715805a-8581-49fd-a59b-bcf578f35fc4" class="">6.8.3 Regularization</h3><p id="a3949584-cdd7-48ea-83b7-a4840a5e3ded" class="">The high model complexity of ANN models poses a significant challenge in learning deep neural networks. Model complexity grows with the addition of hidden layers, which can lead to overfitting, particularly when the training set is small. To address this challenge, it is important to use regularization techniques that reduce the complexity of the learned model. Deep learning has advanced the development of novel regularization techniques for ANN models, one of which is the dropout method. Dropout avoids learning spurious features at hidden nodes that occur due to model overfitting. It does this by randomly dropping input and hidden nodes in the network during training to break complex co-adaptations. The method draws inspiration from gene swapping in sexual reproduction, where useful parent genes intermingle with diverse combinations of genes from the other parent. Dropout randomly drops a fraction of input and hidden nodes in the network at every iteration of the gradient descent method. The weighted links and bias terms involving the dropped nodes are eliminated, resulting in a thinned sub-network of smaller size. The model parameters of the sub-network are then updated by computing activation values and performing backpropagation on this smaller sub-network. These updated values are then added back in the original network to obtain the updated model parameters to be used in the next iteration. The process is repeated until the gradient descent method converges. The model parameters obtained are then scaled down by a factor of (1-γ) to produce the weights and bias terms of the final ANN model. Dropout has been shown to provide significant improvements in generalization performance.</p><h3 id="729be46f-0f6a-43ff-aea3-fe493d7b58a8" class="">6.8.4 Initialization of Model Parameters</h3><p id="397e69fb-c439-4c33-919a-652ac6172ab4" class="">ANN models are prone to getting stuck in locally optimal but globally inferior solutions due to the non-convex nature of their loss function. Therefore, the initial choice of model parameter values is crucial in learning ANN through gradient descent. It is advisable to first learn a simpler model, such as using a single hidden layer, and then incrementally increase the complexity of the model by adding more hidden layers. Another approach is to train the model for a simpler task and then use the learned model parameters as initial parameter choices in the learning of the original task. Pretraining is the process of initializing ANN model parameters before the actual training process. Pretraining helps to initialize the model to a suitable region in the parameter space that would otherwise be inaccessible by random initialization. Supervised pretraining and unsupervised pretraining are two common approaches to pretraining. Supervised pretraining is achieved by incrementally training the ANN model in a layer-wise manner, by adding one hidden layer at a time. Unsupervised pretraining is done by using unlabeled instances to initialize the ANN model. One approach to unsupervised pretraining is to use an unsupervised ANN model known as an autoencoder. The basic architecture of an autoencoder involves learning a reconstruction of the input data by mapping the attributes to latent features and then re-projecting back to the original attribute space to create the reconstruction. During training, the goal is to learn an autoencoder model that provides the lowest reconstruction error, which is typically the squared loss function.</p><h3 id="4e91bd65-7226-4c42-a91f-34c8ff5e27cf" class="">6.8.5 Characteristics of Deep Learning</h3><p id="e8534bef-4599-4366-9982-41f7d9295d03" class="">Deep learning techniques provide the following additional characteristics to ANN:</p><ol type="1" id="d1f464eb-524e-44c0-b13d-0a77c9bd43f9" class="numbered-list" start="1"><li>ANN models trained for a task can be easily re-used for another task with similar attributes using pretraining strategies, promoting re-usability of learning.</li></ol><ol type="1" id="36d582c2-27dc-407c-a662-c2828830beee" class="numbered-list" start="2"><li>Regularization techniques like dropout can reduce model complexity and improve generalization performance, especially in high-dimensional settings with limited labeled training data.</li></ol><ol type="1" id="8076de95-d5b4-4ab5-b6e8-854d981e76e9" class="numbered-list" start="3"><li>Autoencoders can help eliminate irrelevant attributes and reduce the impact of redundant attributes by representing them as copies of the same attribute.</li></ol><ol type="1" id="c830f743-430f-4a0d-9c28-e0f8c0b18010" class="numbered-list" start="4"><li>Various deep learning techniques can ensure adequate learning of ANN models, including novel architecture designs like skip connections to aid gradient flow during backpropagation.</li></ol><ol type="1" id="159a9648-81c9-4b1a-aabd-cf9cb9d4773d" class="numbered-list" start="5"><li>Specialized ANN architectures like convolutional neural networks (CNN) for images and recurrent neural networks (RNN) for sequences have been developed for different input data types. CNNs are widely used in computer vision, while RNNs have applications in speech and language processing.</li></ol><h2 id="f7f77af7-2ba5-47d7-be1c-22aac3bdf7c4" class="">6.9 Support Vector Machine (SVM)</h2><p id="263abf61-f7fb-4c55-8b65-1218ffd808ca" class="">SVM is a discriminative classification model that learns decision boundaries to separate classes in attribute space. It offers strong regularization to control model complexity and ensure good generalization performance. SVM can learn expressive models without overfitting, making it popular in practical applications such as handwritten digit recognition and text categorization. SVM represents the decision boundary using support vectors, the subset of the most difficult training examples to classify. SVM finds the maximum margin hyperplane to separate classes and can be extended to nonlinear decision boundaries using kernel functions.</p><h3 id="06c7df7a-3cea-4985-8aa9-dbd0518b76c2" class="">
+6.9.1
+Margin of a Separating Hyperplane</h3><p id="1db800cd-fa09-455f-bf2d-6bacae965f39" class="">A separating hyperplane is defined by the equation wT x + b = 0, where x represents attributes and (w, b) represent hyperplane parameters. The goal of binary classification is to find a hyperplane that separates both classes. If the data set is linearly separable, there can be many hyperplanes that can separate the classes. However, to obtain the best generalization performance, we would like to choose a hyperplane that is robust to small perturbations. This can be achieved by using the concept of the margin of a separating hyperplane, which is the distance between two parallel hyperplanes that touch the closest instances of both classes. The maximum margin hyperplane is the separating hyperplane with the largest margin, which has been shown to have better generalization performance than those with smaller margins. This is because small margin hyperplanes are susceptible to overfitting, while a larger margin hyperplane has sufficient leeway to be robust to minor modifications in the data, resulting in better generalization performance.</p><h3 id="280ed567-0d0d-4f6e-b639-76552cff0a82" class="">6.9.2 Linear SVM</h3><p id="aad4f667-6a62-4f50-92c4-afde0f7ba401" class="">A linear SVM is a binary classifier that seeks to find a separating hyperplane with the largest margin. The distance of any point from the hyperplane is given by D(x) = |wT x + b| / ||w||. To find the maximum margin hyperplane that adheres to constraints, we consider an optimization problem that is commonly represented as ||w||2 min subject to yi (wT xi + b) ≥ 1. The Lagrangian primal problem is used to learn the model parameters, which involves minimizing the Lagrangian by taking the derivative of LP with respect to w and b and setting them equal to zero. The Karush-Kuhn-Tucker (KKT) conditions provide a complementary slackness condition, which states that the Lagrange multiplier λi is strictly greater than 0 only when xi lies exactly on a margin hyperplane, and only a small number of instances contribute to the weight parameter.</p><h3 id="3fbf9a86-0a8b-4bea-b18b-530ffc5f0bfb" class="">6.9.3 Soft-margin SVM</h3><p id="0d7153d9-4cb7-4698-b63e-2bbc8e7a38a0" class="">
+</p><p id="b3813657-4aee-48e4-91e9-6cbcf8a5e19b" class="">Support Vector Machines (SVMs). SVMs are a type of machine learning algorithm used for classification tasks, and they work by finding a hyperplane that separates the data into different classes. The goal is to find a hyperplane that has a large margin, which is the distance between the hyperplane and the closest data points on either side. The intuition behind this is that a larger margin means the hyperplane is less likely to overfit to the training data and more likely to generalize well to new data.</p><p id="61d00722-3cef-451d-90f1-6f76565a7f39" class="">However, in some cases, the data may not be linearly separable, meaning that there is no hyperplane that can perfectly separate the classes. In these cases, the SVM algorithm will allow some errors in the training data in order to find a hyperplane that still separates the data as well as possible. This is where the soft-margin approach comes in.</p><p id="a8e1a270-75bb-4f09-aafe-6595045a7a49" class="">The soft-margin approach involves introducing slack variables, denoted by ξ, that allow some training instances to violate the strict inequality constraints of the SVM. Essentially, the slack variables allow some data points to be on the wrong side of the hyperplane, but penalize the model for doing so. The objective function of the SVM is then modified to minimize the margin size, while also minimizing the total slack variable values.</p><p id="5c943dec-f90d-491c-b1b7-476dd0d7544c" class="">The new objective function involves minimizing the L2 norm of the weight vector w (which determines the orientation of the hyperplane) and the sum of the slack variable values, subject to the new inequality constraints that allow for some training errors. The degree to which the slack variables are penalized is controlled by a hyperparameter C, which determines the trade-off between minimizing the slack variable values and maximizing the margin size.</p><p id="90b0d9f4-40cd-4b3c-9f19-8a7de0500f51" class="">To solve this new optimization problem, the book describes how to use the Lagrange multiplier method to convert it into its dual form, which is more computationally efficient to solve. The result is a set of equations involving the Lagrange multipliers, which can be used to obtain the weight vector and bias term of the hyperplane.</p><p id="cd7d55e3-a0b0-4d9c-9b69-cc649a555e26" class="">Overall, the soft-margin approach allows SVMs to handle data that is not linearly separable while still minimizing training errors and maximizing the margin size, which helps ensure good generalization performance.</p><h3 id="6ed4ef8a-1fb0-43a7-b5a4-0054958a7ce8" class="">6.9.4 Nonlinear SVM</h3><p id="c96b067a-a90d-4713-800a-7b4ba8a5642d" class="">SVM can be used to classify data sets that have nonlinear decision boundaries by transforming the data from its original attribute space into a new space ϕ(x) so that a linear hyperplane can be used to separate the instances in the transformed space. The learned hyperplane can then be projected back to the original attribute space, resulting in a nonlinear decision boundary. Nonlinear transformation requires a suitable function ϕ, which maps the data from its original attribute space into a new space, allowing for a linear hyperplane to separate the classes. The curse of dimensionality can be avoided by using kernel functions. To learn the optimal separating hyperplane, we can substitute ϕ(x) for x in the formulation of SVM. This can be converted into a dual optimization problem that can be represented using λi. The equation of the hyperplane in the transformed space can also be represented using λi.</p><h3 id="e3ff456f-50bb-407e-bf93-ccc6819736cf" class="">6.9.5 Characteristics of SVM</h3><ol type="1" id="921cd997-1bcd-433e-b6e0-54e830d6a046" class="numbered-list" start="1"><li>SVM is a convex optimization problem with efficient algorithms to find the global minimum, while other classifiers tend to find only local optima.</li></ol><ol type="1" id="12fb5970-323b-417f-a6c6-269312ca49da" class="numbered-list" start="2"><li>SVM balances model complexity and training errors by maximizing the margin of the decision boundary and using a hyper-parameter C.</li></ol><ol type="1" id="e479c3da-6cb1-4847-8089-9c27df1e604e" class="numbered-list" start="3"><li>Linear SVM handles irrelevant and redundant attributes by learning zero or similar weights and is more robust than other classifiers, even in high-dimensional settings. Nonlinear SVM is less impacted by irrelevant and redundant attributes than decision trees.</li></ol><ol type="1" id="d8ea8bb0-65f3-4f54-b02a-603f1b73b628" class="numbered-list" start="4"><li>For categorical data, SVM introduces dummy variables for each categorical attribute value.</li></ol><ol type="1" id="8b73ca15-d625-45ca-8cf1-24b9819f73c2" class="numbered-list" start="5"><li>Multiclass extensions of SVM have been proposed.</li></ol><ol type="1" id="73fabdde-eed3-42ca-a27c-cc385f1f5f3a" class="numbered-list" start="6"><li>SVM has a long training time but can be quickly classified with a small number of support vectors.</li></ol><h2 id="00e9a564-d8f2-4497-a037-4fbaeca9a5df" class="">6.10 Ensemble Methods</h2><p id="9fafa503-b0c1-4a4f-9f37-233248ae6832" class="">This section covers ensemble or classifier combination methods for improving classification accuracy. These methods create a set of base classifiers from training data and use a voting system to make predictions. Ensemble methods tend to perform better than a single classifier, and techniques for constructing the classifier ensemble are presented.</p><h3 id="bffb0fb0-4768-45a1-835e-9602e3b225d5" class="">6.10.1 Rationale for Ensemble Method</h3><p id="999164b5-52a3-45c2-a179-e77f3323f88b" class="">Only an example
+
+Example 6.8 shows how an ensemble of 25 binary classifiers with an error rate of 0.35 can improve classification performance. The ensemble predicts the class label by majority voting on the base classifiers&#x27; predictions. If the base classifiers are identical, the ensemble&#x27;s error rate remains 0.35. However, if the base classifiers are independent, the ensemble&#x27;s error rate can be considerably lower than the base classifiers&#x27; error rate. Figure 6.42 shows the ensemble&#x27;s error rate for different base classifier error rates. Two necessary conditions for an ensemble classifier to perform better than a single classifier are: (1) the base classifiers should be independent and (2) the base classifiers should do better than random guessing. Achieving total independence among the base classifiers is difficult, but ensemble methods have still shown improvements in classification accuracy even when the base classifiers are somewhat correlated.</p><h3 id="e923d5c7-96cc-48e0-a4cf-f00a803023b1" class="">6.10.2
+Methods for Constructing an Ensemble Classifier</h3><p id="480ed5dd-b690-402e-a28f-6b6c9e6f80d9" class="">Ensemble methods are a technique used in machine learning to improve the accuracy of a model. The basic idea is to construct multiple classifiers from the original data and then aggregate their predictions when classifying unknown examples. There are several ways to construct an ensemble of classifiers, including manipulating the training set, input features, class labels, or learning algorithm.</p><p id="095f81d8-935f-40db-8c48-67ced2c3a4bc" class="">The first approach involves creating multiple training sets by resampling the original data according to some sampling distribution and constructing a classifier from each training set. Bagging and boosting are two examples of ensemble methods that manipulate their training sets.</p><p id="dead75be-2534-4c62-9b9d-2448c758f21d" class="">The second approach involves choosing a subset of input features to form each training set, either randomly or based on the recommendation of domain experts. This approach works well with data sets that contain highly redundant features. Random forest is an ensemble method that manipulates its input features and uses decision trees as its base classifiers.</p><p id="3ae9fd35-9a4a-4d66-a4ff-f2c18882fabc" class="">The third approach involves randomly partitioning the class labels into two disjoint subsets, A0 and A1, and assigning training examples whose class label belongs to the subset A0 to class 0, while those that belong to the subset A1 are assigned to class 1. The relabeled examples are then used to train a base classifier, and by repeating this process multiple times, an ensemble of base classifiers is obtained.</p><p id="9941a2f6-e438-4d52-a883-9c1c30f1e1e6" class="">Finally, the fourth approach involves manipulating the learning algorithm, such as changing the network topology or initial weights of an artificial neural network, or injecting randomness into the tree-growing procedure for an ensemble of decision trees.</p><p id="de629f54-c06c-4e53-bc08-79c1bb121a76" class="">Once an ensemble of classifiers has been learned, a test example is classified by combining the predictions made by the base classifiers, either by taking a majority vote or a weighted majority vote. Ensemble methods show the most improvement when used with unstable classifiers, which are sensitive to minor perturbations in the training set, because of high model complexity. By aggregating the responses of multiple unstable classifiers, ensemble learning attempts to minimize their variance without worsening their bias.</p><h3 id="a9c04dd8-abf6-4826-93d4-77a0d5c6114a" class="">6.10.3
+Bias-Variance Decomposition</h3><p id="f27b5bad-402b-406c-99a9-10d21336a639" class="">This passage discusses the bias-variance decomposition method for analyzing the generalization error of a predictive model. It uses an analogy of firing projectiles to illustrate the concept of bias and variance in model predictions. The generalization error of a classification model can be decomposed into terms involving the bias, variance, and noise components of the model. The trade-off between bias and variance explains the effects of underfitting and overfitting on the generalization performance of a model. Ensemble learning methods improve the generalization performance of unstable classifiers by lowering the variance in the predictions. Bagging, a technique that repeatedly samples from a data set according to a uniform probability distribution, is a popular ensemble learning method.</p><h3 id="2854657b-ca53-4a28-9ff1-957d2cd6f31f" class="">6.10.4 Bagging</h3><p id="732a69ed-b3ae-47f9-ad64-17884d05853f" class="">Bagging is a technique that involves repeated random sampling (with replacement) from a data set to create new training sets with the same size as the original data. Each sample may contain repeated instances, and on average, it contains approximately 63% of the original data. After training base classifiers on each sample, bagging combines their predictions through majority voting. Bagging can improve the accuracy of decision trees, especially for small datasets.</p><h3 id="ea844da6-7459-49d7-bba6-8623dca15c24" class="">6.10.5 Boosting</h3><p id="6746685b-1c14-4f06-a97e-12633c5c2b35" class="">Boosting is a method to adjust the distribution of training examples in order to increasingly focus on hard-to-classify examples. The method assigns a weight to each training example, updating the weight at the end of each round of the iterative process. The weights of the training examples can be used to inform the sampling distribution used to draw a set of bootstrap samples from the original data, or they can be used to learn a model that is biased toward examples with higher weight. AdaBoost is a specific implementation of boosting that uses the importance of a base classifier to update the weight of the training examples. The importance of a classifier depends on its error rate, which is defined as the sum of the weights of incorrectly classified examples. The alpha parameter is used to update the weight of the training examples, increasing the weights of incorrectly classified examples and decreasing the weights of correctly classified examples. The final ensemble is obtained by aggregating the base classifiers obtained from each boosting round.</p><p id="2b16456c-c487-4597-be17-50d414d00206" class="">
+</p><h3 id="67c9f117-2df3-4c50-a9e4-bf2fe0613dfe" class="">6.10.6 Random Forests</h3><p id="1b268785-f2db-4f11-a6b0-5dbf850e1c74" class="">Random forests improve generalization performance by creating an ensemble of decorrelated decision trees. This is done by using a bootstrap sample of the training data to learn decision trees, with the best splitting criterion at every internal node being chosen among a small set of randomly selected attributes. After constructing an ensemble of decision trees, their average prediction is used as the final prediction of the random forest. The base classifiers of random forest are unpruned trees, which represent unstable classifiers that have low bias but high variance because of their large size. Random forests choose a splitting criterion at every internal node using a different subset of attributes, which significantly helps in breaking the correlation structure among the decision trees. By aggregating the predictions of an ensemble of strong and decorrelated decision trees, random forests are able to reduce the variance of the trees without negatively impacting their low bias. Additionally, because of their ability to consider only a small subset of attributes at every internal node, random forests are computationally fast and robust even in high-dimensional settings. The number of attributes to be selected at every node, p, is a hyperparameter of the random forest classifier. The oob error estimate can be computed for any generic ensemble learning method that builds independent base classifiers using bootstrap samples of the training set, such as random forests.</p><h3 id="0b18804d-031b-4f63-a275-b649d3d41581" class="">6.10.7 Empirical Comparison among Ensemble Methods</h3><p id="ed8dc1cc-674f-4cf7-a667-6704bf04a8a3" class="">A study compared the performance of a decision tree classifier against three ensemble methods: bagging, boosting, and random forest. The study used 25 different datasets with varying attributes, classes, and instances. Each ensemble method used 50 decision trees as base classifiers. The classification accuracies were obtained using ten-fold cross-validation. The results showed that in general, the ensemble classifiers outperformed a single decision tree classifier on many of the datasets.</p><h2 id="4142a39a-372a-444c-a11f-bd09d16d6899" class="">6.11 Class Imbalance Problem</h2><p id="6d8cec44-7e9e-4eee-a2d1-52b67528f8ce" class="">Class imbalance is a common property in many datasets where certain classes are underrepresented. For instance, in healthcare applications, rare diseases may have fewer positive diagnoses compared to negative diagnoses. Similarly, in credit card fraud detection, legitimate transactions significantly outnumber fraudulent transactions. However, accurately identifying the rare class is often more valuable than accurately identifying the majority class. Class imbalance poses two challenges for classification: (1) difficulty in finding sufficient labeled samples of the rare class and (2) the traditional evaluation metric of accuracy is not suitable for assessing model performance in the presence of class imbalance. To address these challenges, generic methods for building classifiers and evaluating classification performance in the presence of class imbalance are presented in this section. In binary classification problems, the minority class is referred to as the positive (+) class and the majority class as the negative (−) class.</p><p id="84c1ee80-0faa-4575-8b5e-9271362c57ee" class="">
+</p><h3 id="af690312-2ff5-4eb0-9d3b-4d1a74e98ef2" class="">6.11.1 Building Classifiers with Class Imbalance</h3><p id="98fff8b4-95b8-4768-b3e5-eca4c84fd5a4" class="">To build classifiers in the presence of class imbalance in the training set, two primary considerations are important: First, we need to ensure that the learning algorithm is trained over a data set that has adequate representation of both the majority and minority classes, which can be achieved through oversampling and undersampling. Second, we need to adapt the classifier&#x27;s classification decisions to match the requirements of the imbalanced test set by converting the outputs of the classification model to real-valued scores and selecting a suitable threshold on the classification score.</p><p id="9d46efea-8d19-4511-a9e8-0202e576acb5" class="">A balanced training set can be created by generating a sample of training instances where the rare class has adequate representation. There are two types of sampling methods that can be used to enhance the representation of the minority class: undersampling and oversampling. Undersampling reduces the frequency of the majority class to match the frequency of the minority class, while oversampling creates artificial examples of the minority class to make them equal in proportion to the number of negative instances. Oversampling can be achieved by duplicating every positive instance or generating synthetic positive instances in the neighborhood of existing positive instances.</p><p id="b1d8d949-b14c-4fd4-8e0c-fc436c96657c" class="">One limitation of undersampling is that useful negative examples may not be chosen for training, while oversampling can bias the classifier to the specific distribution of training instances, which may not be representative of the overall distribution of test instances, leading to poor generalizability. However, these limitations can be overcome by selecting the most suitable sampling method based on the nature of the dataset.</p><h3 id="dcf5cb7b-2905-4087-8563-fffff5742221" class="">6.11.2 Evaluating Performance with Class Imbalance</h3><p id="8a3a68ed-3f42-4027-8049-f5fca0e6f08e" class="">The most basic way to represent a classifier&#x27;s performance on a test set is by using a confusion matrix, which summarizes the number of instances that were predicted correctly or incorrectly by a classifier. The matrix is composed of four counts: True Positive (TP), False Positive (FP), False Negative (FN), and True Negative (TN). These counts are used to derive various evaluation measures that capture different aspects of performance. Accuracy is a measure that combines all four counts, but it&#x27;s not suitable for imbalanced class distributions. The true positive rate (TPR) and true negative rate (TNR) are evaluation measures that are useful for measuring performance in skewed data. The precision measures the fraction of correct predictions of the positive class over the total number of positive predictions, while the false discovery rate (FDR) measures the ratio of false positive to the total number of positive predictions.</p><h3 id="e8a6b24a-c78b-4059-8bf9-e2be2e0cd6d1" class="">6.11.3 Finding an Optimal Score Threshold</h3><p id="0ce0a677-8d2e-4c3b-9061-c0e702a16683" class="">To find the optimal score threshold s∗ for a classification model, follow these steps:</p><ol type="1" id="3dfca695-75d1-4518-91af-43d5485a0656" class="numbered-list" start="1"><li>Sort the classification scores in increasing order.</li></ol><ol type="1" id="0934ace9-5e47-4e3d-94bc-ecb4387d3a9e" class="numbered-list" start="2"><li>For each unique score s, create a model that labels instances as positive only if s(x) &gt; s, and calculate the performance of this model on a validation set using evaluation measure E(s).</li></ol><ol type="1" id="915a4749-e8a4-407e-ab79-4d370259db9d" class="numbered-list" start="3"><li>Find s∗ that maximizes the evaluation measure, E(s).
+s∗ = argmaxs E(s).
+Use s∗ as a hyperparameter to label test instances as positive if s(x) &gt; s∗.
+If E is skew invariant, s∗ can be selected without knowing the skew of the test set. If E is sensitive to the skew, ensure the validation set used to select s∗ has a similar skew to the test set, or estimate the confusion matrix and skew of the test set to select s∗. Comparing s∗ for different classification algorithms can help compare their test performance.</li></ol><p id="8fa58eb1-78ec-4dea-abbf-1f8af449c170" class="">
+</p><h3 id="8602e7a7-d5da-4710-91df-12e7e179b7f7" class="">6.11.4 Aggregate Evaluation of Performance</h3><p id="037a4327-03d2-4556-b05d-22e7abc589ee" class="">Aggregate evaluation of performance involves evaluating the performance of a classifier over a range of score thresholds. This method helps to obtain robust estimates of classification performance that are not sensitive to specific choices of score thresholds. The receiver operating characteristic (ROC) curve is a widely used tool for aggregate evaluation that shows the trade-off between true positive rate (TPR) and false positive rate (FPR) of a classifier over varying score thresholds. The ROC curve is generated by sorting the test instances in increasing order of their scores and selecting the lowest ranked test instance. The TPR and FPR values are then calculated by classifying the selected instance and those ranked above it as positive and those ranked below it as negative. This process is repeated until the highest ranked test instance is selected, and the TPR and FPR counts are updated accordingly. The resulting TPR-FPR pairs are then plotted to generate the ROC curve. The curve has a staircase pattern, and there are several critical points.</p><h2 id="08d896f8-6823-416f-beaa-c8c5cb82c81c" class="">6.12 Multiclass Problem</h2><p id="ae288750-3ec0-41ff-9f55-8390d2f3d05a" class="">Ways to extend binary classifiers to handle multiclass problems are presented in this chapter. Although some classification techniques are designed for binary classification, real-world problems like character recognition, face identification, and text classification often have more than two categories. The first approach is the one-against-rest (1-r) approach which decomposes the multiclass problem into K binary problems. In this approach, a binary classifier is constructed for each class, and a voting scheme is used to combine predictions made by binary classifiers. The second approach is the one-against-one (1-1) approach, which constructs K(K − 1)/2 binary classifiers to distinguish between a pair of classes. Error-correcting output coding (ECOC) is a more robust method that adds redundancy to the transmitted message by means of a codeword for each class. Each class is represented by a unique bit string of length n, and n binary classifiers are trained to predict each bit of the codeword string.</p></div></article></body></html>

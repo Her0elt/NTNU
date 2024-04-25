@@ -1,0 +1,677 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 3 (Query optimization)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="000cef5c-1b62-4896-b5a8-1f6d9bc284d8" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 3 (Query optimization)</h1></header><div class="page-body"><p id="3439fac5-4d3b-4b46-8f89-2c0c196ad333" class="">
+</p><p id="eec5fa11-3197-4d93-9971-8369e259f358" class="">When optimizing we apply heuristics to the query graph in order to create a more optimized query representation. One of the main heuristic rules applied to a graph is performing select and project before any joins. A query tree consists of leaf nodes where select of projects happened and ends with a root note which is the final join or order by or other operation like it. Joins are represented by joining leaf nodes or already joined nodes together. A query graph is constructed very similarly to a query tree but uses a bit different symbols, it used relations nodes as circles, and constant nodes which are selected, are represented by oval or double circles. Selection and join conditions are represented by graph edges. The query graph does not give an order of when each operation should be executed. </p><p id="fa08bfc3-2443-4740-abb3-167c6772544f" class="">The query parser will typically generate a standard initial query tree to correspond to an SQL query, without doing any optimization. A canonical query tree represents a relational algebra expression that is very inefficient if executed directly, because of the CARTESIAN PRODUCT operation. These trees will never be executed tho since the optimizer will transform this initial query tree into an equivalent final query tree that is efficient to execute. </p><p id="adf2ce5c-6afa-4b30-ad70-81d7cdf66d13" class="">
+</p><p id="e131f47b-de58-4cfb-b354-031326ebfc2a" class="">Rules for heuristics:</p><ol type="1" id="e36fac14-b3b5-4f5f-98ca-88992092c214" class="numbered-list" start="1"><li>Cascade of theta: A conjunctive selection condition can be broken up into a cascade (that is a sequence) of induvial operations</li></ol><ol type="1" id="66768fc4-4e5a-4af0-90a8-246102695acd" class="numbered-list" start="2"><li>Communativity of theta:(theta1 * (theta2(R)) == (theta2 * (theta1(R))</li></ol><ol type="1" id="80143aab-284a-47f0-bff5-112b0cc16c92" class="numbered-list" start="3"><li>Cascade of pi: In a cascade (sequence) of pi operations, all but the last one can be ignored</li></ol><ol type="1" id="3db3dfcb-77c3-4870-9637-d30c210c74de" class="numbered-list" start="4"><li>Commuting thetawith pi: If the selection condition c involves only those attributes in the projection list, the two operations can be commuted.</li></ol><ol type="1" id="5ca6e0be-8604-4023-9a68-44c676a3acf3" class="numbered-list" start="5"><li>Commutativity of join: The join operation si commutative,as is the x operation</li></ol><ol type="1" id="49667705-0d5c-4873-b29d-8c2421d5ea58" class="numbered-list" start="6"><li>Commuting theta with &lt;. If all attributes in the selection condition c involve only the attributes of one of three relations being joining you can joine the two operations</li></ol><ol type="1" id="4b6dae19-5164-44ab-b64d-544e342b795f" class="numbered-list" start="7"><li>Commuting pi with join Suppose that the projection list is L = {A1,….An, B1,…Bn}, where A are attributes of R and be ofS if the join condition c involves only attributes in L the two operations can be commuted by piL (RxS) == (pi A1…An) (R) x (pi B1….Bn)(S)</li></ol><ol type="1" id="0b6de063-f451-403a-b104-ea14ab4c4aaa" class="numbered-list" start="8"><li>Commutatvity of set operations: The set operations u n are commutative, but - is not.</li></ol><ol type="1" id="73f2cba4-705f-4c73-9f05-7d3652843858" class="numbered-list" start="9"><li>Associativity of x z u and n these four operations are individually associative that is if both occurrences of N stand for the same operation that is any one of these four operations</li></ol><ol type="1" id="d50fe6d0-d32b-4658-b6df-83471f9191ba" class="numbered-list" start="10"><li>Commuting with set operations The operations commutes with u, n, and - if N for any one of these operations.</li></ol><ol type="1" id="4c5e2785-8414-44c1-8aa9-1a2b29009db3" class="numbered-list" start="11"><li>Teh pi operation commutes with U</li></ol><ol type="1" id="f7210c04-b2a4-4ad5-be39-ade1a5df95e6" class="numbered-list" start="12"><li>Converting (a,x) sequence into join if the condition c of a m that follows a x corresponds to a join condition convert the m,x sequence into a join</li></ol><ol type="1" id="902402db-4835-44ce-b6e6-2e64d216a2bb" class="numbered-list" start="13"><li>Pushing m in conjunction with set difference</li></ol><ol type="1" id="b5086298-ba29-42e0-8270-b1aca261a059" class="numbered-list" start="14"><li>Pusing m to only one argument n: if in the condciotn c all attributes are from relation R then: c(R n S) = c(R) n</li></ol><ol type="1" id="4c1285ad-7290-4ba8-b3bd-1dd1ee6f0687" class="numbered-list" start="15"><li></li></ol><p id="b4057611-0fed-4890-9cba-a9ee9b676552" class=""><strong>Materialized evaluation,</strong> the result of an operation is stored as a temporary relation. For instance the JOIN operation can be computed and the entire result stored as a temporary relation, which is then read as input by the algorithm that computes the PROJECT operation, which would produce the resulttable. </p><p id="04642c71-da65-4e56-a02c-251575eced14" class=""> <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Pipelined evaluation, </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>as the resulting tupleof an operation are produced they are forwarded directly to the next operation in the query sequence.</p><p id="d353d583-bd8f-433b-a303-19ad74a45587" class="">A query optimizer does not solely use heuristic rules or query transformation,it also estimates and compares the cost of executing a query depending on de order or operations. To use cost optimization the cost function needs to fairly and realistically estimate costs the optimaizer also has to limit the amount of options considered. This approach is best for compiled queries. A cost based query optimization uses techniques that searches the solution space to find the minimal objective cost query plan.</p><p id="8b1fbeb4-e1d0-4441-b7f2-7248930a5151" class="">We can abstract the overall cost-based query optimization approach in the following way:</p><ul id="c6e33359-5fd4-48bf-af83-950936a56076" class="bulleted-list"><li style="list-style-type:disc">For a given subexpression in the query, there may be multiple equivalence rules that apply. The process of applying equivalences is a cascaded one it does not have any limit and there isno definitive convergence it is difficult to conduct this in a space-efficient manner.</li></ul><ul id="da8b9754-4b35-474f-becb-798b8bcd7f26" class="bulleted-list"><li style="list-style-type:disc">It is necessary to report to some quantitative measures for the evaluation of alternatives. By using the space and time requirements and reducing them to some common metric called cost, it is possible to devise some methodology for optimization. </li></ul><ul id="b6630633-c1e3-4e88-b6b2-9220e8a948ad" class="bulleted-list"><li style="list-style-type:disc">Appropriate search strategies can be designed by keeping the cheapest alternatives and pruning the costlier alternatives</li></ul><ul id="ff5ffb65-af47-4d71-8f68-71ea34d3963e" class="bulleted-list"><li style="list-style-type:disc">The scope of query optimization is generally a query block. Various table and index access paths, join permutations (orders), join methods, group-by, methods, and provide the alternatives from which the query optimizer must choose.</li></ul><ul id="ad4a470b-9c16-453e-aa9c-874b65524c2d" class="bulleted-list"><li style="list-style-type:disc">In global query optimization, the scope of optimization is multiple query blocks.</li></ul><p id="a62f6509-82f7-4be5-99ed-482ecc520ab4" class="">The cost of executing a query includes the following components:</p><ol type="1" id="7b5521b2-4854-4874-a4f0-4795472d7261" class="numbered-list" start="1"><li>Access cost to secondary storage. This is the cost of transferring data blocks between secondary disk storage and main memory buffers. This is also known as disk I/O cost. The cost of searching for records in a disk file depends on the type of access structures on that file, such as ordering, hashing, and primary or secondary indexes. In addition, factors such as whether the file blocks are allocated contiguously on the same disk cylinder or scattered on the disk affect the access cost. </li></ol><ol type="1" id="4410e522-45ae-4bc0-8fc2-1c34fec5b63a" class="numbered-list" start="2"><li>Disk storage cost. This is the cost of storing on disk any intermediate files that are generated by the execution strategy for the query. </li></ol><ol type="1" id="c80d06c1-711c-4168-988d-16ed99c93078" class="numbered-list" start="3"><li>Computation cost. This is the cost of performing in-memory operations on the records within the data buffers during query execution. Such operations include searching for and sorting records, merging records for a join or a sort operation, and performing computations on field values. This is also known as CPU cost.  </li></ol><ol type="1" id="cd7440e3-1781-45e3-abce-3a9ea5c7c23e" class="numbered-list" start="4"><li>Memory usage cost. This is the cost pertaining to the number of main memory buffers needed during query execution.</li></ol><ol type="1" id="ef384cfd-70e9-4f08-9fd0-e163ba5799d8" class="numbered-list" start="5"><li>Communication cost. This is the cost of shipping the query and its results from the database site to the site or terminal where the query originated. In distributed databases, it would also include the cost of transferring tables and results among various computers during query evaluation.</li></ol><p id="c898b1cb-0b38-4097-b62e-49dec671fc8a" class="">There are different types of information in the DBMS catalog that can be used by a cost function to evaluate the cost of an operation. These can for example be number of records, the avarge record size, and the number of file blocks, finally the blocking factor for a given file might also be useful. Another useful parameter is the number of distinct values of an attribute R and the selectivity of said attribute. selection cardinality is the product of these two. </p><p id="03399a63-a939-4b32-840e-14f21ae35bce" class="">Histograms are tables of data structures maintanied by the DBMS to record information about the distribution of data. This can help give an estimate of the cardinality of a given table of with in a query.</p><p id="0ef54d41-09d8-44b3-81f6-b5b8c3bf3c53" class="">
+</p><figure id="224589c9-78ad-4004-bb7d-83800093550a" class="image"><a href="Reading%203%20(Query%20optimization)%20000cef5c1b624896b5a81f6d9bc284d8/Untitled.png"><img style="width:694px" src="Reading%203%20(Query%20optimization)%20000cef5c1b624896b5a81f6d9bc284d8/Untitled.png"/></a></figure><p id="5a0d734d-b7e0-4586-8ff3-d4d21570e92e" class="">
+</p><p id="28df186e-4c5c-4c4e-9588-8849e517edf8" class=""> Cost of different select operations:</p><ol type="1" id="1101cc30-24bb-4b37-b9f4-1bcdb39ec3d7" class="numbered-list" start="1"><li>Linear search approach. We seach all the file blocks to retrieve all records satisfying the seleciton condistion hence CS1a= b. For an equality conditionon a key attribute, only half the file blocks are searched on the average before fiding the record, so a rough estimate for CS1b = (b/2) if the record is found if no record is found that satisfies the condition,CS1b = b. </li></ol><ol type="1" id="dc232a7d-e1e6-4c1a-a093-074cd9e0206c" class="numbered-list" start="2"><li>Binary search. This search accesses approximately CS2 = log2b + [(s/bfr)] -1 file blocks. This reduces to log2b if the quality condition is on a unique (key) attrobute because s = 1 in this case. </li></ol><ol type="1" id="09ba70ed-2fb6-4cd4-b738-96a98506748d" class="numbered-list" start="3"><li>Using a primary index to retrieve a single record. For a primary index, retrieve on disk block at each index level, plus one disk block from the data file. Hence, the cost is one more disk block than the number of index levels<ol type="a" id="489614ae-9f47-46b8-b7ea-e8b89b699a32" class="numbered-list" start="1"><li>Using hash key to retrieve a single record. For hashing only one disk block needs to be accessed in most cases. The cost function is approximately CS3b = 1 for staic hasing or linear hashing, and it is 2 disk block accesses for extendible hashing.</li></ol></li></ol><ol type="1" id="9a9c0803-5ae8-4053-89eb-b4215e9529e7" class="numbered-list" start="4"><li>Using an ordering index to retrieve multiple records. If the comparision condistion is &gt;, ≥, &lt; or ≤ on a key field with an ordering index, roughly half the file records will satisfy the condition. This gives a cost function of CS4 = x + (b/2). This is a very rough estimate, and although it may be correct on the avarge, it may be inaccurate in individual cases.A more accurate estimate is possible if the distrivution of records is stored in a histogram.</li></ol><ol type="1" id="97cfd10c-2fb7-4f1a-be8c-d9474a31aa4f" class="numbered-list" start="5"><li>Using a clustering index to retrieve multiple records. One disk block is accessed at each index level, which gives the addressof the first file disk block in the cluster. Given equality condition on the indexing attribute, s reords will satisfy the cindition where s is the selection carinality of the indexing attribute. This means that [(s/bfr)] file blocks will be in the cluster of file blocks that hold all the selecte records, giving CS5 = x +[(s/bfr)]. </li></ol><ol type="1" id="294492de-56f5-4f10-a8fb-f2368e81e297" class="numbered-list" start="6"><li>Using a secondary (B+-tree) index. For a secondary index on a key attribute, with an equality selection condition, the cost is x + 1 disk block accesses. For a secondary index on a nonkey attribute, s records will satisfy an equality condition, where s is the selection cardinality of the indexing attribute. However, because the index is nonclustering each of the records may redise.</li></ol><ol type="1" id="1c86c5d9-e53e-428e-875c-1c7d3aa1ffa7" class="numbered-list" start="7"><li>Consjunctive selcetion. We can use either use linear search or any other method descussed above. In th elattercase, we us eone condition to retrieve the records and then check in th emian memoery buffer whether each retrived record satifies the remanining conditions in the conjucntion. If mutliple indexes exist, the search of eaach index can produce a set of record pointers in the main memory buffers. The intersection of the sets of records pointers can be computed in main memoery, and then the resutling records are retrieved based on their records ids. </li></ol><ol type="1" id="77ccda60-e7bb-415d-8aad-09f09a3d142f" class="numbered-list" start="8"><li>Conjunctive selection using a composite index. Same as p3a, p5, or p6 dpeding on the type of index</li></ol><ol type="1" id="a07b1417-a461-4328-b389-eddf1bf1cadd" class="numbered-list" start="9"><li>selection using a bitmap index. Depeinding on hte nature of selection if we can reduce the selceiton to a set of equality conditions each equating the attribute with a value, then a bit vector for each value is accessed which is r bits or r/8 bytes long. A number of bit becotres may fit in one block. The, if s records qulify s blocks are accessed for the data records. </li></ol><ol type="1" id="58eeb46e-9508-40d2-8027-5fac8e34a537" class="numbered-list" start="10"><li>Selection using a functional index. This workds similar to p6 execpt that the index is based on a funciton of mutliple attributes if that function is appearing in  the select clause, the corresponding index may be utilized. </li></ol><p id="82948f08-6a24-4a15-8cb6-ca639795209f" class="">
+</p><p id="24f3a8e3-f023-4c24-b4df-889eb85d8e7a" class="">Cost-based optimization uses different approaches to find the optimal cost execution of a given query. To preform such an operation a programming strategy called dynamic programming is often used. This strategy optimizes på calculating different plans, but only by calculating a given sub-problem once, which them selves are sub-problems. So the technique builds on itself in order to efficiently solve a problem.</p><p id="1dc19826-5431-417f-8b16-158425d6de69" class="">
+</p><p id="550f264c-9575-472d-8794-9edf812c98db" class="">To accurately create a cost functions for joins we need to know the amount of data that the join results in. </p><p id="c1be3df3-a630-4ca6-88c5-51a2ccbe1fd7" class="">join selectivity (js)= |R car S| / |R x S| = |R car S| / (|R|*|S|)</p><p id="bed371d1-0450-40ee-9518-1b1f4a1d299a" class="">if there is no join condition c then js = 1 and if np rcords satefies c then js = 0, so  0 ≤ js ≤ 1. <div class="indented"><ol type="1" id="f1105ab9-b6ce-4353-bac6-7dbfc55a2032" class="numbered-list" start="1"><li>If A is a key of R then |R cat S| ≤ |S| so js ≤ 1/|R|. This si because each record in file will be joined with a tmost one record in file R, since A is a KEy of R. A special case of this condition is when attribute B is a foreign key of S that references the primary key A of R. In addition if the foregin key B has not null constraint, then js=1/|R|, and the result file of the join will contain |S| records</li></ol><ol type="1" id="53b9604f-edcd-4a81-9581-0f94e81a34fe" class="numbered-list" start="2"><li>if B is a key of S, then |R cat S| ≤ |R|, so js ≤ 1/|S|</li></ol><p id="febf8b10-28d2-4be2-8cab-9c8c0c763351" class="">
+</p><p id="ef7ce4ca-f087-49db-9959-9a73ece87382" class="">Because of the algebraic transformation rules,a number of different ways to preform a join increases based on how many joins a query has. We often say that a query with n join relations will have n -1 join operations. You can say that for n join relation there are n! join orders,this includes carteisan products. Because of this the query optimizer normally limits the depth of a join tree. A left deep join tree has always right nodes a base relations. and the opposite for right deep trees. Bushy join tree is a binary thee where the left or right child of an internal node may be an internal node. </p><p id="f3a1fc9b-7d5d-4d50-bcf9-7fb1be83c1c5" class="">There are two ways of creating a actual optimization algorithm, and both are based on different approaches with in dynamic programming. They are either a top-down approach where you start at the top and implement each opeartion as you go, and a bottom-up approach where you start add the bottum and finishe when you have created a full plan with all parts.  </p><p id="44dabe42-e9f0-4340-95c8-e9ebaea49857" class="">There are a couple of heuristics that are applied to a optimizer to make elaborate cost computaions unnesessary.</p><ul id="5238cc37-4292-400e-aa9e-c23eaeb6a3f5" class="bulleted-list"><li style="list-style-type:disc">for selections, use index scans wherever possible</li></ul><ul id="d582559c-1e7c-4116-973d-966b0967889d" class="bulleted-list"><li style="list-style-type:disc"> If the selection condition is conjunctive use the selection that results in the smallest cardinality first</li></ul><ul id="e7310d0a-a7b0-4c7d-92b2-1c40f917e4c2" class="bulleted-list"><li style="list-style-type:disc">If the relations are already dorted on the attributes being matched in a join then perfer sort-merge join to toerh join methods.</li></ul><ul id="00e6fae7-4e36-4ae2-8ebf-94617e3c4ad1" class="bulleted-list"><li style="list-style-type:disc">For union and intersection of more than two relations, use the associative rule condiser the relations in the ascending order of their estimated cardinaliteies</li></ul><ul id="c01cc20f-8c51-4f1c-8ca9-5fd733085da7" class="bulleted-list"><li style="list-style-type:disc">If one of the arguments in a join has an index on the join attribute, use that as the inner realtion</li></ul><ul id="2f094a66-2139-4ea0-a5a0-d7e198b38a89" class="bulleted-list"><li style="list-style-type:disc">if the left relation is small and the right relation is large and it has index on the joining column, thentry index-based nested-loop join.</li></ul><ul id="f9484126-d748-4791-a51f-b7bed0440d7e" class="bulleted-list"><li style="list-style-type:disc">Consider only those join order where there are no cartesian products or where all joins appear before cartesian products</li></ul></div></p><p id="c948a779-cfab-4cd6-b591-10c6981de23d" class="">
+</p></div></article></body></html>

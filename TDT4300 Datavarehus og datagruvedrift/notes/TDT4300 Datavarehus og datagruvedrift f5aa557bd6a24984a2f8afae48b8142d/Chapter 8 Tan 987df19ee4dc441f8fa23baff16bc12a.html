@@ -1,0 +1,689 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 8 Tan</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="987df19e-e4dc-441f-8fa2-3baff16bc12a" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📖</span></div><h1 class="page-title">Chapter 8 Tan</h1><table class="properties"><tbody><tr class="property-row property-row-person"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesPerson"><path d="M10.9536 7.90088C12.217 7.90088 13.2559 6.79468 13.2559 5.38525C13.2559 4.01514 12.2114 2.92017 10.9536 2.92017C9.70142 2.92017 8.65137 4.02637 8.65698 5.39087C8.6626 6.79468 9.69019 7.90088 10.9536 7.90088ZM4.4231 8.03003C5.52368 8.03003 6.42212 7.05859 6.42212 5.83447C6.42212 4.63843 5.51245 3.68945 4.4231 3.68945C3.33374 3.68945 2.41846 4.64966 2.41846 5.84009C2.42407 7.05859 3.32251 8.03003 4.4231 8.03003ZM1.37964 13.168H5.49561C4.87231 12.292 5.43384 10.6074 6.78711 9.51807C6.18628 9.14746 5.37769 8.87231 4.4231 8.87231C1.95239 8.87231 0.262207 10.6917 0.262207 12.1628C0.262207 12.7974 0.548584 13.168 1.37964 13.168ZM7.50024 13.168H14.407C15.4009 13.168 15.7322 12.8423 15.7322 12.2864C15.7322 10.8489 13.8679 8.88354 10.9536 8.88354C8.04492 8.88354 6.17505 10.8489 6.17505 12.2864C6.17505 12.8423 6.50635 13.168 7.50024 13.168Z"></path></svg></span>Owner</th><td></td></tr><tr class="property-row property-row-verification"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesVerification"><path d="M3.86426 14.0459H5.32715C5.45475 14.0459 5.56185 14.0892 5.64844 14.1758L6.6875 15.2148C7.13411 15.6615 7.56934 15.8825 7.99316 15.8779C8.42155 15.8779 8.85677 15.6569 9.29883 15.2148L10.3379 14.1758C10.429 14.0892 10.5384 14.0459 10.666 14.0459H12.1221C12.751 14.0459 13.2158 13.8955 13.5166 13.5947C13.8219 13.2939 13.9746 12.8268 13.9746 12.1934V10.7305C13.9746 10.6029 14.0202 10.4958 14.1113 10.4092L15.1436 9.37012C15.5902 8.92806 15.8112 8.49284 15.8066 8.06445C15.8066 7.63607 15.5856 7.19857 15.1436 6.75195L14.1113 5.71289C14.0202 5.6263 13.9746 5.52148 13.9746 5.39844V3.92871C13.9746 3.30436 13.8242 2.83952 13.5234 2.53418C13.2227 2.22884 12.7555 2.07617 12.1221 2.07617H10.666C10.5384 2.07617 10.429 2.03288 10.3379 1.94629L9.29883 0.914062C8.85677 0.462891 8.42155 0.239583 7.99316 0.244141C7.56934 0.244141 7.13411 0.467448 6.6875 0.914062L5.64844 1.94629C5.56185 2.03288 5.45475 2.07617 5.32715 2.07617H3.86426C3.23535 2.07617 2.76823 2.22656 2.46289 2.52734C2.16211 2.82812 2.01172 3.29525 2.01172 3.92871V5.39844C2.01172 5.52148 1.96842 5.6263 1.88184 5.71289L0.849609 6.75195C0.402995 7.19857 0.179688 7.63607 0.179688 8.06445C0.179688 8.49284 0.402995 8.92806 0.849609 9.37012L1.88184 10.4092C1.96842 10.4958 2.01172 10.6029 2.01172 10.7305V12.1934C2.01172 12.8223 2.16211 13.2871 2.46289 13.5879C2.76823 13.8932 3.23535 14.0459 3.86426 14.0459ZM7.23438 11.4277C7.10221 11.4277 6.98372 11.4004 6.87891 11.3457C6.77409 11.291 6.67155 11.2021 6.57129 11.0791L4.89648 9.04199C4.83724 8.96452 4.79167 8.88477 4.75977 8.80273C4.72786 8.7207 4.71191 8.63639 4.71191 8.5498C4.71191 8.37663 4.77116 8.22852 4.88965 8.10547C5.0127 7.97786 5.16081 7.91406 5.33398 7.91406C5.44336 7.91406 5.54134 7.93685 5.62793 7.98242C5.71452 8.02799 5.80339 8.10775 5.89453 8.22168L7.20703 9.88965L10.0371 5.36426C10.1829 5.12728 10.3675 5.00879 10.5908 5.00879C10.7594 5.00879 10.9098 5.06348 11.042 5.17285C11.1787 5.28223 11.2471 5.42578 11.2471 5.60352C11.2471 5.68099 11.2288 5.76302 11.1924 5.84961C11.1559 5.93164 11.1149 6.00911 11.0693 6.08203L7.87012 11.0723C7.78809 11.1908 7.69238 11.2796 7.58301 11.3389C7.47819 11.3981 7.36198 11.4277 7.23438 11.4277Z"></path></svg></span>Verification</th><td></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td></td></tr><tr class="property-row property-row-last_edited_time"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesCreatedAt"><path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM4.54102 8.91211H7.99316C8.30078 8.91211 8.54004 8.67285 8.54004 8.37207V3.8877C8.54004 3.58691 8.30078 3.34766 7.99316 3.34766C7.69238 3.34766 7.45312 3.58691 7.45312 3.8877V7.83203H4.54102C4.2334 7.83203 4.00098 8.06445 4.00098 8.37207C4.00098 8.67285 4.2334 8.91211 4.54102 8.91211Z"></path></svg></span>Last edited time</th><td><time>@April 14, 2023 9:29 AM</time></td></tr></tbody></table></header><div class="page-body"><p id="91e6b721-4c65-4f4e-86a5-bf626a4ae900" class="">Cluster analysis is a complex field with numerous algorithms developed for various domains and applications. However, no single algorithm is suitable for all types of data, clusters, and applications. Instead, different techniques work well in specific situations. This is because what constitutes a good set of clusters is often subjective, and finding the optimal clustering using objective measures is usually computationally infeasible. This chapter explores the key issues in cluster analysis, including the characteristics of data, clusters, and algorithms that strongly impact clustering. These issues are important for understanding, describing, and comparing clustering techniques and for deciding which technique to use in a particular situation. Additionally, some clustering algorithms have time or space complexity constraints that make them unsuitable for large datasets. Finally, this chapter discusses additional clustering techniques, describing their algorithms, issues, and methods, and provides general guidelines for selecting a clustering algorithm for a given application.</p><h2 id="69f22cd5-11f7-4c5d-8f16-a14a97fa4993" class="">8.1 Characteristics of Data, Clusters, and Clustering Algorithms</h2><h3 id="5caf1db4-05a2-47b8-b5a3-b0c5baecc54c" class="">8.1.1 Example: Comparing K-means and DBSCAN</h3><p id="be47065a-e1ec-4d46-b5e3-8ce7abe9017b" class="">Comparison of DBSCAN and K-means:</p><ul id="92aa00db-37b4-428a-984b-07e3d4d8dea8" class="bulleted-list"><li style="list-style-type:disc">Both are partitional clustering algorithms, but K-means clusters all objects while DBSCAN discards noise.</li></ul><ul id="7dd4cb88-e348-4e7e-a8d6-6e73c0fb4206" class="bulleted-list"><li style="list-style-type:disc">K-means is prototype-based while DBSCAN is density-based.</li></ul><ul id="737b7de8-6832-4268-b292-89e3bfeffe53" class="bulleted-list"><li style="list-style-type:disc">DBSCAN can handle different cluster sizes and shapes and is robust to noise/outliers, while K-means struggles with non-globular clusters and clusters of different sizes.</li></ul><ul id="bb2c2588-2e1a-4903-8013-40b8839cb3dc" class="bulleted-list"><li style="list-style-type:disc">K-means requires well-defined centroids while DBSCAN requires meaningful density based on traditional Euclidean notion.</li></ul><ul id="b9dc5ee4-6918-4513-ab9c-94270a90a690" class="bulleted-list"><li style="list-style-type:disc">K-means is suitable for sparse high-dimensional data while DBSCAN performs poorly for such data.</li></ul><ul id="57f428f1-65a0-4a40-ab02-346eacba463f" class="bulleted-list"><li style="list-style-type:disc">Both can handle different types of data and don&#x27;t look for clusters involving only a subset of attributes.</li></ul><ul id="fb7993fa-032e-4adf-9ea0-265044e4b0fc" class="bulleted-list"><li style="list-style-type:disc">K-means can find non-well separated overlapping clusters while DBSCAN merges overlapping clusters.</li></ul><ul id="6d3f294f-5c27-453d-862c-82fcad0ec524" class="bulleted-list"><li style="list-style-type:disc">K-means has O(m) time complexity while DBSCAN has O(m^2) time complexity except for special cases.</li></ul><ul id="ecb1c75c-a9da-4139-ba14-3f40280c5292" class="bulleted-list"><li style="list-style-type:disc">DBSCAN produces the same clusters across multiple runs while K-means does not.</li></ul><ul id="2991f03b-f0b3-4757-bb1e-77f586239955" class="bulleted-list"><li style="list-style-type:disc">DBSCAN automatically determines the number of clusters while K-means requires the number to be specified as a parameter.</li></ul><ul id="1d075596-c9c8-4b4d-a432-4648e28f30ba" class="bulleted-list"><li style="list-style-type:disc">K-means is an optimization problem while DBSCAN is not based on a formal model.</li></ul><h3 id="a572cad7-cd34-4504-b0b7-d0ca2a4c3ea4" class="">8.1.2 Data Characteristics</h3><p id="72463ce9-d2cb-41e9-b699-de01ea2b9031" class="">Characteristics of data that affect cluster analysis include high dimensionality, size, sparseness, noise and outliers, type of attributes and data set, scale, and mathematical properties of the data space. High-dimensional data sets make traditional Euclidean density meaningless and proximity more uniform. Clustering algorithms that work well for small or medium-sized data sets may not be scalable for larger data sets. Sparse data often consists of asymmetric attributes, and similarity measures for such data are commonly used. Noise and outliers can degrade the performance of clustering algorithms, and different proximity and density measures are appropriate for different types of data. Attributes that are measured on different scales can strongly affect distance or similarity between two objects, and mathematical properties of the data space are necessary for some clustering techniques.</p><h3 id="c77b4e35-812e-46d9-a8cc-b85ce23ffc29" class="">8.1.3 Cluster Characteristics</h3><p id="22050fbb-0326-468c-993b-31e264944ee6" class="">There are several important characteristics of clusters that are worth considering in cluster analysis. One such characteristic is the data distribution, which some clustering techniques assume to be a particular type of distribution. Clustering based on mixture models can be used to model data as arising from a mixture of distributions, with each cluster corresponding to a distribution.</p><p id="3791c9db-8463-4143-8e61-2d82b13e983f" class="">Another important characteristic is the shape of the clusters. While some clusters are regularly shaped, others can be of arbitrary shape. Techniques such as DBSCAN and single link can handle clusters of arbitrary shape, but prototype-based schemes and some hierarchical techniques cannot. Chameleon and CURE are examples of techniques that were specifically designed to address this problem.</p><p id="20a50f4b-cb49-4bdd-832f-acafe95fd976" class="">Different cluster sizes can also cause problems for many clustering methods, such as K-means. Clusters that have widely varying density can cause problems for methods such as DBSCAN and K-means. The SNN density-based clustering technique addresses this issue.</p><p id="3860e46c-fa03-4fb5-9643-ad03428c1f33" class="">When clusters touch or overlap, some clustering techniques combine clusters that should be kept separate. Fuzzy clustering is one technique for dealing with data that does not form well-separated clusters.</p><p id="965936d4-59e4-46cb-a639-b71af22450c9" class="">In most clustering techniques, there is no explicit consideration of the relationships between clusters, such as their relative position. Self-organizing maps (SOM) is a clustering technique that directly considers the relationships between clusters during the clustering process.</p><p id="4ba691f0-4087-4dc7-921c-502d2dcf3839" class="">Clusters may only exist in a subset of dimensions, and the clusters determined using one set of dimensions are frequently quite different from the clusters determined by using another set. While this issue can arise with as few as two dimensions, it becomes more acute as dimensionality increases. One approach to this problem is feature selection, but this approach assumes that there is only one subset of dimensions in which the clusters exist. In reality, clusters can exist in many distinct subspaces, some of which overlap. Techniques that address the general problem of subspace clustering are discussed in cluster analysis.</p><h3 id="28008056-5256-4339-8a81-19c4c25277ce" class="">8.1.4 General Characteristics of Clustering Algorithms</h3><p id="89a346ba-3b3c-4364-85fc-35bbf88483c9" class="">Clustering algorithms have various characteristics that are important to consider. Some algorithms are order-dependent, meaning the quality and number of clusters produced can vary based on the order of the data. Other algorithms, like K-means, produce different results for each run due to their reliance on a random initialization step. Scalability is also a crucial factor, as clustering algorithms for large datasets should have linear or near-linear time and space complexity. Parameter selection can be challenging, especially when small changes in parameters drastically change the clustering results. Some clustering techniques transform the clustering problem to another domain, while others treat clustering as an optimization problem. Our discussion of clustering algorithms groups techniques according to whether they are prototype-based, density-based, or graph-based, with a separate discussion on scalable clustering techniques. The chapter concludes with a discussion of how to choose a clustering algorithm.</p><h2 id="7db274d6-7d8b-469f-b75f-120ee50e6087" class="">8.2 Prototype-Based Clustering</h2><p id="74bb3211-2697-463b-bf6f-126297690476" class="">Prototype-based clustering assigns objects to clusters based on the distance to a prototype. This approach can be extended in several ways: (1) objects can belong to multiple clusters with weights, (2) clusters can be modeled as statistical distributions, and (3) relationships among clusters can be constrained. Fuzzy c-means, mixture model clustering, and Self-Organizing Maps (SOM) are examples of clustering algorithms that incorporate these extensions. Fuzzy c-means allows for soft assignment of points to clusters, mixture model clustering models clusters as mixtures of distributions, and SOM requires clusters to have a prespecified relationship to one another.</p><h3 id="0b29fbfd-d41d-4474-83af-ba7d7d50a50f" class="">8.2.1 Fuzzy Clustering</h3><p id="26a4147f-a1be-4a4c-a134-647f7d80f83a" class="">The fuzzy clustering technique is useful in cases where objects in a data set cannot be easily partitioned into well-separated clusters. Fuzzy set theory and fuzzy logic, introduced by Lotfi Zadeh in 1965, allow for objects to belong to a set with a degree of membership between 0 and 1 and for statements to be true with a degree of certainty between 0 and 1. Fuzzy clustering provides a natural technique for producing a clustering in which membership weights have a natural interpretation. Fuzzy c-means is a specific example of fuzzy clustering and is a version of K-means that uses fuzzy logic. The algorithm iteratively computes the centroids of each cluster and the fuzzy pseudo-partition until the partition does not change.</p><h3 id="920a52b2-bde5-4ba5-92f4-629bff6dd540" class="">8.2.2 Clustering Using Mixture Models</h3><p id="b74d525d-ffea-41ee-948f-ca9e3d798c17" class="">This section discusses statistical clustering using mixture models. Mixture models assume that data has been generated as a result of a statistical process and describe the data by finding the statistical model that best fits the data, with the model described by a distribution and a set of parameters. Each distribution corresponds to a cluster, and the parameters of each distribution provide a description of the corresponding cluster. The section explains the Expectation-Maximization (EM) algorithm, which estimates the parameters of mixture models and is used to cluster data. Mixture models view the data as a set of observations from a mixture of different probability distributions, which can be modeled using multivariate normal distributions. By using statistical methods, we can estimate the parameters of these distributions from the data and identify which objects belong to which clusters. However, mixture modeling does not produce a crisp assignment of objects to clusters, but rather gives the probability with which a specific object belongs to a particular cluster.</p><p id="0519d44a-14d3-430c-b95f-4dcc8390b465" class="">The maximum likelihood approach can estimate the model parameters for a mixture model. If we know which data objects come from which distributions, the maximum likelihood estimates of the parameters are calculated from simple formulas involving the data. However, in a more general and realistic situation, we do not know which points were generated by which distribution. The solution to this problem is the EM algorithm. Given a guess for the parameter values, the EM algorithm calculates the probability that each point belongs to each distribution and then uses these probabilities to compute a new estimate for the parameters. This iteration continues until the estimates of the parameters do not change or change very little. The EM algorithm is similar to the K-means algorithm, but each object is assigned to every cluster (distribution) with some probability. This process is often straightforward, as the parameters are typically computed using formulas derived from maximum likelihood estimation.</p><p id="f5cc53c6-1163-4a66-9e75-afa274dd4a99" class="">In the context of mixture models and the EM algorithm, the computation of the mean is modified to account for the fact that every object belongs to a distribution with a certain probability. The EM algorithm can be applied to the data, and the set of initial parameters for the two distributions are estimated. For the expectation step of EM, we want to compute the probability that a point came from a particular distribution. These values can be expressed by Equation 8.13, which is a straightforward application of Bayes rule. We compute the cluster membership probabilities for all points, and the EM algorithm continues until the estimates of the parameters do not change or change very little.</p><h3 id="4d9a7dcc-de9b-40c9-b863-c82f48f03f1e" class="">8.2.3 Self-Organizing Maps (SOM)</h3><p id="47707f0a-354f-4171-be96-df7e019ab286" class="">The Kohonen Self-Organizing Feature Map (SOFM or SOM) is a clustering and data visualization technique based on a neural network viewpoint. It is a variation of prototype-based clustering, where the goal is to find a set of centroids (reference vectors) and to assign each object in the data set to the centroid that provides the best approximation of that object. SOM imposes a topographic ordering on the centroids, and nearby centroids are updated. The final output of the SOM technique is a set of centroids that implicitly define clusters. Each cluster consists of the points closest to a particular centroid. SOM uses each data point to update the closest centroid and centroids that are nearby in the topographic ordering. The SOM algorithm consists of initialization, selecting the next object, determining the closest centroid to the object, updating the centroid, and assigning each object to its closest centroid. The Euclidean distance metric or the dot product metric can be used to determine the closest centroid. SOM produces an ordered set of centroids for any given data set, and the centroids of a two-dimensional SOM can be viewed as lying on a two-dimensional surface that tries to fit the n-dimensional data as well as possible.</p><h2 id="9fe62189-4671-4009-95c7-b6eb56834fac" class="">8.3 Density-Based Clustering</h2><h3 id="4381a505-7417-436e-9e10-5cc9dbb81f4f" class="">8.3.1 Grid-Based Clustering</h3><p id="5c36c502-ce0c-4adf-a8a4-1f65a930f08c" class="">A grid is a useful way to organize data in low dimensions. The process involves dividing the possible values of each attribute into contiguous intervals, creating a set of grid cells. Objects are assigned to cells that contain corresponding attribute intervals, and information such as the number of points in each cell can be collected. Clustering using a grid is typically density-based, and Algorithm 8.4 describes a basic approach. The step of defining grid cells is crucial but there are various ways to do it. For continuous attributes, the values are commonly split into equal-width intervals, but more advanced techniques can also be used. Regardless of the approach, the definition of the grid has a significant impact on clustering results. The density of a grid cell is usually defined as the number of points in the cell divided by the volume of the region. Clusters are formed from contiguous groups of dense cells. However, there are some issues to address, such as determining what is meant by adjacent cells and efficiently finding adjacent cells when only occupied cells are stored.</p><h3 id="7fddc1fb-de33-444a-a2a4-b9e1c8d14959" class="">8.3.2
+Subspace Clustering</h3><p id="2a645a92-f8dd-49ce-87f2-26b9c8f2a9ec" class="">Cluster techniques can find clusters using all of the attributes. However, when considering only subsets of features, i.e., subspaces of the data, the clusters found can be different from one subspace to another. There are two reasons that subspace clusters might be interesting: first, the data may be clustered with respect to a small set of attributes but randomly distributed with respect to the remaining attributes. Second, there are cases in which different clusters exist in different sets of dimensions. A set of points may not form a cluster in the entire data space but may form a cluster in a subspace, and clusters that exist in the full data space or even a subspace show up as clusters in lower-dimensional spaces. To find clusters and the dimensions in which they exist, we need to look in subsets of dimensions.</p><p id="18112b28-c9bd-4e6d-8f6b-c82c396b56bc" class="">
+</p><h3 id="5c8cc334-6e0b-4e71-9321-e81b7111d3bf" class="">8.3.3
+DENCLUE: A Kernel-Based Scheme for Density-Based
+Clustering</h3><p id="859bb238-4f5a-4e0a-8c13-ce334aace0ad" class="">DENCLUE is a density-based clustering algorithm that models the overall density of a set of points using inﬂuence functions associated with each point to identify local density maxima which define clusters. Points are associated with a particular peak using a hill-climbing procedure, and the set of points associated with a peak become a cluster. Points whose associated peak has a density less than a threshold are discarded, and clusters connected by a path of points with a density above the threshold are merged. The algorithm uses kernel density estimation to describe the distribution of the data by a function, where the contribution of each point to the overall density function is expressed by an inﬂuence or kernel function. The algorithm uses a grid-based approach to reduce the time complexity of computing the density at each point.</p><h2 id="8abefaf3-5e2d-435d-8e5f-20c9928b4f35" class="">8.4 Graph-Based Clustering</h2><p id="637b6b81-4266-4a5d-a4d0-ae54552e821c" class="">
+</p><h3 id="1910b372-4563-439d-8069-0dc7cef2fdf4" class="">8.4.1 Sparsification</h3><p id="a8a712dc-6195-467d-a5cd-a2e9a34dd59a" class="">The proximity matrix for m data points can be represented as a dense graph where each node is connected to all others. Sparsification techniques can be used to reduce the size of the proximity matrix, and improve clustering performance. Sparsification reduces data size, improves clustering accuracy, and enables the use of graph partitioning algorithms. Sparsification should be considered an initial step before clustering. In practice, a perfect sparsification rarely happens, and the sparse proximity graph is often modified to yield a new proximity graph. Clustering algorithms work with the proximity graph that is the result of all these preprocessing steps.</p><h3 id="78ebd863-4196-45d4-87cf-5c7584f6ddf2" class="">8.4.2
+Minimum Spanning Tree (MST) Clustering</h3><p id="af5603f8-473e-4523-b62e-531d2c4a8490" class="">Divisive hierarchical clustering algorithms are an alternative to agglomerative ones. One example of a divisive technique is bisecting K-means, which we introduced earlier in Section 5.2.3. Another divisive approach is the MST algorithm, which starts with the minimum spanning tree of the proximity graph and can be viewed as a form of sparsification for identifying clusters. Interestingly, this algorithm produces the same clustering results as single-link agglomerative clustering. To compute the MST of a graph, we need to find a subgraph that contains all the nodes, has no cycles, and has the minimum total edge weight of all possible spanning trees. The MST divisive hierarchical clustering algorithm can be summarized as follows: First, find the MST of the dissimilarity graph. Then, repeatedly create a new cluster by breaking the link with the largest dissimilarity until only singleton clusters remain.</p><h3 id="1f6ef50f-502e-4dda-a798-a07fd52911c1" class="">8.4.3
+OPOSSUM: Optimal Partitioning of Sparse Similarities
+Using METIS</h3><p id="2b7adc57-8ef4-40fc-b2b0-7bc59aa5cc1b" class="">OPOSSUM is a clustering technique that works well with sparse, high-dimensional data like document or market basket data. It uses the METIS algorithm to partition the sparsified similarity graph into k distinct components (clusters), where k is a user-defined parameter. The similarity measures used are those suitable for sparse, high-dimensional data. OPOSSUM has two balance constraints: roughly equal-sized clusters or roughly equal sum of attribute values. Its strengths include simplicity and speed, but it may generate relatively pure pieces of larger clusters if used to create a large number of clusters.</p><h3 id="6081afb0-ba70-43aa-8b49-702b195dd901" class="">8.4.4 Chameleon: Hierarchical Clustering with Dynamic
+Modeling</h3><p id="07a8cb4e-ea3a-446b-aef9-eb1f14848b5f" class="">Agglomerative hierarchical clustering merges the most similar clusters using either strength of connections or closeness of clusters to measure similarity. However, using only one approach can lead to merging errors, such as when clusters with a small gap between them are not merged in favor of two clusters that almost touch. Most clustering techniques have a static global model of clusters, which cannot handle variations in cluster characteristics such as size, shape, and density. Chameleon is an agglomerative clustering algorithm that uses closeness, interconnectivity, and local modeling of clusters to address these issues. It combines an initial partitioning of the data with a hierarchical clustering scheme that merges two clusters only if the resulting cluster is similar to the two original clusters. The algorithm uses the concept of relative closeness, which is the absolute closeness of two clusters normalized by the internal closeness of the clusters, to determine which pair of clusters to merge.</p><h3 id="654ec5cd-88a4-4a74-8609-b4370c073731" class="">8.4.5
+Spectral Clustering</h3><p id="9451f18d-ecbe-4620-8b10-f43386fbfaa7" class="">Spectral clustering is a graph partitioning method that uses the graph&#x27;s spectrum (eigenvalues and eigenvectors associated with the adjacency matrix) to identify natural clusters of data. The weighted adjacency matrix has a block structure that can help identify inherent clusters of data, but adjacency matrices associated with most similarity graphs are not in block diagonal form. The Laplacian matrix, computed as L=D−W, can be used to identify clusters by considering the graph spectrum.</p><h3 id="b925551d-2f66-4b98-8aa2-7e96bd749a2a" class="">8.4.6
+Shared Nearest Neighbor Similarity</h3><p id="7b724760-e29f-4926-94ea-5b3cd25990ed" class="">Clustering techniques that rely on standard approaches to similarity and density may not produce desired results. The cosine similarity measure is often used to assess similarity between objects in high-dimensional spaces but low similarity can result in unreliable clustering. The nearest neighbor may often belong to a different class. Differences in density between clusters can also create problems in traditional clustering techniques. An indirect approach to similarity is introduced based on shared nearest neighbors (SNN) definition of similarity. SNN similarity is the number of shared neighbors as long as the two objects are on each other&#x27;s nearest neighbor lists. SNN similarity takes into account the context of an object by using the number of shared nearest neighbors and addresses problems that occur with direct similarity.</p><h2 id="8042a80e-dd84-4e7d-a6df-c11dbb37b408" class="">8.4.7
+The Jarvis-Patrick Clustering Algorithm</h2><figure id="bc98acef-ec53-454e-bd07-58547e8db283" class="image"><a href="Chapter%208%20Tan%20987df19ee4dc441f8fa23baff16bc12a/Untitled.png"><img style="width:440px" src="Chapter%208%20Tan%20987df19ee4dc441f8fa23baff16bc12a/Untitled.png"/></a></figure><p id="ca579472-7c77-41af-bd86-3e8ac10abc3d" class="">Algorithm 8.12: Jarvis-Patrick clustering algorithm replaces proximity between two points with SNN similarity, which is sparsified using a threshold. Clusters are found as connected components of the SNN graph. Storage requirements are O(km) and time complexity is O(m^2). However, for low-dimensional Euclidean data, time complexity can be reduced to O(m log m) using special techniques. JP clustering is good at handling noise, outliers, clusters of different sizes and shapes, and high-dimensional data. However, it can be brittle and may split or join true clusters. It may not cluster all objects, but they can be added to existing clusters. Parameter selection can be challenging.</p><h3 id="ece874a7-32d6-4611-932b-bc27736aa3c7" class="">8.4.8
+SNN Density</h3><p id="6335c758-ddf2-4c7b-9295-5a529a98d2bd" class="">In high-dimensional data, traditional Euclidean density becomes meaningless due to the so-called &quot;curse of dimensionality.&quot; This issue applies to density estimation methods that take a grid-based, center-based, or kernel-density estimation approach. While it is possible to use a center-based definition of density with a similarity measure that works well for high dimensions, such as cosine or Jaccard, these measures still have problems.</p><p id="9d7420e3-ecda-4864-bc54-863baa199302" class="">However, a similarity measure called Shared Nearest Neighbor (SNN) can reflect the local configuration of points in the data space and is relatively insensitive to variations in density and the dimensionality of the space, making it a promising candidate for a new measure of density. By using SNN similarity, it is possible to define a concept of SNN density that is based on the local configuration of points in the data space.</p><p id="47340c4d-489f-40ca-b061-f3158fbbe620" class="">To define SNN density, we can follow the approach used by DBSCAN and modify the definitions of core points, border points, and noise points. A point is a core point if the number of points within a given neighborhood around the point, as determined by SNN similarity and a supplied parameter Eps, exceeds a certain threshold M inP ts, which is also a supplied parameter. A border point is a point that is not a core point, i.e., there are not enough points in its neighborhood for it to be a core point, but it falls within the neighborhood of a core point. A noise point is any point that is neither a core point nor a border point.</p><p id="08a36066-11d8-4d95-a5d2-ed39ee4da70d" class="">SNN density measures the degree to which a point is surrounded by similar points with respect to nearest neighbors. Therefore, points in regions of high and low density will typically have relatively high SNN density, while points in regions where there is a transition from low to high density will tend to have low SNN density. This approach is well-suited for data sets in which there are wide variations in density, but clusters of low density are still interesting.</p><h3 id="dc10d833-c47e-4ac7-b8b6-71a517fe211b" class="">8.4.9
+SNN Density-Based Clustering</h3><p id="153bdbda-39a1-490b-8c7c-2a6f04d2e425" class="">The SNN density-based clustering algorithm combines the SNN density with the DBSCAN algorithm to cluster data. This algorithm finds clusters in which points are strongly related to one another, and it automatically determines the number of clusters in the data. The steps of the algorithm include computing the SNN similarity graph and applying DBSCAN with user-specified parameters for Eps and M inP ts. This approach is more flexible than Jarvis-Patrick clustering or DBSCAN, as it can be used for high-dimensional data and situations in which the clusters have different densities. SNN density-based clustering is good for finding topics in groups of documents, and it has been applied to monthly time series data of atmospheric pressure at various points on Earth. The algorithm found clusters of time series of length 492 months, even though they were visualized as two-dimensional regions. The strengths and limitations of SNN density-based clustering are similar to those of JP clustering, but the use of core points and SNN density adds considerable power and flexibility to this approach.</p><h2 id="27aaa9d3-31a5-4691-a05b-ffe87eef276b" class="">8.5
+Scalable Clustering Algorithms</h2><h2 id="b69f8a97-0c9d-4094-96f4-5eaa067d034f" class="">8.5.1
+Scalability: General Issues and Approaches</h2><p id="2f7d322a-7b06-4d47-8b17-73103ac84ead" class="">Clustering algorithms have memory and computation requirements that can exceed linear growth, making them difficult to perform efficiently. Hierarchical clustering, for example, typically requires memory proportional to O(m^2), where m is the number of objects being clustered. Random data access is required by many clustering algorithms, which makes efficient use of secondary storage (disk) difficult because random data access is slow. To reduce the memory and computation requirements, various techniques can be used such as multidimensional or spatial access methods, bounds on proximities, sampling, partitioning data objects, and summarization. Multidimensional or spatial access methods partition the data space hierarchically, allowing the nearest neighbors of a point to be found more efficiently. Bounds on proximities can be used to avoid proximity computations. Sampling reduces the time complexity of an O(m^2) algorithm to O(m) by clustering a sample of points and assigning the remaining points to the existing clusters. Partitioning the data objects involves using an efficient technique to partition the data into disjoint sets and then clustering these sets separately. Finally, summarization involves summarizing the data in a single pass and clustering the summarized data.</p><h3 id="7b1931f7-9007-455c-8684-6aec0114213b" class="">8.5.2
+BIRCH</h3><p id="53f53a93-9546-4bcb-af36-9ef6c79ecc74" class="">BIRCH is a clustering technique that efficiently clusters data in Euclidean vector spaces. It uses Clustering Features (CF) and a CF tree to represent a cluster of data points by a triple of numbers: N (number of points), LS (linear sum of the points), and SS (sum of squares of the points). These statistics can be used to compute the distance between clusters and the diameter of a cluster. A CF tree is built as the data is scanned and is a height-balanced tree consisting of interior and leaf nodes. The threshold parameter T controls the fineness of clustering and the height of the tree. BIRCH follows each split with a merge step and has a procedure for removing outliers. It consists of three phases: loading data, building a smaller CF tree, and performing global clustering.</p><h3 id="4e4fb861-b4cf-4c04-a481-6eaea81f6a52" class="">8.5.3
+CURE</h3><p id="bffae034-b6fe-4e3e-a9dd-e107ee3896b9" class="">CURE is a clustering algorithm that can handle large datasets, outliers, and clusters with non-spherical shapes and non-uniform sizes. It uses multiple representative points to represent a cluster, where the first point is the farthest from the center, and the remaining points are the farthest from all previously chosen points. The number of points chosen is a parameter, usually set at 10 or more. The representative points are shrunk toward the center by a factor of α to moderate the effect of outliers. CURE uses agglomerative hierarchical clustering to cluster the data and eliminates outliers at two different points in the clustering process. To speed up the clustering process, CURE uses two techniques: random sampling and partitioning. The algorithm&#x27;s complexity is O(m² log m), so it cannot be applied directly to large datasets. The algorithm&#x27;s goal is to find the user-specified number of clusters.</p><h2 id="ca863116-bc08-4b5d-bd58-a903e938312a" class="">8.6
+Which Clustering Algorithm?</h2><p id="d3e59df7-31d4-4c1d-ba06-67b7f0c0635f" class="">To illustrate the importance of considering the factors mentioned above when selecting a clustering algorithm, let&#x27;s take the example of a marketing company that wants to segment its customers based on their purchasing behavior. The goal is to identify groups of customers that are likely to respond similarly to marketing campaigns and promotions.</p><p id="a6446232-00ba-4eb8-a970-32e03c469e36" class="">First, the company needs to decide what type of clustering is appropriate for this task. Since the goal is to segment customers into distinct groups, a partitional clustering scheme such as K-means or Fuzzy C-means would be appropriate.</p><p id="2261a70d-a155-4e32-8585-4a9c72492462" class="">Next, the company needs to consider the type of cluster that best matches the intended application. Prototype-based clustering schemes like K-means tend to produce globular clusters, which may be appropriate if the company wants to identify groups of customers with similar purchasing habits. However, if the company is also interested in identifying groups of customers based on other factors such as demographics or psychographics, a graph-based clustering scheme such as hierarchical clustering or DBSCAN may be more suitable.</p><p id="0e0b7f17-42cf-4517-8519-24f84350a8e5" class="">In addition to the general type of cluster, other cluster characteristics are important. For example, the company may want to find clusters in subspaces of the original data space, which would require an algorithm like CLIQUE that explicitly looks for such clusters. The company may also want to enforce spatial relationships between clusters, which would require an approach like SOM.</p><p id="4b363aba-e63d-4adc-8def-3fc96b4e2926" class="">The characteristics of the data sets and attributes are also important to consider. For instance, K-means can only be used on data for which an appropriate proximity measure is available that allows meaningful computation of a cluster centroid.</p><p id="c5223f4e-cf9b-4465-a0bd-d2b5d4c01e70" class="">Lastly, the company needs to consider noise and outliers in the data set. If the clustering algorithm assumes that regions or points with density lower than a global threshold are noise or outliers, this may not be appropriate for the marketing company&#x27;s use case as some customers with lower purchasing behavior may still be important to include in a segment.</p><p id="ee8e2a1d-1851-4738-8629-50954e9f5823" class="">
+</p></div></article></body></html>

@@ -1,0 +1,90 @@
+import lejos.hardware.port.Port;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.motor.*;
+import lejos.hardware.sensor.*;
+import lejos.robotics.RangeFinder;
+import lejos.robotics.SampleProvider;
+import lejos.utility.Delay;
+import lejos.hardware.Brick;
+import lejos.hardware.BrickFinder;
+
+public class Color2 {
+	EV3ColorSensor sensor;
+	SampleProvider sp;
+	static Color2 color1, color4;
+    float [] sample;
+    static double svart;
+    static boolean sistSvart1;
+
+    public static void main(String[] args) {
+		Brick brick = BrickFinder.getDefault();
+
+		// Color sensor
+		Port s1 = brick.getPort("S1");
+		Port s4 = brick.getPort("S4");
+		color1 = new Color2(s1);
+		color4 = new Color2(s4);
+
+		svart = 4;
+		System.out.println("Svart: " + svart);
+
+
+		boolean fortsett = true;
+		Motor.A.forward();
+		Motor.C.forward();
+
+		while(fortsett) {
+			System.out.println("1: " + color1.getColor()*100 + " 4: " + color4.getColor()*100);
+			if (color1.getColor()*100 < svart && color4.getColor() < svart) {
+				// Ikke gjør noe
+			} else {
+				if (color1.getColor()*100 < svart) {
+					sistSvart1 = true;
+				}
+				if (color4.getColor()*100 < svart) {
+					sistSvart1 = false;
+				}
+			}
+			if (color1.getColor()*100 > svart && color4.getColor()*100 > svart) {
+				roter(sistSvart1);
+			}
+
+			Delay.msDelay(50);
+		}
+	}
+
+	public static void roter(boolean left) {
+		while (color1.getColor()*100 > svart && color4.getColor()*100 > svart) {
+				if (left) {
+								Motor.A.setSpeed(200);
+							} else {
+								Motor.C.setSpeed(200);
+							}
+						}
+						Motor.A.setSpeed(700);
+						Motor.C.setSpeed(700);
+					}
+
+
+    public Color2(Port port)
+	{
+		sensor = new EV3ColorSensor(port);
+		sp = sensor.getMode("RGB");
+	    sample = new float[sp.sampleSize()];
+	}
+
+	public float getColor()
+	{
+       		sp.fetchSample(sample, 0);
+
+       		return sample[0];
+	}
+
+	public float[] getColors()
+	{
+       		sp.fetchSample(sample, 0);
+
+       		return sample;
+	}
+
+}

@@ -1,0 +1,669 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Reading 9 (The Log-Structured Merge-Tree (LSM-Tree))</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="bd123737-0d03-42e6-b594-1e4be5585c3b" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📃</span></div><h1 class="page-title">Reading 9 (The Log-Structured Merge-Tree (LSM-Tree))</h1></header><div class="page-body"><p id="3efd9ad0-a955-425e-a443-648303d23424" class="">Long-lived transactions in activity flow management systems are becoming commercially available, increasing the need for indexed access to transactional log records. As systems take on responsibility for more complex activities, the duration and number of events that make up a single long-lived activity will increase, requiring the ability to review past transactional steps in real-time. The need to answer queries about a vast number of past activity logs implies that indexed log access will become more important. Even with current transactional systems, there is clear value in providing indexing to support queries on history tables with high insert volume. The Five Minute Rule is a basic result that states we can reduce system costs by purchasing memory buffer space to keep pages in memory when page reference frequency exceeds about once every 60 seconds. This time period is expected to grow over the years as memory prices come down faster than disk arms. An example shows that an index on a high insert volume history table essentially doubles the disk cost for a multi-user application.</p><p id="c593da49-a039-4dbc-9ed4-955b68a0257a" class="">LSM-trees consist of two tree-like components: C0, which is memory-resident and C1, which is disk-resident. New entries are first written to a log file and then inserted into the C0 tree, which eventually migrates to the C1 tree. To move entries from the C0 to C1 tree, a rolling merge process deletes a contiguous segment of entries from C0 and merges them into C1. Newly merged blocks are written to new disk positions, and old blocks are not overwritten to enable recovery in case of a crash. The parent directory nodes in C1 are updated to reflect the new leaf structure, but remain in buffer for longer periods to minimize I/O. The leftover entries, as well as updated directory node information, remain in block memory buffers without being written to disk.</p><p id="80251974-04cd-45f3-bada-f505a6f336f3" class="">To track the development of an LSM-tree, we begin by inserting data into the C0 tree in memory. Unlike the C1 tree, the C0 tree can have nodes of any size, so there is no need to limit them to the size of a disk page. Once the C0 tree reaches its maximum size, a sequence of entries is deleted and organized into a C1 tree leaf node, which is stored in a buffer resident multi-page block. These blocks are written to disk as the leaf level of the C1 tree. A directory node structure is created in memory as leaf nodes are added. To minimize memory buffer requirements, multi-page blocks are used for the rolling merge or for long-range retrievals, while single-page nodes are used for indexed find access. Partially full multi-page blocks of C1 directory nodes are usually left in the buffer while a sequence of leaf node blocks are written out. C1 directory nodes are written to disk when a multi-page block buffer containing directory nodes is full, the root node splits, or a checkpoint is performed. After the first entry is written out to the C1 tree, the process begins again on the left end of both trees, with successive passes reading multi-page leaf-level blocks of the C1 tree into the buffer and merging them with the entries in the C0 tree. The rolling merge process uses a cursor that circulates through equal key values of the C0 and C1 tree components. The emptying and filling blocks of the C1 tree on each level contain page-sized nodes that are buffer resident. All buffered information at each level must be written to new positions on disk when a complete flush of all buffered nodes is required. Old information that might still be needed during recovery is never overwritten on disk, only invalidated as new writes succeed with more up-to-date information. The LSM-tree is designed to minimize random page I/O involved in normal B-tree entry insertion by writing data in multi-page blocks, which eliminates seek time and rotational latency.</p><p id="5e746f7a-0b8d-4b91-b0e7-f2197a558b23" class="">When searching for a value or range in an LSM-tree index, the C0 and C1 trees are searched, which may cause a slight CPU overhead compared to the B-tree case. If the LSM-tree has more than two components, there may also be an I/O overhead. To ensure that all entries have been examined, each component must be accessed through its index structure. However, optimizations can limit the search to an initial subset of the components. For example, if unique index values are guaranteed, or if the find criterion uses recent timestamp values, the search can be limited to an early component. The C0 tree can also buffer recently inserted values and fulfill an important efficiency consideration. For example, indexes to short-term transaction UNDO logs can remain memory resident, and by keeping track of the start-time for each transaction, all logs for a transaction started in the last τ0 seconds can be found in component C0 without recourse to disk components.</p><p id="52ecd4f1-6f84-4726-8563-c73c0d600823" class="">Deletes in LSM-trees can be deferred and batched, just like inserts. When a row is deleted, a delete node entry can be placed in the C0 tree with the key value and RID to delete. The actual delete is done during the rolling merge process when the index entry is encountered. Find requests must be filtered through delete node entries to avoid returning references to deleted records. Updates can be viewed as a delete followed by an insert. Predicate deletion allows batch deletes by asserting a predicate, while long-latency find provides an efficient means of responding to a query where the results can wait for the circulation period of the slowest cursor.</p><p id="832c96be-cd03-4ab4-9828-f7e194cd6855" class="">This section analyzes the cost-performance of an LSM-tree with two components compared to a B-tree providing the same indexing capabilities. The analysis focuses on the I/O resources utilized for a high volume of new insertions. The LSM-tree and B-tree are easily comparable, both containing an entry for each row indexed in collation sequence at a leaf level, with upper-level directory information that channels access along a path of page-sized nodes. The analysis of I/O advantage for new entry inserts to the LSM-tree is effectively illustrated by analogy to the less efficient but well-understood behavior of the B-tree.</p><p id="8d15611e-bf77-4a8c-94cc-4a2ded84bc64" class="">The I/O insert costs of an LSM-tree of two components compared to a B-tree is a product of two factors. The first factor, COSTπ/COSTP, corresponds to the advantage gained in the LSM-tree by performing all I/O in multi-page blocks, thus utilizing disk arms much more efficiently by saving a great deal of seek and rotational latency time. The second factor that determines I/O cost ratio between the LSM-tree and the B-tree is given as 1/M, representing the batching efficiency to be gained during a merge step. M is the average number of entries merged from C0 into a page-sized leaf node of C1.</p><p id="e1a14e35-1f5e-46dc-8917-ad5b23dfb043" class="">The LSM-tree has an efficiency advantage over the B-tree because of these two factors, and the &quot;rolling merge&quot; process is fundamental to gaining this advantage. The factor COSTπ/COSTP corresponding to the ratio of efficiency of multi-page block over single-page I/O is a constant. However, the batching efficiency 1/M of a merge step is proportional to the ratio in size between the C0 and the C1 components. The larger the C0 component in comparison to the C1 component, the more efficiency is gained in the merge. Up to a certain point, we can save additional money on disk arm cost by using a larger C0 component, but this entails a larger memory cost to contain the C0 component.</p><p id="d662a1eb-ecb5-4993-866f-ef9c78a17740" class="">There is an optimal mix of sizes to minimize the total cost of disk arms and memory capacity, but the solution can be quite expensive in terms of memory for a large C0. This consideration motivates the need for a multicomponent LSM-tree. A three-component LSM-tree has a memory-resident component C0 and disk-resident components C1 and C2, where the components increase in size with increasing subscript. There is a rolling merge process in train between C0 and C1 as well as a separate rolling merge between C1 and C2 that move entries out from the smaller to the larger component each time the smaller component exceeds its threshold size.</p><p id="87a96443-a7ae-4353-8bb0-49ae38a1060a" class="">The advantage of an LSM-tree of three components is that batching efficiency can be geometrically improved by choosing C1 to optimize the combined ratio of size between C0 and C1 and between C1 and C2. As a result, the size of the C0 memory component can be made much smaller in proportion to the total index, with a significant improvement in cost.</p><p id="b82989c5-bee5-4380-bd3e-b9111d171358" class="">LSM-tree has a cost advantage over B-tree, particularly in I/O cost, because page I/O can be amortized with many other pages of a multi-page block. The cost of storing data on disk includes disk capacity and disk I/O rate. When capacity is the limiting factor, the disk arms may only be fractionally utilized by the application, whereas the I/O rate may be the limiting factor when the disk arms reach their full utilization rate while the disk is only fractionally full. The cost of a random page I/O during peak use is based on the disk arm cost, whereas the cost of a disk page I/O as part of a large multi-page block I/O is a good deal smaller because it amortizes seek time and rotational latency over multiple pages. The cost of accessing disk-resident data is given by COST-D, which is either S.COSTd or H.COSTP, whichever is the maximum. The cost of accessing buffer-resident data is given by COST-B, which is S.COSTm + S.COSTd. The total cost for supporting data access for an application, COST-TOT, is the minimum of the calculated costs. There are three cost regimes in the graph of COST-TOT as the page access rate H increases for a given volume of data S: cold, warm, and hot. Hot data justifies memory buffer residence, whereas cold data is disk-capacity limited, and warm data has limited data capacity used under each disk arm, which makes disk arms the limit of use.</p><p id="ed01f8b1-2119-40ef-8278-456ae25c7125" class="">I/O costs of index operations can be analyzed in comparison to B-trees and LSM-trees. The LSM-tree provides two batching effects that reduce costs: reduced I/O costs and delayed merging of newly inserted entries into the C1 tree. The Batch-Merge Parameter M is used to quantify the multiple-entries-per-leaf batching effect. The cost of an entry insert into the LSM-tree is calculated using the formula COSTLSM-ins = 2.COSTπ/M. This cost formula is compared to the B-tree insert cost formula, which is given by COSTB-ins = COSTP/(De+1), where De is the effective depth of the B-tree. The comparison of the two cost formulas gives the ratio COSTLSM-ins/COSTB-ins = K1/(COSTπ/COSTP).(1/M), where K1 is a constant with a value of approximately 0.67 for the index sizes considered.</p><p id="ab9d71c1-9922-4ad0-a14a-6ee14ac6b606" class="">The parameter M for an LSM-tree is the average number of entries in the C0 tree that are inserted into each single page leaf node of the C1 tree during rolling merge. While M is usually greater than 1, in some cases, it can be less than 1, which means that more than one C1 tree page must be brought in and out of memory for each entry merged in from the C0 tree. If M is too small, this could cancel the batching effect of multi-page disk reads, making it better to use a normal B-tree instead of an LSM-tree. To avoid a small M value, the C0 component should be larger relative to C1. However, if the size of C0 is so large that memory cost becomes a significant factor, it might be better to use an LSM-tree with more than two components. In general, an LSM-tree of K+1 components has components C0, C1, C2,...,CK-1 and CK, which are indexed tree structures of increasing size. There are asynchronous rolling merge processes in train between all component pairs (Ci-1, Ci) that move entries from the smaller to the larger component each time the smaller component exceeds its threshold size.</p><p id="201e6a94-d4fe-4449-bb02-a44f48a1d003" class="">We derive a formula for the I/O cost of inserts into an LSM-tree with multiple components, and show how to determine optimal threshold sizes for these components. We define the size of an LSM-tree component, denoted by S(Ci), as the number of bytes of entries it contains at the leaf level, and assume a relatively steady insertion rate to component C0, with all newly inserted entries eventually circulating to component CK. We assume that each component has a size close to a maximum threshold size, which is to be determined. The total page I/O rate to perform ongoing merge operations between component pairs can be expressed as a function of the insertion rate and size ratios between adjacent pairs of components. To minimize the total I/O rate of a multi-component LSM-tree, we size intermediate components in a geometric progression between the smallest and largest, with fixed SK, S0, and insertion rate R. The total page I/O rate H is given by a formula that involves the number of bytes per page and the ratio r between adjacent components. Theorem 3.2 provides a more precise solution for the ri values when the total size S is held constant. Finally, Example 3.3 illustrates the appropriate process for arriving at an optimal total cost for a given number of components.</p><p id="38fc2fc0-0ffc-4120-b921-e44f291e99e6" class="">We derive a method for optimizing the size of the memory buffer (S0) and disk (S1) of an LSM-tree, using the total I/O rate H as a function of S0, while R and SK remain constant. The total cost of the LSM-tree is the sum of the memory and disk costs, where we trade off expensive memory for inexpensive disk. The relative cost C is a function of two variables t and s; the variable t is a normalized temperature measuring the basic multi-page block I/O rate required by the application, and s represents how much memory we decide to use to implement the LSM-tree. To decide the size of S0, the simplest rule would be to follow the line s = t, on which C = s + 1, and the disk storage and I/O capacities are fully utilized.</p><p id="a265617d-960e-414e-a195-c3e4cb4c1eee" class="">An LSM-tree is a data structure consisting of a memory resident component and disk resident components arranged in increasing size. Rolling merge processes move entries from the smaller to the larger component whenever the smaller component exceeds its threshold size. Each disk resident component is composed of page-sized nodes in a B-tree structure with multiple nodes sitting on multi-page blocks. Directory information in upper levels of the tree allows access down through single page nodes and indicates which sequence of nodes sit on a multi-page block. Nodes can be individually resident in a single page memory buffer or memory resident within their containing multi-page block. The LSM-tree must mediate physical conflicts between find operations and rolling merge operations. Nodes are locked in write mode during rolling merge and in read mode during find operations. The locking approach depends on the data structure used. When performing a rolling merge, the cursor has an inner component position in the smaller component and an outer component position in the larger component. As the merge cursor progresses through entries in the inner and outer components, it releases write locks for nodes under the cursor, which allows faster cursors to pass slower ones.</p><p id="43aefeae-ed8c-4193-9b86-30ac9fc4cf72" class="">The LSM-tree index recovery process involves a classical recovery problem of reconstructing the work that took place in memory after a system crash. When a checkpoint is requested, all merge steps in operation are completed, and all new entry inserts to the LSM-tree are postponed until the checkpoint is complete. The checkpoint information is written to disk and includes the disk addresses of the roots of all components, the location of all merge cursors, and the current information for dynamic allocation of new multi-page blocks.</p><p id="4a63e7d6-f9fa-4a98-ab9b-d1f519d012f3" class="">After a system crash, the checkpoint can be located, and the saved C0 component loaded back into memory. Then, logs starting with the first LSN after LSN0 are read into memory and have their associated index entries entered into the LSM-tree. As we recover logs of inserts for indexed rows, we place new entries into the C0 component, and the rolling merge process starts again, overwriting any multi-page blocks written since the checkpoint, but recovering all new index entries, until the most recently inserted row has been indexed and recovery is complete.</p><p id="a8e28e35-100c-4aad-88c5-fe4ffe9a8536" class="">During the recovery process, directory information must be corrected immediately to point to the appropriate disk position. After a checkpoint occurs and the multi-page blocks are read back into memory buffers to continue the rolling merge, all the blocks involved must be assigned to a new disk. The only drawback of this recovery approach is the possibly large pause while various disk writes take place during the checkpoint process.</p><p id="f034fc19-b9b7-47de-bf06-01a1693b8c67" class="">The article discusses various disk-based access methods and argues that no other disk indexing structure consistently gives superior I/O performance than B-trees for the Acct-ID||Timestamp index on the History file. The article introduces the concept of a Continuum Structure and explains why most existing disk-based access methods are Continuum structures. The article explains that Continuum Structures require at least two I/Os for each index insert, which is approximately the same as a B-tree. The article goes on to discuss LSM-trees and how they can reduce disk arm load by as much as two orders of magnitude in certain situations due to their ability to keep component C0 memory resident and careful deferred placement. The article concludes by stating that inserts of new entries in Continuum Structures require two I/Os for exactly this reason.</p><figure id="389103c3-9de4-40e0-a68a-69f11921c7e9" class="image"><a href="Reading%209%20(The%20Log-Structured%20Merge-Tree%20(LSM-Tree%20bd1237370d0342e6b5941e4be5585c3b/Untitled.png"><img style="width:457px" src="Reading%209%20(The%20Log-Structured%20Merge-Tree%20(LSM-Tree%20bd1237370d0342e6b5941e4be5585c3b/Untitled.png"/></a></figure><p id="160898d8-686f-42d5-a872-ea88b2ad2c1c" class="">A B-tree combines the low cost of disk storage with the high cost of memory accessibility for frequently accessed data. The LSM-tree extends this hierarchy and uses merge I/O to perform multi-page disk reads. Figure 6.1 shows a graph of the cost of access per MByte versus data temperature for a B-tree and an LSM-tree with K=1. The effect of buffering on a B-tree is to flatten the graph in the Hot Data region. The LSM-tree reduces the cost of access for mergeable operations towards that of cold data and can accommodate many cases of hot data mostly on disk, which is an advantage for applications with many mergeable operations.</p><p id="e0adcf91-ec23-46ff-8cf9-7438c0933727" class="">LSM-tree entries can contain records rather than RIDs, allowing records to be clustered by key value, but with larger entries and faster insert rates. Clustering can have performance implications, such as with the Escrow transactional method. Clustering by TID and FID in LSM-trees can save I/Os with long-lived transactions. Retaining recent entries in a component rather than migrating them can improve efficiency and control over archival time-key indexing. Ideas for further research include extending cost analysis to situations where find operations must be balanced with merges, offloading CPU work to maintain the LSM-tree, and designing distributed work carefully in cases of shared memory.</p></div></article></body></html>
